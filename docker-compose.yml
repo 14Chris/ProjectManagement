@@ -1,0 +1,39 @@
+version: "3.1"
+
+networks:
+    dockerapi-dev:
+        driver: bridge
+
+services:
+    projectmanagmentapi:
+        image: projectmanagmentapi:latest
+        depends_on: 
+            - "postgres-image"
+        build: 
+            context: .\ProjectManagment.Services
+            dockerfile: Dockerfile
+        ports:
+            - "8000:80"
+        environment: 
+            DB_CONNECTION_STRING: "host=postgres-image;port=5432;database=projectmanagment;username=postgres;password=dockerPassword"
+        networks: 
+            - dockerapi-dev
+    
+    postgres-image:
+        image: postgres:latest
+        ports:
+            - "5432:5432"
+        restart: always
+        volumes:
+            - db_volume:/var/lib/postgresql/data
+        environment:
+            POSTGRES_USER: "postgres"
+            POSTGRES_PASSWORD: "dockerPassword"
+            POSTGRES_DB: "projectmanagment"
+        networks: 
+            - dockerapi-dev
+    
+volumes:
+    db_volume:
+    
+
