@@ -80,6 +80,22 @@ namespace ProjectManagment.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {
+
+            //Verify if any user has the same email than the parameter
+            if(_context.User.Where(x=>x.email == user.email).Any())
+            {
+                return BadRequest("EMAIL_ALREADY_REGISTRED");
+            }
+
+            //Verify that the password checked the requirements
+            if (!PasswordUtilities.PasswordMatchRegex(user.password))
+            {
+                return BadRequest("PASSWORD_TOO_WEAK");
+            }
+
+            //Hash the password of the user
+            user.password = PasswordUtilities.HashPassword(user.password);
+
             _context.User.Add(user);
             await _context.SaveChangesAsync();
 
@@ -100,6 +116,20 @@ namespace ProjectManagment.Api.Controllers
             await _context.SaveChangesAsync();
 
             return user;
+        }
+
+        // GET: check if email already exists
+        [HttpGet("email_exists/{email}")]
+        public IActionResult CheckEmailExists(string email)
+        {
+            if(_context.User.Where(x => x.email == email).Any())
+            {
+                return Conflict();
+            }
+            else
+            {
+                return Ok();
+            }
         }
 
         private bool UserExists(int id)

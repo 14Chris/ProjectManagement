@@ -5,8 +5,6 @@
 </template>
 
 <script>
-import axios from "axios";
-
 export default {
   name: "App",
   components: {},
@@ -16,16 +14,6 @@ export default {
     };
   },
   mounted() {
-    var apiUrl = "http://localhost:8000/";
-    // process.env.API_URL;
-
-    var config = {
-      headers: { "Access-Control-Allow-Origin": "*" }
-    };
-
-    axios.get(apiUrl + "WeatherForecast", config).then(response => {
-      this.apiData = response.data;
-    });
   }
 };
 </script>
