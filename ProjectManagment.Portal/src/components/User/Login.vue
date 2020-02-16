@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>Login</h1>
-    <form class="ui form">
+    <form v-on:submit.prevent="Login" class="ui form">
       <div class="field">
         <label>Email</label>
         <input type="text" v-model="login.email" name="email" placeholder="Email" />
@@ -17,23 +17,35 @@
 </template>
 
 <script>
-import ApiService from "../../services/api.service";
+import ApiService from "../../services/api";
+var _this = this;
 var api = new ApiService();
 export default {
   name: "Login",
   components: {},
   data() {
     return {
-      login:{
-        email:"",
-        password:""
+      login: {
+        email: "",
+        password: ""
       }
     };
   },
   mounted() {},
-  methods:{
-    login: function() {
-
+  methods: {
+    Login: function() {
+      api
+        .create("Login", JSON.stringify(this.login))
+        .then(resp => resp.json()) // Transform the data into json
+        .then(function(data) {
+          // Create and append the li's to the ul
+          var token = data.token;
+          localStorage.setItem('userToken',token);
+          _this.$router.push('/')
+        })
+        .catch(error => {
+          console.log("error", error);
+        });
     }
   }
 };

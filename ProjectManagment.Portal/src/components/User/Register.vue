@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import ApiService from "../../services/api.service";
+import ApiService from "../../services/api";
 import RegisterUserModel from "../../models/RegisterUserModel";
 import { required, sameAs, minLength } from "vuelidate/lib/validators";
 

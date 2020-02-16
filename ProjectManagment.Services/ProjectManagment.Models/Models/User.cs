@@ -16,6 +16,8 @@ namespace ProjectManagment.Models.Models
 
         public string password { get; set; }
 
+        public bool active { get; set; }
+
         public byte[] profile_picture {get;set;}
 
         public List<Project> Projects { get; set; }

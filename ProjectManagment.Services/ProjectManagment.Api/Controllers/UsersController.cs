@@ -95,6 +95,7 @@ namespace ProjectManagment.Api.Controllers
 
             //Hash the password of the user
             user.password = PasswordUtilities.HashPassword(user.password);
+            user.active = false;
 
             _context.User.Add(user);
             await _context.SaveChangesAsync();

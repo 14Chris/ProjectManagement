@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -11,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using ProjectManagment.Models;
 
 namespace ProjectManagment.Api
@@ -27,7 +30,9 @@ namespace ProjectManagment.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers()
+                    //.AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
+                    ;
 
             services.AddCors(options =>
             {
@@ -35,9 +40,25 @@ namespace ProjectManagment.Api
                 builder =>
                 {
                     builder.AllowAnyOrigin()
-                                        .AllowAnyHeader()
-                                        .AllowAnyMethod();
+                           .AllowAnyHeader()
+                           .AllowAnyMethod();
                 });
+            });
+
+            ///Gestion de l'authentification d'un utilisateur avec un jeton JWT
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = false,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = Configuration["Jwt:Issuer"],
+                    ValidAudience = Configuration["Jwt:Issuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+                };
             });
 
             string? dbConnectString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
@@ -62,11 +83,13 @@ namespace ProjectManagment.Api
                 dbContext.Database.Migrate();
             }
 
-            app.UseCors();
-
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
