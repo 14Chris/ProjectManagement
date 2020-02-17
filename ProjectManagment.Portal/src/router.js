@@ -23,22 +23,26 @@ const router = new Router({
       component: Register
     },
     {
-        path: '/login',
-        name: 'Login',
-        component: Login
+      path: '/login',
+      name: 'Login',
+      component: Login
     },
     {
       path: '/',
       name: 'Home',
       component: Home,
-      beforeEnter: ((to, from, next)=>{
-        var isAuthenticated = (localStorage.getItem('userToken') != null)
-      
-        if (!isAuthenticated) next('/login')
+      beforeEnter: ((to, from, next) => {
+        var token = localStorage.getItem('userToken')
+       
+        if (token == "undefined") {
+          next('/login')
+        }
         // if the user is not authenticated, `next` is called twice
-        else next()
+        else {
+          next()
+        }
       })
-  }
+    }
   ]
 })
 

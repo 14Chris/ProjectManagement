@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +27,40 @@ namespace ProjectManagment.Api.Controllers
         public async Task<ActionResult<IEnumerable<User>>> GetUser()
         {
             return await _context.User.ToListAsync();
+        }
+
+        // GET: api/Users
+        [HttpGet("session")]
+        public async Task<ActionResult<User>> GetUserSession()
+        {
+
+            int id = -1;
+
+            bool ok = Int32.TryParse(HttpContext.User.Identities.FirstOrDefault().Claims.FirstOrDefault().Value, out id);
+            if (!ok)
+                return Unauthorized();
+
+            var compte = await _context.User.FindAsync(id);
+
+            if (compte == null)
+            {
+                return Unauthorized();
+            }
+
+            return compte;
+        }
+
+        // GET: api/Users
+        [HttpGet("{id}/profile_picture")]
+        [AllowAnonymous]
+        public IActionResult GetUserProfilePicture(int id)
+        {
+            var compte = _context.User.Find(id);
+
+            if (compte.profile_picture == null)
+                return NotFound();
+
+            return File(compte.profile_picture, "image/jpeg");
         }
 
         // GET: api/Users/5

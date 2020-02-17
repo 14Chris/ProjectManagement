@@ -38,20 +38,23 @@ export default class ApiService {
     }
 
     generateHeaders() {
-        // if (authToken && authToken.length > 0) {
-        //   return {
-        //     Accept: 'application/json',
-        //     'Content-Type': 'application/json',
-        //     'Authorization': `Bearer ${authToken}`,
-        //     'X-API-KEY': this.apiKey
-        //   }
-        // }
-        // else {
+        var authToken = localStorage.getItem('userToken')
+        console.log(authToken)
+
+        if (authToken && authToken.length > 0) {
+          return {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`,
+            'X-API-KEY': this.apiKey
+          }
+        }
+        else {
         return {
             Accept: 'application/json',
             'Content-Type': 'application/json',
             'X-API-KEY': this.apiKey
         }
-        // }
+        }
     }
 }
