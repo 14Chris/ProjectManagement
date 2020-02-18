@@ -4,6 +4,8 @@
       <form v-on:submit.prevent="updateUser">
         <h1>Profile</h1>
 
+        <avatar :username="user.first_name" :size="150"></avatar>
+
         <b-field label="First name">
           <b-input type="text" v-model="user.first_name"></b-input>
         </b-field>
@@ -23,10 +25,15 @@
 
 <script>
 import ApiService from "../../services/api";
+import Avatar from 'vue-avatar'
+
 var api = new ApiService();
+
 export default {
   name: "Profile",
-  components: {},
+  components: {
+    Avatar
+  },
   data() {
     return {
       user: null,
