@@ -8,23 +8,18 @@ const router = new Router({
   routes: [
     {
       path: '/register',
-      name: 'Register',
       component: Register
     },
     {
       path: '/login',
-      name: 'Login',
       component: Login
     },
     {
-      path: '/home',
-      name: 'Home',
+      path: '/',
       component: Home,
       children: [{
         path: 'profile',
-        components: {
-          default: Profile
-        }
+        component: Profile
       }],
       beforeEnter: ((to, from, next) => {
         var token = localStorage.getItem('userToken')

@@ -1,32 +1,34 @@
 <template>
   <form v-on:submit.prevent="registerUser" class="ui form">
     <h1>Register</h1>
-    <div class="required field">
-      <label>First Name</label>
-      <input type="text" v-model="model.first_name" name="first-name" placeholder="First Name" />
-    </div>
+
+    <b-field label="First name">
+      <b-input v-model="model.first_name"></b-input>
+    </b-field>
     <div
       class="error"
       v-if="!$v.model.first_name.required && submitStatus=='ERROR'"
     >First name is required</div>
-    <div class="required field">
-      <label>Last Name</label>
-      <input type="text" v-model="model.last_name" name="last-name" placeholder="Last Name" />
-    </div>
+
+    <b-field label="Last Name">
+      <b-input v-model="model.last_name"></b-input>
+    </b-field>
     <div
       class="error"
-      v-if="!$v.model.last_name.required && submitStatus=='ERROR'">Last name is required</div>
+      v-if="!$v.model.last_name.required && submitStatus=='ERROR'"
+    >Last name is required</div>
 
-    <div class="required field">
-      <label>Email</label>
-      <input type="text" v-model="model.email" name="email" placeholder="Email" />
-    </div>
+    <b-field label="Email">
+      <b-input v-model="model.email"></b-input>
+    </b-field>
     <div class="error" v-if="!$v.model.email.required && submitStatus=='ERROR'">Email is required</div>
-    <div class="error" v-if="!$v.model.email.isUnique && submitStatus=='ERROR'">Email is already taken</div>
-    <div class="required field">
-      <label>Password</label>
-      <input type="password" v-model="model.password" name="password" placeholder="Password" />
-    </div>
+    <div
+      class="error"
+      v-if="!$v.model.email.isUnique && submitStatus=='ERROR'"
+    >Email is already taken</div>
+    <b-field label="Password">
+      <b-input type="password" v-model="model.password"></b-input>
+    </b-field>
     <div
       class="error"
       v-if="!$v.model.password.required && submitStatus=='ERROR'"
@@ -35,16 +37,9 @@
       class="error"
       v-if="!$v.model.password.minLength && submitStatus=='ERROR'"
     >Password must have at least {{$v.model.password.$params.minLength.min}} letters.</div>
-
-    <div class="required field">
-      <label>Confirm password</label>
-      <input
-        type="password"
-        v-model="model.repeatPassword"
-        name="confirm-password"
-        placeholder="Confirm password"
-      />
-    </div>
+    <b-field label="Confirm password">
+      <b-input type="password" v-model="model.repeatPassword"></b-input>
+    </b-field>
     <div
       class="error"
       v-if="!$v.model.repeatPassword.sameAsPassword && submitStatus=='ERROR'"
@@ -53,7 +48,7 @@
       class="error"
       v-if="!$v.model.repeatPassword.required && submitStatus=='ERROR'"
     >Confirmation password is required</div>
-    <button class="ui button" type="submit">Submit</button>
+    <b-button native-type="submit">Register</b-button>
   </form>
 </template>
 
@@ -106,11 +101,10 @@ export default {
         required,
         // simulate async call, fail for all logins with even length
         async isUnique(value) {
-          const response = await api.getData("Users/email_exists/"+value);
-          if(response.status == 200){
+          const response = await api.getData("Users/email_exists/" + value);
+          if (response.status == 200) {
             return true;
-          }
-          else{
+          } else {
             return false;
           }
         }

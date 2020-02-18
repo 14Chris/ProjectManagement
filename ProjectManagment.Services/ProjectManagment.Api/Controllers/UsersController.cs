@@ -6,13 +6,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ProjectManagment.Api.Models;
 using ProjectManagment.Models;
 using ProjectManagment.Models.Models;
 
 namespace ProjectManagment.Api.Controllers
 {
     [Route("[controller]")]
-   
     [ApiController]
     public class UsersController : ControllerBase
     {
@@ -34,7 +34,7 @@ namespace ProjectManagment.Api.Controllers
         // GET: api/Users
         [HttpGet("session")]
         [Authorize]
-        public async Task<ActionResult<User>> GetUserSession()
+        public ActionResult<UserProfileDataModel> GetUserSession()
         {
 
             int id = -1;
@@ -43,7 +43,14 @@ namespace ProjectManagment.Api.Controllers
             if (!ok)
                 return Unauthorized();
 
-            var compte = await _context.User.FindAsync(id);
+            var compte = _context.User.Where(x => x.id == id).Select(x => new UserProfileDataModel()
+            {
+                id = x.id,
+                first_name = x.first_name,
+                last_name =x.last_name,
+                email = x.email
+             
+            }).SingleOrDefault();
 
             if (compte == null)
             {
@@ -86,14 +93,17 @@ namespace ProjectManagment.Api.Controllers
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<IActionResult> PutUser(int id, User user)
+        public async Task<IActionResult> PutUser(int id, UserProfileDataModel model)
         {
-            if (id != user.id)
+            if (id != model.id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(user).State = EntityState.Modified;
+            User user = _context.User.Find(id);
+
+            user.last_name = model.last_name;
+            user.first_name = model.first_name;
 
             try
             {
@@ -123,7 +133,7 @@ namespace ProjectManagment.Api.Controllers
         {
 
             //Verify if any user has the same email than the parameter
-            if(_context.User.Where(x=>x.email == user.email).Any())
+            if (_context.User.Where(x => x.email == user.email).Any())
             {
                 return BadRequest("EMAIL_ALREADY_REGISTRED");
             }
@@ -166,7 +176,7 @@ namespace ProjectManagment.Api.Controllers
         [AllowAnonymous]
         public IActionResult CheckEmailExists(string email)
         {
-            if(_context.User.Where(x => x.email == email).Any())
+            if (_context.User.Where(x => x.email == email).Any())
             {
                 return Conflict();
             }
