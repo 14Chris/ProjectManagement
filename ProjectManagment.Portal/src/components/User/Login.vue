@@ -1,6 +1,6 @@
 <template>
   <div>
-    <form v-on:submit.prevent="Login" class="ui form">
+    <form v-on:submit.prevent="Login">
       <h1>Login</h1>
       <b-field label="Email">
         <b-input v-model="login.email"></b-input>

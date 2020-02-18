@@ -1,18 +1,19 @@
 <template>
   <div>
     <div v-if="user != null">
-      <h1>Profile</h1>
-      
+      <form v-on:submit.prevent="updateUser">
+        <h1>Profile</h1>
 
-      <b-field label="First name">
-        <b-input type="text" v-model="user.first_name"></b-input>
-      </b-field>
+        <b-field label="First name">
+          <b-input type="text" v-model="user.first_name"></b-input>
+        </b-field>
 
-      <b-field label="Last name">
-        <b-input type="text" v-model="user.last_name"></b-input>
-      </b-field>
+        <b-field label="Last name">
+          <b-input type="text" v-model="user.last_name"></b-input>
+        </b-field>
 
-      <b-button native-type="submit">Modify</b-button>
+        <b-button native-type="submit">Modify</b-button>
+      </form>
     </div>
     <div v-else>
       <b-loading :is-full-page="isFullPage" :active.sync="isLoading" :can-cancel="true"></b-loading>
@@ -29,21 +30,47 @@ export default {
   data() {
     return {
       user: null,
-      isFullPage:false,
-      isLoading:true
+      isFullPage: false,
+      isLoading: true
     };
   },
   mounted() {
-
     var _this = this;
-     api
+    api
       .getData("Users/Session")
       .then(resp => resp.json()) // Transform the data into json
       .then(function(data) {
-        _this.user = data
+        _this.user = data;
       });
   },
-  methods: {}
+  methods: {
+    updateUser() {
+      // var _this = this;
+      api.update("Users/" + this.user.id, JSON.stringify(this.user)).then(resp => {
+        if (resp.status == 204) {
+          this.success("Change made");
+        } else {
+          this.danger("Error during modification");
+        }
+      }); // Transform the data into json
+    },
+    success(message) {
+      this.$buefy.toast.open({
+        duration: 5000,
+        message: message,
+        position: "is-bottom",
+        type: "is-success"
+      });
+    },
+    danger(message) {
+      this.$buefy.toast.open({
+        duration: 5000,
+        message: message,
+        position: "is-bottom",
+        type: "is-danger"
+      });
+    }
+  }
 };
 </script>
 
