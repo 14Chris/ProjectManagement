@@ -12,6 +12,7 @@ using ProjectManagment.Models.Models;
 namespace ProjectManagment.Api.Controllers
 {
     [Route("[controller]")]
+   
     [ApiController]
     public class UsersController : ControllerBase
     {
@@ -24,6 +25,7 @@ namespace ProjectManagment.Api.Controllers
 
         // GET: api/Users
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<User>>> GetUser()
         {
             return await _context.User.ToListAsync();
@@ -31,6 +33,7 @@ namespace ProjectManagment.Api.Controllers
 
         // GET: api/Users
         [HttpGet("session")]
+        [Authorize]
         public async Task<ActionResult<User>> GetUserSession()
         {
 
@@ -65,6 +68,7 @@ namespace ProjectManagment.Api.Controllers
 
         // GET: api/Users/5
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<User>> GetUser(int id)
         {
             var user = await _context.User.FindAsync(id);
@@ -81,6 +85,7 @@ namespace ProjectManagment.Api.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> PutUser(int id, User user)
         {
             if (id != user.id)
@@ -113,6 +118,7 @@ namespace ProjectManagment.Api.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
+        [AllowAnonymous]
         public async Task<ActionResult<User>> PostUser(User user)
         {
 
@@ -140,6 +146,7 @@ namespace ProjectManagment.Api.Controllers
 
         // DELETE: api/Users/5
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<ActionResult<User>> DeleteUser(int id)
         {
             var user = await _context.User.FindAsync(id);
@@ -156,6 +163,7 @@ namespace ProjectManagment.Api.Controllers
 
         // GET: check if email already exists
         [HttpGet("email_exists/{email}")]
+        [AllowAnonymous]
         public IActionResult CheckEmailExists(string email)
         {
             if(_context.User.Where(x => x.email == email).Any())

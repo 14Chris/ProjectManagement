@@ -18,7 +18,7 @@
 
 <script>
 import ApiService from "../../services/api";
-var _this = this;
+// var _this = this;
 var api = new ApiService();
 export default {
   name: "Login",
@@ -34,6 +34,8 @@ export default {
   mounted() {},
   methods: {
     Login: function() {
+      var router = this.$router;
+     
       api
         .create("Login", JSON.stringify(this.login))
         .then(resp => resp.json()) // Transform the data into json
@@ -41,7 +43,7 @@ export default {
           // Create and append the li's to the ul
           var token = data.token;
           localStorage.setItem('userToken',token);
-          _this.$router.push('/')
+          router.push('/')
         })
         .catch(error => {
           console.log("error", error);

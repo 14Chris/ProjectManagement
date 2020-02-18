@@ -1,19 +1,35 @@
 <template>
   <div>
-    <div class="ui secondary menu">
-      <a class="active item">Home</a>
-      <a class="item">Messages</a>
-      <a class="item">Friends</a>
-      <div class="right menu">
-        <div class="item">
-          <div class="ui icon input">
-            <input type="text" placeholder="Search..." />
-            <i class="search link icon"></i>
-          </div>
-        </div>
-        <a class="ui item">Logout</a>
-      </div>
-    </div>
+    <b-navbar>
+      <!-- <template slot="brand">
+            <b-navbar-item tag="router-link" :to="{ path: '/' }">
+                <img
+                    src="https://raw.githubusercontent.com/buefy/buefy/dev/static/img/buefy-logo.png"
+                    alt="Lightweight UI components for Vue.js based on Bulma"
+                >
+            </b-navbar-item>
+      </template>-->
+      <template slot="start">
+        <b-navbar-item href="#">Project</b-navbar-item>
+      </template>
+      <template slot="end">
+        <b-dropdown aria-role="menu" class position="is-bottom-left">
+          <b-icon class="navbar-item" icon="account" size="is-medium" slot="trigger"></b-icon>
+
+          <b-dropdown-item>
+            <router-link :to="{name: '/home/profile'}">Profil</router-link>
+          </b-dropdown-item>
+
+          <b-dropdown-item value="settings">
+            <b-icon icon="settings"></b-icon>Settings
+          </b-dropdown-item>
+          <b-dropdown-item value="logout" aria-role="menuitem">
+            <b-icon icon="logout"></b-icon>Logout
+          </b-dropdown-item>
+        </b-dropdown>
+      </template>
+    </b-navbar>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -25,17 +41,23 @@ export default {
   name: "Home",
   components: {},
   data() {
-    return {};
+    return {
+      toggleCard: false
+    };
   },
   mounted() {
     api
       .getData("Users/Session")
       .then(resp => resp.json()) // Transform the data into json
       .then(function(data) {
-        console.log("session", data)
+        console.log("session", data);
       });
   },
-  methods: {}
+  methods: {
+    toggle() {
+      this.toggleCard = !this.toggleCard;
+    }
+  }
 };
 </script>
 

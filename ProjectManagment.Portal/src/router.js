@@ -1,19 +1,8 @@
-import Vue from 'vue'
 import Router from 'vue-router'
 import Register from './components/User/Register'
 import Login from './components/User/Login'
 import Home from './components/Home'
-
-Vue.use(Router)
-
-
-// function authGuard (to, from, next){
-//   var isAuthenticated = (localStorage.getItem('userToken') != null)
-
-//   if (!isAuthenticated) next('/login')
-//   // if the user is not authenticated, `next` is called twice
-//   else next()
-// }
+import Profile from './components/User/Profile'
 
 const router = new Router({
   routes: [
@@ -28,23 +17,29 @@ const router = new Router({
       component: Login
     },
     {
-      path: '/',
+      path: '/home',
       name: 'Home',
       component: Home,
+      children: [{
+        path: 'profile',
+        components: {
+          default: Profile
+        }
+      }],
       beforeEnter: ((to, from, next) => {
         var token = localStorage.getItem('userToken')
-       
-        if (token == "undefined") {
+        console.log(token)
+        // if the user is not authenticated, `next` is called twice
+        if (token == "undefined" || token == null) {
           next('/login')
         }
-        // if the user is not authenticated, `next` is called twice
         else {
           next()
         }
-      })
+      }),
+     
     }
   ]
 })
-
 
 export default router
