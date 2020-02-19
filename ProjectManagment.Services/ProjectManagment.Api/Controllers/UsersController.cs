@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using JWT;
+using JWT.Algorithms;
+using JWT.Builder;
+using JWT.Serializers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -184,6 +188,180 @@ namespace ProjectManagment.Api.Controllers
             {
                 return Ok();
             }
+        }
+
+        //Méthode permettant d'activer un compte utilisateur à l'aide d'un token fourni
+        [HttpGet("account_activation/{token}")]
+        [AllowAnonymous]
+        public async Task<ActionResult> ActivateAccount(string token)
+        {
+            //Récupération du dernier token (par l'id)
+            Token tokenActivation = _context.Token.Where(x => x.token == token && x.type == TypeToken.AccountActivation).OrderByDescending(x => x.id).FirstOrDefault();
+
+            if (tokenActivation == null)
+                return BadRequest();
+
+            string secret = "tokenReset33-password&!";
+
+            //Vérification du token (expiration, clé, ...)
+            try
+            {
+                IJsonSerializer serializer = new JsonNetSerializer();
+                IDateTimeProvider provider = new UtcDateTimeProvider();
+                IJwtValidator validator = new JwtValidator(serializer, provider);
+                IBase64UrlEncoder urlEncoder = new JwtBase64UrlEncoder();
+                IJwtDecoder decoder = new JwtDecoder(serializer, validator, urlEncoder, new HMACSHA256Algorithm());
+
+                var json = decoder.Decode(token, secret, verify: true);
+            }
+            catch (TokenExpiredException)
+            {
+                _context.Token.Remove(tokenActivation);
+                return BadRequest();
+            }
+            catch (SignatureVerificationException)
+            {
+                return BadRequest();
+            }
+
+            //Si token ok, on active le compte
+            User user = _context.User.Find(tokenActivation.id_user);
+            user.active = true;
+            //On supprime le token d'activation
+            _context.Token.Remove(tokenActivation);
+            await _context.SaveChangesAsync();
+
+            //et on envoie un email à l'utilisateur
+
+            return Ok();
+        }
+
+        //Méthode permettant de générer un token de changement de mot de passe à la suite d'un oubli et d'envoyer un email
+        //contenant un lien permettant de le changer
+        [HttpPost("forgot_password")]
+        [AllowAnonymous]
+        public async Task<ActionResult> ForgotPassword([FromBody]string email)
+        {
+            //Récupération de l'utilisateur par email
+            User user = _context.User.Where(x => x.email == email).SingleOrDefault();
+
+            //Si pas d'utilisateur trouvé
+            if (user == null)
+                return BadRequest();
+
+            //Génération d'un token pour réinitialiser le mot de passe de l'utilisateur
+            // Génération d'un token pour l'activation du compte valable pendant 2h
+            var token = new JwtBuilder()
+                  .WithAlgorithm(new HMACSHA256Algorithm())
+                  .WithSecret("tokenReset33-password&!")
+                  .AddClaim("exp", DateTimeOffset.UtcNow.AddHours(6).ToUnixTimeSeconds())
+                  .AddClaim("claim2", "claim2-value")
+                  .Build();
+
+            //Ajout du token en base de données
+            Token tokenActivation = new Token();
+            tokenActivation.id_user = user.id;
+            tokenActivation.type = TypeToken.ForgotPassword;
+            tokenActivation.token = token;
+            _context.Token.Add(tokenActivation);
+
+            await _context.SaveChangesAsync();
+
+            if (tokenActivation.id > 0)
+            {
+                //Envoi d'un email contenant un lien pour réinitialier le mot de passe
+                //((EmailSender)_emailSender).SendForgotPasswordMailAsync(user, tokenActivation.token);
+            }
+
+            return Ok();
+        }
+
+        //Méthode permettant de valider le token fourni pour changer de mot de passe
+        [HttpGet("reset_password/{token}")]
+        [AllowAnonymous]
+        public ActionResult ValidateTokenResetPassword(string token)
+        {
+            //Si le token est bien valide pour changer le mot de passe
+            Token tokenReset = _context.Token.Where(x => x.token == token && x.type == TypeToken.ForgotPassword).OrderByDescending(x => x.id).FirstOrDefault();
+
+            if (tokenReset == null)
+                return BadRequest();
+
+            string secret = "tokenReset33-password&!";
+
+            //Vérification du token (expiration, clé, ...)
+            try
+            {
+                IJsonSerializer serializer = new JsonNetSerializer();
+                IDateTimeProvider provider = new UtcDateTimeProvider();
+                IJwtValidator validator = new JwtValidator(serializer, provider);
+                IBase64UrlEncoder urlEncoder = new JwtBase64UrlEncoder();
+                IJwtDecoder decoder = new JwtDecoder(serializer, validator, urlEncoder, new HMACSHA256Algorithm());
+
+                var json = decoder.Decode(token, secret, verify: true);
+            }
+            catch (TokenExpiredException)
+            {
+                _context.Token.Remove(tokenReset);
+                return BadRequest();
+            }
+            catch (SignatureVerificationException)
+            {
+                return BadRequest();
+            }
+
+            //Si Ok
+            return Ok();
+        }
+
+        //Méthode permettant de modifier le mot de passe d'un utilisateur à la suite d'un oublie
+        [HttpPost("reset_password/{token}")]
+        [AllowAnonymous]
+        public async Task<ActionResult> ResetPassword(string token, [FromBody]string password)
+        {
+            //Si le token est bien valide pour changer le mot de passe
+            Token tokenReset = _context.Token.Where(x => x.token == token && x.type == TypeToken.ForgotPassword).OrderByDescending(x => x.id).FirstOrDefault();
+
+            if (tokenReset == null)
+                return BadRequest("BAD_TOKEN");
+
+            string secret = "tokenReset33-password&!";
+
+            //Vérification du token (expiration, clé, ...)
+            try
+            {
+                IJsonSerializer serializer = new JsonNetSerializer();
+                IDateTimeProvider provider = new UtcDateTimeProvider();
+                IJwtValidator validator = new JwtValidator(serializer, provider);
+                IBase64UrlEncoder urlEncoder = new JwtBase64UrlEncoder();
+                IJwtDecoder decoder = new JwtDecoder(serializer, validator, urlEncoder, new HMACSHA256Algorithm());
+
+                var json = decoder.Decode(token, secret, verify: true);
+            }
+            catch (TokenExpiredException)
+            {
+                _context.Token.Remove(tokenReset);
+                return BadRequest();
+            }
+            catch (SignatureVerificationException)
+            {
+                return BadRequest();
+            }
+
+            User user = _context.User.Find(tokenReset.id_user);
+
+            if (user == null)
+                return BadRequest("NO_USER");
+
+            //test si le nouveau mot de passe respect les conditions (regex)
+            if (!PasswordUtilities.PasswordMatchRegex(password))
+                return BadRequest("PASSWORD_TOO_WEAK");
+
+            user.password = PasswordUtilities.HashPassword(password);
+
+            await _context.SaveChangesAsync();
+
+            return Ok();
         }
 
         private bool UserExists(int id)

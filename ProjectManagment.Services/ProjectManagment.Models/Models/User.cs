@@ -21,5 +21,7 @@ namespace ProjectManagment.Models.Models
         public byte[] profile_picture {get;set;}
 
         public List<Project> Projects { get; set; }
+
+        public List<Token> Tokens { get; set; }
     }
 }

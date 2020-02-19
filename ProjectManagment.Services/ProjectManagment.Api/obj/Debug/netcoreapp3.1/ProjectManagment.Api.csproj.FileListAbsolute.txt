@@ -191,4 +191,3 @@ C:\Users\lenfa\Projects\ProjectManagmentApp\ProjectManagment.Services\ProjectMan
 C:\Users\lenfa\Projects\ProjectManagmentApp\ProjectManagment.Services\ProjectManagment.Api\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\lenfa\Projects\ProjectManagmentApp\ProjectManagment.Services\ProjectManagment.Api\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Protocols.dll
 C:\Users\lenfa\Projects\ProjectManagmentApp\ProjectManagment.Services\ProjectManagment.Api\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
-C:\Users\lenfa\Projects\ProjectManagmentApp\ProjectManagment.Services\ProjectManagment.Api\obj\Debug\netcoreapp3.1\ProjectManagment.Api.MvcApplicationPartsAssemblyInfo.cache

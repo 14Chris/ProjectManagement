@@ -7,7 +7,6 @@
       <template slot="end">
         <b-dropdown aria-role="menu" class position="is-bottom-left">
           <b-icon class="navbar-item" icon="account" size="is-medium" slot="trigger"></b-icon>
-
           <b-dropdown-item>
             <router-link to="/profile">Profil</router-link>
           </b-dropdown-item>

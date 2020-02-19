@@ -16,6 +16,7 @@ namespace ProjectManagment.Models
         public DbSet<Project> Project { get; set; }
         public DbSet<Task> Task { get; set; }
         public DbSet<Event> Event { get; set; }
+        public DbSet<Token> Token { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
