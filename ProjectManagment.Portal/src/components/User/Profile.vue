@@ -1,19 +1,50 @@
 <template>
   <div class="container">
     <div v-if="user != null">
-      <form v-on:submit.prevent="updateUser">
-        <AvatarSelector v-model="file" :formats="formats" :size="sizeKB" :url="profilePictureUrl" />
+      <div v-if="edit">
+        <form v-on:submit.prevent="updateUser">
+          <AvatarSelector
+            v-model="file"
+            :formats="formats"
+            :size="sizeKB"
+            :url="profilePictureUrl"
+            :edit="edit"
+          />
 
+          <b-field label="First name">
+            <b-input type="text" v-model="user.first_name"></b-input>
+          </b-field>
+
+          <b-field label="Last name">
+            <b-input type="text" v-model="user.last_name"></b-input>
+          </b-field>
+          <b-field label="Email">
+            <h3>{{user.email}}</h3>
+          </b-field>
+
+          <b-button type="is-success" native-type="submit">Submit</b-button>
+          <b-button type="is-danger" @click="edit=false">Cancel</b-button>
+        </form>
+      </div>
+      <div v-else>
+        <AvatarSelector
+          v-model="file"
+          :formats="formats"
+          :size="sizeKB"
+          :url="profilePictureUrl"
+          :edit="edit"
+        />
         <b-field label="First name">
-          <b-input type="text" v-model="user.first_name"></b-input>
+          <h3>{{user.first_name}}</h3>
         </b-field>
-
         <b-field label="Last name">
-          <b-input type="text" v-model="user.last_name"></b-input>
+          <h3>{{user.last_name}}</h3>
         </b-field>
-
-        <b-button type="is-primary" native-type="submit">Modify</b-button>
-      </form>
+        <b-field label="Email">
+          <h3>{{user.email}}</h3>
+        </b-field>
+        <b-button type="is-primary" @click="edit=true">Modify</b-button>
+      </div>
     </div>
     <div v-else>
       <b-loading :is-full-page="isFullPage" :active.sync="isLoading" :can-cancel="true"></b-loading>
@@ -40,7 +71,8 @@ export default {
       file: null,
       formats: ["image/jpg", "image/jpeg", "image/png"],
       sizeKB: 5000,
-      profilePictureUrl: ""
+      profilePictureUrl: "",
+      edit: false
     };
   },
   mounted() {
@@ -100,15 +132,13 @@ export default {
         position: "is-bottom",
         type: "is-danger"
       });
+    },
+    SetModifyMode() {
+      this.edit = true;
+    },
+    CancelModifyMode() {
+      this.edit = false;
     }
-    // toBase64(file) {
-    //   new Promise((resolve, reject) => {
-    //     const reader = new FileReader();
-    //     reader.readAsDataURL(file);
-    //     reader.onload = () => resolve(reader.result);
-    //     reader.onerror = error => reject(error);
-    //   });
-    // }
   }
 };
 </script>

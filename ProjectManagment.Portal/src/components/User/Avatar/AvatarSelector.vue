@@ -1,14 +1,26 @@
 <template>
-  <div class="avatar-selector">
-    <div>
-      <input type="file" @change="handleAvatarChange" :accept="formatsString" />
-      <p
-        class="avatar-selector-instructions"
-      >{{formatsString}} files with a size less than {{size}}KB</p>
+  <div>
+    <div v-if="edit" class="avatar-selector">
+      <div class="avatar-container">
+        <avatar class="avatar-picture" :size="200" v-if="value" :src="avatarFileUrl"></avatar>
+        <avatar class="avatar-picture" :size="200" v-else-if="urlCheck" :src="url"></avatar>
+        <avatar class="avatar-picture" :size="200" v-else src="../../../assets/avatar.png"></avatar>
+        <b-field class="change-picture-btn">
+          <b-upload v-model="file">
+            <a class="button is-text">
+              <b-icon icon="upload"></b-icon>
+            </a>
+          </b-upload>
+        </b-field>
+      </div>
     </div>
-    <avatar :size="200" v-if="value" :src="avatarFileUrl"></avatar>
-    <avatar :size="200" v-else-if="urlCheck" :src="url"></avatar>
-    <avatar :size="200" v-else src="../../../assets/avatar.png"></avatar>
+    <div v-else class="avatar-selector">
+      <div class="avatar-container">
+        <avatar class="avatar-picture" :size="200" v-if="value" :src="avatarFileUrl"></avatar>
+        <avatar class="avatar-picture" :size="200" v-else-if="urlCheck" :src="url"></avatar>
+        <avatar class="avatar-picture" :size="200" v-else src="../../../assets/avatar.png"></avatar>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -28,7 +40,8 @@ export default {
     value: Blob,
     formats: Array,
     size: Number,
-    url: String
+    url: String,
+    edit: Boolean
   },
   computed: {
     formatsString: {
@@ -80,9 +93,31 @@ export default {
 .avatar-selector {
   align-items: center;
   display: flex;
+  height: 200px;
   .avatar-instructions {
     font-style: italic;
     margin: 10px;
   }
+}
+
+.avatar-container {
+  height: fit-content;
+  width: fit-content;
+}
+.avatar-picture {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.change-picture-btn {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 80px;
+  left: 80px;
+
+  // z-index: 10;
 }
 </style>
