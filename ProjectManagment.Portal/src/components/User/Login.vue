@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <form v-on:submit.prevent="Login">
       <h1>Login</h1>
       <b-field label="Email">

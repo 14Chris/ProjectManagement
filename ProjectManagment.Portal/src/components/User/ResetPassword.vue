@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <h1>Reset password</h1>
     <form v-on:submit.prevent="SubmitPasswordChange">
       <!-- <div>{{this.model.token}}</div> -->
@@ -48,11 +48,23 @@ export default {
     };
   },
   mounted() {
-    this.token = this.$route.params.token;
+    var router = this.$router;
+    api.getData("Users/reset_password/" + this.$route.params.token).then(response => {
+
+      if (response.status == 200) {
+        this.token = this.$route.params.token;
+      } else {
+        response.json().then(async data => {
+          this.danger(data);
+          await(3000);
+          router.push("/login");
+        });
+      }
+    });
   },
   methods: {
     SubmitPasswordChange: function() {
-      //   var router = this.$router;
+        var router = this.$router;
       api
         .create(
           "Users/reset_password/" + this.token,
@@ -60,10 +72,10 @@ export default {
         )
         .then(resp => {
           if (resp.status == 200) {
-              this.success("Password changed")
-          }
-          else{
-              this.danger("Error in changing password")
+            this.success("Password changed");
+            router.push("/login");
+          } else {
+            this.danger("Error in changing password");
           }
         }) // Transform the data into json
         .catch(error => {
@@ -78,7 +90,7 @@ export default {
         type: "is-danger"
       });
     },
-     success(message) {
+    success(message) {
       this.$buefy.toast.open({
         duration: 5000,
         message: message,

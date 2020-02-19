@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <h1>Forgot password</h1>
     <form v-on:submit.prevent="SubmitPasswordChange">
       <b-field label="Email">
@@ -37,7 +37,7 @@ export default {
             return;
           } else {
             resp.json().then(function(data) {
-                console.log(data)
+              console.log(data);
               router.push("/");
             });
           }

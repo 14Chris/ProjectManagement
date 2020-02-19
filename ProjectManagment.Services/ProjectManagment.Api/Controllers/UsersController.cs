@@ -284,7 +284,7 @@ namespace ProjectManagment.Api.Controllers
             Token tokenReset = _context.Token.Where(x => x.token == token && x.type == TypeToken.ForgotPassword).OrderByDescending(x => x.id).FirstOrDefault();
 
             if (tokenReset == null)
-                return BadRequest();
+                return BadRequest("BAD_TOKEN");
 
             string secret = "tokenReset33-password&!";
 
