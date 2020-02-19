@@ -3,6 +3,8 @@ import Register from './components/User/Register'
 import Login from './components/User/Login'
 import Home from './components/Home'
 import Profile from './components/User/Profile'
+import ForgotPassword from './components/User/ForgotPassword'
+import ResetPassword from './components/User/ResetPassword'
 
 const router = new Router({
   routes: [
@@ -13,6 +15,14 @@ const router = new Router({
     {
       path: '/login',
       component: Login
+    },
+    {
+      path: '/forgot_password',
+      component: ForgotPassword
+    },
+    {
+      path: '/reset_password/:token',
+      component: ResetPassword
     },
     {
       path: '/',

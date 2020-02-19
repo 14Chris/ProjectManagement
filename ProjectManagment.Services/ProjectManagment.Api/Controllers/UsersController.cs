@@ -250,13 +250,12 @@ namespace ProjectManagment.Api.Controllers
                 return BadRequest();
 
             //Génération d'un token pour réinitialiser le mot de passe de l'utilisateur
-            // Génération d'un token pour l'activation du compte valable pendant 2h
             var token = new JwtBuilder()
                   .WithAlgorithm(new HMACSHA256Algorithm())
                   .WithSecret("tokenReset33-password&!")
                   .AddClaim("exp", DateTimeOffset.UtcNow.AddHours(6).ToUnixTimeSeconds())
                   .AddClaim("claim2", "claim2-value")
-                  .Build();
+                  .Encode();
 
             //Ajout du token en base de données
             Token tokenActivation = new Token();
@@ -303,11 +302,11 @@ namespace ProjectManagment.Api.Controllers
             catch (TokenExpiredException)
             {
                 _context.Token.Remove(tokenReset);
-                return BadRequest();
+                return BadRequest("TOKEN_EXPIRED");
             }
             catch (SignatureVerificationException)
             {
-                return BadRequest();
+                return BadRequest("BAD_SIGNATURE");
             }
 
             //Si Ok

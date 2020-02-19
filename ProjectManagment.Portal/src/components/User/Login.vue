@@ -12,6 +12,7 @@
 
       <b-button native-type="submit">Login</b-button>
       <b-button tag="router-link" to="/register" type="is-link">Register</b-button>
+      <b-button type="is-text" tag="router-link" to="/forgot_password">Forgot password ?</b-button>
     </form>
   </div>
 </template>
