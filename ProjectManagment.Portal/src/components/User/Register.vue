@@ -23,6 +23,7 @@
         <b-input v-model="model.email"></b-input>
       </b-field>
       <div class="error" v-if="!$v.model.email.required && submitStatus=='ERROR'">Email is required</div>
+      <div class="error" v-if="!$v.model.email.email && submitStatus=='ERROR'">Please enter valid email address</div>
       <div
         class="error"
         v-if="!$v.model.email.isUnique && submitStatus=='ERROR'"
@@ -57,7 +58,7 @@
 <script>
 import ApiService from "../../services/api";
 import RegisterUserModel from "../../models/RegisterUserModel";
-import { required, sameAs, minLength } from "vuelidate/lib/validators";
+import { required, sameAs, minLength, email } from "vuelidate/lib/validators";
 
 var api = new ApiService();
 
@@ -101,6 +102,7 @@ export default {
       },
       email: {
         required,
+        email,
         // simulate async call, fail for all logins with even length
         async isUnique(value) {
           const response = await api.getData("Users/email_exists/" + value);

@@ -13,7 +13,7 @@
             size="is-medium"
             slot="trigger"
           ></b-icon>
-          <b-dropdown-item>
+          <b-dropdown-item >
             <router-link to="/profile">Profil</router-link>
           </b-dropdown-item>
           <b-dropdown-item value="settings">Settings</b-dropdown-item>

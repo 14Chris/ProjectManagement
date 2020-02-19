@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <div class="container">
     <div v-if="user != null">
       <form v-on:submit.prevent="updateUser">
         <h1>Profile</h1>
-
-        <avatar :username="user.first_name" :size="150"></avatar>
+        {{file != null ? file.getAsBinary() : ""}}
+        <AvatarSelector v-model="file" :formats="formats" :size="sizeKB" />
 
         <b-field label="First name">
           <b-input type="text" v-model="user.first_name"></b-input>
@@ -25,20 +25,24 @@
 
 <script>
 import ApiService from "../../services/api";
-import Avatar from 'vue-avatar'
+// import Avatar from "vue-avatar";
+import AvatarSelector from "./Avatar/AvatarSelector"
 
 var api = new ApiService();
 
 export default {
   name: "Profile",
   components: {
-    Avatar
+    AvatarSelector
   },
   data() {
     return {
       user: null,
       isFullPage: false,
-      isLoading: true
+      isLoading: true,
+      file: null,
+      formats: ["image/jpg", "image/jpeg", "image/png"],
+      sizeKB: 1000
     };
   },
   mounted() {
@@ -53,13 +57,15 @@ export default {
   methods: {
     updateUser() {
       // var _this = this;
-      api.update("Users/" + this.user.id, JSON.stringify(this.user)).then(resp => {
-        if (resp.status == 204) {
-          this.success("Change made");
-        } else {
-          this.danger("Error during modification");
-        }
-      }); // Transform the data into json
+      api
+        .update("Users/" + this.user.id, JSON.stringify(this.user))
+        .then(resp => {
+          if (resp.status == 204) {
+            this.success("Change made");
+          } else {
+            this.danger("Error during modification");
+          }
+        }); // Transform the data into json
     },
     success(message) {
       this.$buefy.toast.open({
