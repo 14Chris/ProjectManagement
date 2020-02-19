@@ -67,15 +67,14 @@ export default {
 
               resp.json().then(function(data) {
                 console.log(data);
-                // Create and append the li's to the ul
+   
                 var token = data.token;
                 localStorage.setItem("userToken", token);
                 _this.isLoading = false;
                 router.push("/");
               });
             }
-          }) // Transform the data into json
-
+          })
           .catch(error => {
             _this.isLoading = false;
             console.log("error", error);

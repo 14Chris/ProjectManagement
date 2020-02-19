@@ -108,6 +108,7 @@ namespace ProjectManagment.Api.Controllers
 
             user.last_name = model.last_name;
             user.first_name = model.first_name;
+            user.profile_picture = Convert.FromBase64String(model.profile_picture);
 
             try
             {

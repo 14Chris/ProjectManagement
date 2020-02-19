@@ -46,6 +46,7 @@ export default class ApiService {
             Accept: 'application/json',
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',
+           'Access-Control-Allow-Headers': "*",
             'Authorization': `Bearer ${authToken}`,
             'X-API-KEY': this.apiKey
           }
@@ -54,6 +55,7 @@ export default class ApiService {
         return {
             Accept: 'application/json',
             'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Headers': "*",
             'Content-Type': 'application/json',
             'X-API-KEY': this.apiKey
         }
