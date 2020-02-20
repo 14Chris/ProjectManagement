@@ -191,5 +191,16 @@ C:\Users\lenfa\Projects\ProjectManagmentApp\ProjectManagment.Services\ProjectMan
 C:\Users\lenfa\Projects\ProjectManagmentApp\ProjectManagment.Services\ProjectManagment.Api\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\lenfa\Projects\ProjectManagmentApp\ProjectManagment.Services\ProjectManagment.Api\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Protocols.dll
 C:\Users\lenfa\Projects\ProjectManagmentApp\ProjectManagment.Services\ProjectManagment.Api\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
-C:\Users\lenfa\Projects\ProjectManagmentApp\ProjectManagment.Services\ProjectManagment.Api\obj\Debug\netcoreapp3.1\ProjectManagment.Api.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\lenfa\Projects\ProjectManagmentApp\ProjectManagment.Services\ProjectManagment.Api\bin\Debug\netcoreapp3.1\JWT.dll
+C:\Users\lenfa\Projects\ProjectManagmentApp\ProjectManagment.Services\ProjectManagment.Api\bin\Debug\netcoreapp3.1\FluentEmail.Core.dll
+C:\Users\lenfa\Projects\ProjectManagmentApp\ProjectManagment.Services\ProjectManagment.Api\obj\Debug\netcoreapp3.1\ProjectManagment.Api.RazorAssemblyInfo.cache
+C:\Users\lenfa\Projects\ProjectManagmentApp\ProjectManagment.Services\ProjectManagment.Api\obj\Debug\netcoreapp3.1\ProjectManagment.Api.RazorAssemblyInfo.cs
+C:\Users\lenfa\Projects\ProjectManagmentApp\ProjectManagment.Services\ProjectManagment.Api\obj\Debug\netcoreapp3.1\ProjectManagment.Api.TagHelpers.input.cache
+C:\Users\lenfa\Projects\ProjectManagmentApp\ProjectManagment.Services\ProjectManagment.Api\obj\Debug\netcoreapp3.1\ProjectManagment.Api.TagHelpers.output.cache
+C:\Users\lenfa\Projects\ProjectManagmentApp\ProjectManagment.Services\ProjectManagment.Api\obj\Debug\netcoreapp3.1\ProjectManagment.Api.RazorCoreGenerate.cache
+C:\Users\lenfa\Projects\ProjectManagmentApp\ProjectManagment.Services\ProjectManagment.Api\obj\Debug\netcoreapp3.1\Razor\MailUtilities\Templates\ActivateAccount.cshtml.g.cs
+C:\Users\lenfa\Projects\ProjectManagmentApp\ProjectManagment.Services\ProjectManagment.Api\obj\Debug\netcoreapp3.1\Razor\MailUtilities\Templates\ResetPassword.cshtml.g.cs
+C:\Users\lenfa\Projects\ProjectManagmentApp\ProjectManagment.Services\ProjectManagment.Api\obj\Debug\netcoreapp3.1\ProjectManagment.Api.RazorTargetAssemblyInfo.cs
+C:\Users\lenfa\Projects\ProjectManagmentApp\ProjectManagment.Services\ProjectManagment.Api\bin\Debug\netcoreapp3.1\FluentEmail.Razor.dll
+C:\Users\lenfa\Projects\ProjectManagmentApp\ProjectManagment.Services\ProjectManagment.Api\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Mvc.Razor.Extensions.dll
+C:\Users\lenfa\Projects\ProjectManagmentApp\ProjectManagment.Services\ProjectManagment.Api\bin\Debug\netcoreapp3.1\RazorLight.dll

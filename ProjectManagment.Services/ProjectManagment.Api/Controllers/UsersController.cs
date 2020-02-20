@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ProjectManagment.Api.MailUtilities;
 using ProjectManagment.Api.Models;
 using ProjectManagment.Models;
 using ProjectManagment.Models.Models;
@@ -21,10 +22,12 @@ namespace ProjectManagment.Api.Controllers
     public class UsersController : ControllerBase
     {
         private readonly ProjectManagmentContext _context;
+        private readonly IEmailSender _emailSender;
 
-        public UsersController(ProjectManagmentContext context)
+        public UsersController(ProjectManagmentContext context,IEmailSender emailSender)
         {
             _context = context;
+            _emailSender = emailSender;
         }
 
         // GET: api/Users
@@ -156,6 +159,29 @@ namespace ProjectManagment.Api.Controllers
             _context.User.Add(user);
             await _context.SaveChangesAsync();
 
+            // Génération d'un token pour l'activation du compte valable pendant 2h
+            var token = new JwtBuilder()
+                  .WithAlgorithm(new HMACSHA256Algorithm())
+                  .WithSecret("tokenReset33-password&!")
+                  .AddClaim("exp", DateTimeOffset.UtcNow.AddHours(24).ToUnixTimeSeconds())
+                  .AddClaim("claim2", "claim2-value")
+                  .Encode();
+
+            //Ajout du token en base de données
+            Token tokenActivation = new Token();
+            tokenActivation.id_user = user.id;
+            tokenActivation.type = TypeToken.AccountActivation;
+            tokenActivation.token = token;
+            _context.Token.Add(tokenActivation);
+
+            await _context.SaveChangesAsync();
+
+            if (tokenActivation.id > 0)
+            {
+                // Envoi d'un email avec un lien d'activation du compte
+                ((EmailSender)_emailSender).SendAccountActivationMailAsync(user, tokenActivation.token);
+            }
+
             return CreatedAtAction("GetUser", new { id = user.id }, user);
         }
 
@@ -270,7 +296,7 @@ namespace ProjectManagment.Api.Controllers
             if (tokenActivation.id > 0)
             {
                 //Envoi d'un email contenant un lien pour réinitialier le mot de passe
-                //((EmailSender)_emailSender).SendForgotPasswordMailAsync(user, tokenActivation.token);
+                ((EmailSender)_emailSender).SendResetPasswordMailAsync(user, tokenActivation.token);
             }
 
             return Ok();

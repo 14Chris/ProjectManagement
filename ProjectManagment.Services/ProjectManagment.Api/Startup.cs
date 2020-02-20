@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -14,6 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using ProjectManagment.Api.MailUtilities;
 using ProjectManagment.Models;
 
 namespace ProjectManagment.Api
@@ -67,6 +70,19 @@ namespace ProjectManagment.Api
 
             services.AddDbContext<ProjectManagmentContext>(options =>
                     options.UseNpgsql(connectionString));
+
+            // Configure IFluentEmail
+            services.AddFluentEmail("lenfant.chris@hotmail.fr")
+            .AddRazorRenderer()
+            .AddSmtpSender(new SmtpClient("smtp-mail.outlook.com", 587)
+            {
+                Credentials = new NetworkCredential("lenfant.chris@hotmail.fr", "Mmajjbmt15!14"),
+                EnableSsl = true
+            });
+
+            // Add our service
+            services.AddScoped<IEmailSender, EmailSender>();
+            services.AddHttpContextAccessor();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
