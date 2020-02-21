@@ -1,13 +1,17 @@
 <template>
   <div class="container">
-    <h1>Forgot password</h1>
-    <form v-on:submit.prevent="SubmitPasswordChange">
-      <b-field label="Email">
-        <b-input type="text" v-model="model.email"></b-input>
-      </b-field>
+    <div class="card">
+      <div class="card-content">
+        <p class="title">Forgot password</p>
+        <form v-on:submit.prevent="SubmitPasswordChange">
+          <b-field label="Email">
+            <b-input type="text" v-model="model.email"></b-input>
+          </b-field>
 
-      <b-button native-type="submit">Submit</b-button>
-    </form>
+          <b-button type="is-success" native-type="submit">Submit</b-button>
+        </form>
+      </div>
+    </div>
   </div>
 </template>
 

@@ -1,25 +1,33 @@
 <template>
   <div class="container">
     <b-loading :is-full-page="isFullPage" :active.sync="isLoading" :can-cancel="true"></b-loading>
-    <form v-on:submit.prevent="Login">
-      <h1>Login</h1>
-      <b-field label="Email">
-        <b-input v-model="login.email"></b-input>
-      </b-field>
-      <div class="error" v-if="!$v.login.email.required && submitStatus=='ERROR'">Email is required</div>
+    <div class="card">
+      <div class="card-content">
+        <p class="title">Login</p>
 
-      <b-field label="Password">
-        <b-input type="password" v-model="login.password"></b-input>
-      </b-field>
-      <div
-        class="error"
-        v-if="!$v.login.password.required && submitStatus=='ERROR'"
-      >Password is required</div>
+        <form v-on:submit.prevent="Login">
+          <b-field label="Email">
+            <b-input v-model="login.email"></b-input>
+          </b-field>
+          <div
+            class="error"
+            v-if="!$v.login.email.required && submitStatus=='ERROR'"
+          >Email is required</div>
 
-      <b-button native-type="submit">Login</b-button>
-      <b-button tag="router-link" to="/register" type="is-link">Register</b-button>
-      <b-button type="is-text" tag="router-link" to="/forgot_password">Forgot password ?</b-button>
-    </form>
+          <b-field label="Password">
+            <b-input type="password" v-model="login.password"></b-input>
+          </b-field>
+          <div
+            class="error"
+            v-if="!$v.login.password.required && submitStatus=='ERROR'"
+          >Password is required</div>
+
+          <b-button type="is-success" native-type="submit">Login</b-button>
+          <b-button tag="router-link" to="/register" type="is-link">Register</b-button>
+          <b-button type="is-text" tag="router-link" to="/forgot_password">Forgot password ?</b-button>
+        </form>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -60,14 +68,14 @@ export default {
               resp.json().then(data => {
                 this.danger("Authentication failed : " + data);
               });
-         
+
               return;
             } else {
               _this.submitStatus = "OK";
 
               resp.json().then(function(data) {
                 console.log(data);
-   
+
                 var token = data.token;
                 localStorage.setItem("userToken", token);
                 _this.isLoading = false;
@@ -104,4 +112,16 @@ export default {
 </script>
 
 <style>
+.container {
+  align-content: center;
+  height: 100%;
+}
+
+.card {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 50%;
+}
 </style>

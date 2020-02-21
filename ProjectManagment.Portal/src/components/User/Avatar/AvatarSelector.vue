@@ -95,16 +95,14 @@ export default {
     }
   },
   watch: {
-  edit: {
-    deep: true,
-    immediate: true,
-    handler(newVal) {
-      if(newVal == false){
-        this.value = null
+    edit: {
+      deep: true,
+      immediate: true,
+      handler() {
+        this.value = null;
       }
     }
   }
-}
 };
 </script>
 
