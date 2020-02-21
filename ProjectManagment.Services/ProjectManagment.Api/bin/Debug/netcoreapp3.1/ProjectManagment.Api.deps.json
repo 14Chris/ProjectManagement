@@ -26,6 +26,7 @@
         "dependencies": {
           "FluentEmail.Core": "2.7.0",
           "FluentEmail.Razor": "2.7.0",
+          "FluentEmail.Smtp": "2.7.1",
           "JWT": "6.1.0",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "3.1.2",
           "Microsoft.EntityFrameworkCore": "3.1.1",
@@ -345,6 +346,20 @@
         },
         "compile": {
           "lib/netstandard2.0/FluentEmail.Razor.dll": {}
+        }
+      },
+      "FluentEmail.Smtp/2.7.1": {
+        "dependencies": {
+          "FluentEmail.Core": "2.7.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/FluentEmail.Smtp.dll": {
+            "assemblyVersion": "2.7.1.0",
+            "fileVersion": "2.7.1.0"
+          }
+        },
+        "compile": {
+          "lib/netstandard2.0/FluentEmail.Smtp.dll": {}
         }
       },
       "JWT/6.1.0": {
@@ -4198,6 +4213,13 @@
       "sha512": "sha512-xCfa/mZCj7ZNdxK4NkK1CoHOV0zcvDuKejwT2URZOIvxAlQOAsZCHN9RB4K2JftxlJSyzRlNzNP8dnnI2Y979Q==",
       "path": "fluentemail.razor/2.7.0",
       "hashPath": "fluentemail.razor.2.7.0.nupkg.sha512"
+    },
+    "FluentEmail.Smtp/2.7.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-C79ynt21tz3675glvmPRNP8q4on4m7etTBeSTI6LZci4SDZY2K3ioOr0uJxG9D4TezkP4tqYoC/3hUwSY/vLBg==",
+      "path": "fluentemail.smtp/2.7.1",
+      "hashPath": "fluentemail.smtp.2.7.1.nupkg.sha512"
     },
     "JWT/6.1.0": {
       "type": "package",

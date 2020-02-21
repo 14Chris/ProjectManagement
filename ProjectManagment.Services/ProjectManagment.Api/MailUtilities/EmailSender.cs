@@ -32,13 +32,28 @@ namespace ProjectManagment.Api.MailUtilities
         public async Task<bool> SendUsingTemplate(string to, string subject, EmailTemplate template, object model)
         {
             string currentDirectory = Directory.GetCurrentDirectory();
+            string htmlTemplate = "";
+            switch (template)
+            {
+                case EmailTemplate.ActivateAccount:
+                    htmlTemplate = @"<h2>Account activation</h2>
+<p>Hello @Model.UserName,</p>
+<p>Click on this <a href=""@Model.ActivateLink"">link</a> to activation your account</p>";
+                    break;
+                case EmailTemplate.ResetPassword:
+                    htmlTemplate = @"<h2>Password reset</h2>
+<p>Hello @Model.UserName,</p>
+<p>Click on this @Model.ActivateLink to reset your password</p> 
+";
+                    break;
+            }
+
             try
             {
-                
                 var result = await _email.To(to)
                 .Subject(subject)
-                .UsingTemplateFromFile(string.Format("/app/publish/MailUtility/Templates/{0}.cshtml", template), model)
-                .SendAsync();
+                .UsingTemplate(htmlTemplate, model)
+.SendAsync();
 
                 if (!result.Successful)
                 {
@@ -53,7 +68,6 @@ namespace ProjectManagment.Api.MailUtilities
             }
             catch (Exception ex)
             {
-                //Directory.GetDirectories(currentDirectory+"/publish").ToList().ForEach(x => _logger.LogError(x));
                 _logger.LogError("Failed to send an email.\n{Errors}", string.Join(Environment.NewLine, ex.Message));
                 return false;
             }

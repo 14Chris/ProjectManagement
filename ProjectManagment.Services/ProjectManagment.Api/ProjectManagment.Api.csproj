@@ -4,8 +4,25 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UserSecretsId>8d10e886-6322-46c8-ba30-820015784693</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <MvcRazorCompileOnPublish>false</MvcRazorCompileOnPublish>
+    <MvcRazorExcludeRefAssembliesFromPublish>false</MvcRazorExcludeRefAssembliesFromPublish>
     <!--<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>-->
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="MailUtilities\Templates\ActivateAccount.cshtml" />
+    <Content Remove="MailUtilities\Templates\ResetPassword.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="MailUtilities\Templates\ActivateAccount.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CustomToolNamespace></CustomToolNamespace>
+    </None>
+    <None Include="MailUtilities\Templates\ResetPassword.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="FluentEmail.Core" Version="2.7.0" />
