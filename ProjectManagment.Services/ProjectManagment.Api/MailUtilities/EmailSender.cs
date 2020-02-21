@@ -61,7 +61,7 @@ namespace ProjectManagment.Api.MailUtilities
                 }
                 else
                 {
-                    _logger.LogError("Email sent");
+                    _logger.LogInformation("Email sent");
                 }
 
                 return result.Successful;

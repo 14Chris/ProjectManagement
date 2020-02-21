@@ -33,7 +33,6 @@ const router = new Router({
       }],
       beforeEnter: ((to, from, next) => {
         var token = localStorage.getItem('userToken')
-        console.log(token)
         // if the user is not authenticated, `next` is called twice
         if (token == "undefined" || token == null) {
           next('/login')

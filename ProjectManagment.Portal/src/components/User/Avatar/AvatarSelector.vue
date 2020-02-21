@@ -4,21 +4,22 @@
       <div class="avatar-container">
         <avatar class="avatar-picture" :size="200" v-if="value" :src="avatarFileUrl"></avatar>
         <avatar class="avatar-picture" :size="200" v-else-if="urlCheck" :src="url"></avatar>
-        <avatar class="avatar-picture" :size="200" v-else src="../../../assets/avatar.png"></avatar>
-        <b-field class="change-picture-btn">
-          <b-upload v-model="file">
-            <a class="button is-text">
-              <b-icon icon="upload"></b-icon>
-            </a>
-          </b-upload>
-        </b-field>
+        <avatar class="avatar-picture" :size="200" v-else username="Chris"></avatar>
+        <input class="change-picture-btn" type="button" @click="uploadAvatar" value="Upload avatar" />
+        <input
+          type="file"
+          @change="handleAvatarChange"
+          :accept="formatsString"
+          ref="avatarSelector"
+          style="display:none"
+        />
       </div>
     </div>
     <div v-else class="avatar-selector">
       <div class="avatar-container">
         <avatar class="avatar-picture" :size="200" v-if="value" :src="avatarFileUrl"></avatar>
         <avatar class="avatar-picture" :size="200" v-else-if="urlCheck" :src="url"></avatar>
-        <avatar class="avatar-picture" :size="200" v-else src="../../../assets/avatar.png"></avatar>
+        <avatar class="avatar-picture" :size="200" v-else username="Chris"></avatar>
       </div>
     </div>
   </div>
@@ -84,8 +85,26 @@ export default {
       http.open("HEAD", url, false);
       http.send();
       return http.status != 404;
+    },
+    uploadAvatar() {
+      this.$refs.avatarSelector.click();
+    },
+    CancelUploadAvatar() {
+      this.value = null;
+      console.log(this.value);
+    }
+  },
+  watch: {
+  edit: {
+    deep: true,
+    immediate: true,
+    handler(newVal) {
+      if(newVal == false){
+        this.value = null
+      }
     }
   }
+}
 };
 </script>
 
@@ -99,25 +118,23 @@ export default {
     margin: 10px;
   }
 }
-
 .avatar-container {
-  height: fit-content;
-  width: fit-content;
+  height: 200px;
+  width: 200px;
+  margin: 0 auto;
 }
+
 .avatar-picture {
   width: 100%;
   height: 100%;
   position: absolute;
-  top: 0;
-  left: 0;
+  // top: 0;
+  // left: 0;
 }
 .change-picture-btn {
-  width: 100%;
-  height: 100%;
   position: absolute;
-  top: 80px;
-  left: 80px;
+  background-color: transparent;
 
-  // z-index: 10;
+  z-index: 10;
 }
 </style>

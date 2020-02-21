@@ -39,9 +39,7 @@ export default class ApiService {
 
     generateHeaders() {
         var authToken = localStorage.getItem('userToken')
-        console.log(authToken)
-
-        if (authToken && authToken.length > 0) {
+         if (authToken && authToken.length > 0) {
           return {
             Accept: 'application/json',
             'Content-Type': 'application/json',

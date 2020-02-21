@@ -1,19 +1,25 @@
 <template>
   <div class="container">
-    <div v-if="user != null">
+    <div class="div-profile" v-if="user != null">
       <div v-if="edit">
         <form v-on:submit.prevent="updateUser">
           <AvatarSelector
+            class="avatar-profile"
             v-model="file"
             :formats="formats"
             :size="sizeKB"
             :url="profilePictureUrl"
             :edit="edit"
+            ref="avatarComponent"
           />
 
           <b-field label="First name">
             <b-input type="text" v-model="user.first_name"></b-input>
           </b-field>
+          <div
+            class="error"
+            v-if="!$v.user.first_name.required && submitStatus=='ERROR'"
+          >First name is required</div>
 
           <b-field label="Last name">
             <b-input type="text" v-model="user.last_name"></b-input>
@@ -21,6 +27,16 @@
           <b-field label="Email">
             <h3>{{user.email}}</h3>
           </b-field>
+          <b-field label="Password">
+            <b-button type="is-primary" @click="ShowModifyPasswordModal">Modify password</b-button>
+          </b-field>
+          <b-modal :active.sync="isCardModalActive" :width="640">
+            <div class="card">
+              <div class="card-content">
+                <ModifyPasswordForm :idUser="user.id" />
+              </div>
+            </div>
+          </b-modal>
 
           <b-button type="is-success" native-type="submit">Submit</b-button>
           <b-button type="is-danger" @click="edit=false">Cancel</b-button>
@@ -28,11 +44,13 @@
       </div>
       <div v-else>
         <AvatarSelector
+          class="avatar-profile"
           v-model="file"
           :formats="formats"
           :size="sizeKB"
           :url="profilePictureUrl"
           :edit="edit"
+          ref="avatarComponent"
         />
         <b-field label="First name">
           <h3>{{user.first_name}}</h3>
@@ -55,24 +73,29 @@
 <script>
 import ApiService from "../../services/api";
 import AvatarSelector from "./Avatar/AvatarSelector";
+import { required } from "vuelidate/lib/validators";
+import ModifyPasswordForm from "./ModifyPasswordForm";
 
 var api = new ApiService();
 
 export default {
   name: "Profile",
   components: {
-    AvatarSelector
+    AvatarSelector,
+    ModifyPasswordForm
   },
   data() {
     return {
+      file: null,
       user: null,
       isFullPage: false,
       isLoading: true,
-      file: null,
       formats: ["image/jpg", "image/jpeg", "image/png"],
       sizeKB: 5000,
       profilePictureUrl: "",
-      edit: false
+      edit: false,
+      submitStatus: "",
+      isCardModalActive: false
     };
   },
   mounted() {
@@ -89,32 +112,44 @@ export default {
   methods: {
     updateUser() {
       var _this = this;
-      if (this.file != null) {
-        var reader = new FileReader();
-        reader.readAsDataURL(this.file);
-        reader.onload = function() {
-          _this.user.profile_picture = reader.result.split(",")[1];
 
+      this.submitStatus = "SUBMITTED";
+      if (this.$v.$invalid) {
+        this.submitStatus = "ERROR";
+      } else {
+        this.submitStatus = "PENDING";
+        if (this.file != null) {
+          var reader = new FileReader();
+          reader.readAsDataURL(this.file);
+          reader.onload = function() {
+            _this.user.profile_picture = reader.result.split(",")[1];
+
+            api
+              .update("Users/" + _this.user.id, JSON.stringify(_this.user))
+              .then(resp => {
+                if (resp.status == 204) {
+                  _this.submitStatus = "OK";
+                  _this.success("Change made");
+                  _this.edit = false;
+                } else {
+                  _this.submitStatus = "ERROR";
+                  _this.danger("Error during modification");
+                }
+              });
+          };
+        } else {
           api
             .update("Users/" + _this.user.id, JSON.stringify(_this.user))
             .then(resp => {
               if (resp.status == 204) {
+                _this.submitStatus = "OK";
                 _this.success("Change made");
               } else {
+                _this.submitStatus = "ERROR";
                 _this.danger("Error during modification");
               }
             });
-        };
-      } else {
-        api
-          .update("Users/" + _this.user.id, JSON.stringify(_this.user))
-          .then(resp => {
-            if (resp.status == 204) {
-              _this.success("Change made");
-            } else {
-              _this.danger("Error during modification");
-            }
-          });
+        }
       }
     },
     success(message) {
@@ -137,11 +172,31 @@ export default {
       this.edit = true;
     },
     CancelModifyMode() {
+      this.$refs.avatarComponent.CancelUploadAvatar();
       this.edit = false;
+    },
+    ShowModifyPasswordModal() {
+      this.isCardModalActive = true;
+    }
+  },
+  validations: {
+    user: {
+      first_name: {
+        required
+      }
     }
   }
 };
 </script>
 
 <style>
+.div-profile {
+  width: 50%;
+  margin: 0 auto;
+  margin-top: 25px !important;
+}
+
+.avatar-profile {
+  margin: 0 auto;
+}
 </style>

@@ -38,7 +38,7 @@ namespace ProjectManagment.Api.Controllers
             return await _context.User.ToListAsync();
         }
 
-        // GET: api/Users
+        // GET: Users
         [HttpGet("session")]
         [Authorize]
         public ActionResult<UserProfileDataModel> GetUserSession()
@@ -67,7 +67,7 @@ namespace ProjectManagment.Api.Controllers
             return compte;
         }
 
-        // GET: api/Users
+        // GET: Users
         [HttpGet("{id}/profile_picture")]
         [AllowAnonymous]
         public IActionResult GetUserProfilePicture(int id)
@@ -80,7 +80,7 @@ namespace ProjectManagment.Api.Controllers
             return File(compte.profile_picture, "image/jpeg");
         }
 
-        // GET: api/Users/5
+        // GET: Users/5
         [HttpGet("{id}")]
         [Authorize]
         public async Task<ActionResult<User>> GetUser(int id)
@@ -95,9 +95,7 @@ namespace ProjectManagment.Api.Controllers
             return user;
         }
 
-        // PUT: api/Users/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+        // PUT: Users/5
         [HttpPut("{id}")]
         [Authorize]
         public async Task<IActionResult> PutUser(int id, UserProfileDataModel model)
@@ -132,7 +130,7 @@ namespace ProjectManagment.Api.Controllers
             return NoContent();
         }
 
-        // POST: api/Users
+        // POST: Users
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
@@ -183,6 +181,41 @@ namespace ProjectManagment.Api.Controllers
             }
 
             return CreatedAtAction("GetUser", new { id = user.id }, user);
+        }
+
+        // POST: Users/password
+        [HttpPost("password")]
+        [Authorize]
+        public async Task<IActionResult> ModifyPasswordUser(ModifyPasswordModel model)
+        {
+            int id = -1;
+
+            bool ok = Int32.TryParse(HttpContext.User.Identities.FirstOrDefault().Claims.FirstOrDefault().Value, out id);
+            if (!ok)
+                return Unauthorized();
+
+            var compte = _context.User.Where(x => x.id == id).SingleOrDefault();
+
+            if (compte == null)
+            {
+                return Unauthorized();
+            }
+
+            if(compte.password != PasswordUtilities.HashPassword(model.oldPassword))
+            {
+                return BadRequest("INVALID_OLD_PASSWORD");
+            }
+
+            if (!PasswordUtilities.PasswordMatchRegex(model.newPassword))
+            {
+                return BadRequest("NEW_PASSWORD_TOO_WEAK");
+            }
+
+            compte.password = PasswordUtilities.HashPassword(model.newPassword);
+
+            await _context.SaveChangesAsync();
+
+            return Ok();
         }
 
         // DELETE: api/Users/5
