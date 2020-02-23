@@ -58,7 +58,7 @@
             v-if="!$v.model.repeatPassword.required && submitStatus=='ERROR'"
           >Confirmation password is required</div>
           <b-button type="is-success" native-type="submit">Register</b-button>
-               <b-button tag="router-link" to="/login" type="is-link">Login</b-button>
+          <b-button tag="router-link" to="/login" type="is-link">Login</b-button>
         </form>
       </div>
     </div>
@@ -137,15 +137,6 @@ export default {
 </script>
 
 <style scoped>
-.form {
-  margin-left: 100px;
-  margin-right: 100px;
-}
-
-.error {
-  color: red;
-}
-
 .container {
   align-content: center;
   height: 100%;
@@ -157,5 +148,16 @@ export default {
   top: 50%;
   transform: translate(-50%, -50%);
   width: 50%;
+}
+</style>
+
+<style>
+.form {
+  margin-left: 100px;
+  margin-right: 100px;
+}
+
+.error {
+  color: red;
 }
 </style>

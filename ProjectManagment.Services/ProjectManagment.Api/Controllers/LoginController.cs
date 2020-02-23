@@ -30,7 +30,7 @@ namespace ProjectManagment.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login([FromBody]LoginDataModel login)
+        public IActionResult Login([FromBody]LoginModel login)
         {
             IActionResult response = Unauthorized();
             var user = AuthenticateUser(login);
@@ -73,7 +73,7 @@ namespace ProjectManagment.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        private User AuthenticateUser(LoginDataModel login)
+        private User AuthenticateUser(LoginModel login)
         {
             string password = PasswordUtilities.HashPassword(login.password);
 

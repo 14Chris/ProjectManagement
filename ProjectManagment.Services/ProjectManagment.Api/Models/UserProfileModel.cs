@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ProjectManagment.Api.Models
 {
-    public class UserProfileDataModel
+    public class UserProfileModel
     {
         public int id { get; set; }
         public string first_name { get; set; }

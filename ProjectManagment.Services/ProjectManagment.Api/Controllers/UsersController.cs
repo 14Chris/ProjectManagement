@@ -41,7 +41,7 @@ namespace ProjectManagment.Api.Controllers
         // GET: Users
         [HttpGet("session")]
         [Authorize]
-        public ActionResult<UserProfileDataModel> GetUserSession()
+        public ActionResult<UserProfileModel> GetUserSession()
         {
 
             int id = -1;
@@ -50,7 +50,7 @@ namespace ProjectManagment.Api.Controllers
             if (!ok)
                 return Unauthorized();
 
-            var compte = _context.User.Where(x => x.id == id).Select(x => new UserProfileDataModel()
+            var compte = _context.User.Where(x => x.id == id).Select(x => new UserProfileModel()
             {
                 id = x.id,
                 first_name = x.first_name,
@@ -98,7 +98,7 @@ namespace ProjectManagment.Api.Controllers
         // PUT: Users/5
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<IActionResult> PutUser(int id, UserProfileDataModel model)
+        public async Task<IActionResult> PutUser(int id, UserProfileModel model)
         {
             if (id != model.id)
             {

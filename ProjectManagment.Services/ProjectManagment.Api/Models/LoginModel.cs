@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ProjectManagment.Api.Models
 {
-    public class LoginDataModel
+    public class LoginModel
     {
         public string email { get; set; }
         public string password { get; set; }
