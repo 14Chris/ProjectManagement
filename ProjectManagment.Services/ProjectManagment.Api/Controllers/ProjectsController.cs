@@ -52,7 +52,7 @@ namespace ProjectManagment.Api.Controllers
             {
                 id = x.id,
                 name = x.name,
-                creation_date = x.creation_date,
+                creation_date = x.creation_date.ToString("dd/MM/yyyy"),
                 creator = new UserModel()
                 {
                     id = x.Creator.id,

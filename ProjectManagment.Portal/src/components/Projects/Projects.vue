@@ -14,6 +14,17 @@
     </div>
     <div v-else>
       <p>{{projects.length}} projects</p>
+      <b-table :data="projects" @click="RowCliked">
+        <template slot-scope="props">
+          <b-table-column field="name" label="Name">{{ props.row.name }}</b-table-column>
+
+          <b-table-column field="creation_date" label="Creation date">{{ props.row.creation_date }}</b-table-column>
+          <b-table-column
+            field="creator"
+            label="Creator"
+          >{{ props.row.creator.first_name + " " + props.row.creator.last_name }}</b-table-column>
+        </template>
+      </b-table>
     </div>
   </div>
 </template>
@@ -43,7 +54,12 @@ export default {
     });
   },
   methods: {
-    ShowAddProjectModal() {}
+    ShowAddProjectModal() {},
+    RowCliked(row) {
+      // var router = this.$router;
+      this.$router.push("/projects/" + row.id);
+      console.log(row);
+    }
   }
 };
 </script>

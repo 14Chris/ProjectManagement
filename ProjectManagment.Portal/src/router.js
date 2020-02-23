@@ -6,6 +6,7 @@ import Profile from './components/User/Profile'
 import ForgotPassword from './components/User/ForgotPassword'
 import ResetPassword from './components/User/ResetPassword'
 import Projects from './components/Projects/Projects'
+import ProjectDetail from './components/Projects/ProjectDetail'
 
 const router = new Router({
   routes: [
@@ -30,14 +31,19 @@ const router = new Router({
       component: Home,
       children: [
         {
-        path: 'profile',
-        component: Profile
-      },
+          path: 'profile',
+          component: Profile
+        },
         {
-        path: 'projects',
-        component: Projects
-      },
-    ],
+          path: 'projects',
+          component: Projects,
+
+        },
+        {
+          path: "projects/:id",
+          component: ProjectDetail
+        },
+      ],
       beforeEnter: ((to, from, next) => {
         var token = localStorage.getItem('userToken')
         // if the user is not authenticated, `next` is called twice
@@ -48,7 +54,7 @@ const router = new Router({
           next()
         }
       }),
-     
+
     }
   ]
 })

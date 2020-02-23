@@ -11,7 +11,7 @@ namespace ProjectManagment.Api.Models
 
         public string name { get; set; }
 
-        public DateTime creation_date { get; set; }
+        public string creation_date { get; set; }
 
         public UserModel creator { get; set; }
     }
