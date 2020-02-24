@@ -18,6 +18,7 @@ import ApiService from "../../services/api";
 var api = new ApiService();
 export default {
   name: "AddProjectForm",
+  props:['ProjectAdded'],
   data() {
     return {
       model: {
@@ -42,9 +43,12 @@ export default {
         this.submitStatus = "PENDING";
         api.create("Projects", JSON.stringify(this.model))
         .then(reponse => {
-          if (reponse.status == 200) {
+          console.log("response", reponse)
+          //If created
+          if (reponse.status == 201) {
             this.submitStatus = "OK";
             console.log("Add project: Ok");
+            this.ProjectAdded()
           } else {
             this.submitStatus = "ERROR";
             console.log("Add project: Error");

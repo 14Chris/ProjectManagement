@@ -5,7 +5,7 @@
     <b-modal :active.sync="isCardModalActive" :width="800">
       <div class="card">
         <div class="card-content">
-          <AddProjectForm></AddProjectForm>
+          <AddProjectForm v-bind:ProjectAdded="ProjectAdded"></AddProjectForm>
         </div>
       </div>
     </b-modal>
@@ -59,10 +59,20 @@ export default {
       // var router = this.$router;
       this.$router.push("/projects/" + row.id);
       console.log(row);
+    },
+    ProjectAdded() {
+      this.isCardModalActive = false;
+      api.getData("Projects/User").then(response => {
+        response.json().then(data => {
+          this.projects = data;
+          console.log(this.projects);
+        });
+      });
     }
   }
 };
 </script>
 
-<style>
+<style scoped>
+  
 </style>

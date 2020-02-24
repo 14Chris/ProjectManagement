@@ -7,6 +7,11 @@ import ForgotPassword from './components/User/ForgotPassword'
 import ResetPassword from './components/User/ResetPassword'
 import Projects from './components/Projects/Projects'
 import ProjectDetail from './components/Projects/ProjectDetail'
+import ProjectTasks from './components/Projects/ProjectTasks'
+import ProjectCalendar from './components/Projects/ProjectCalendar'
+import ProjectSettings from './components/Projects/ProjectSettings'
+import ProjectDocuments from './components/Projects/ProjectDocuments'
+import ProjectDashboard from './components/Projects/ProjectDashboard'
 
 const router = new Router({
   routes: [
@@ -41,7 +46,29 @@ const router = new Router({
         },
         {
           path: "projects/:id",
-          component: ProjectDetail
+          component: ProjectDetail,
+          children: [
+            {
+              path: "dashboard",
+              component: ProjectDashboard,
+            },
+            {
+              path: "tasks",
+              component: ProjectTasks,
+            },
+            {
+              path: "calendar",
+              component: ProjectCalendar,
+            },
+            {
+              path: "documents",
+              component: ProjectDocuments,
+            },
+            {
+              path: "settings",
+              component: ProjectSettings,
+            },
+          ]
         },
       ],
       beforeEnter: ((to, from, next) => {

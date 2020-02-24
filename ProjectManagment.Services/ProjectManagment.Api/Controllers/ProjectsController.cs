@@ -65,9 +65,21 @@ namespace ProjectManagment.Api.Controllers
 
         // GET: Projects/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Project>> GetProject(int id)
+        public ActionResult<ProjectModel> GetProject(int id)
         {
-            var project = await _context.Project.FindAsync(id);
+            var project = _context.Project.Where(x => x.id == id).Select(x => new ProjectModel()
+            {
+                id = x.id,
+                name = x.name,
+                creation_date = x.creation_date.ToString("dd/MM/yyyy"),
+                creator = new UserModel()
+                {
+                    id = x.Creator.id,
+                    first_name = x.Creator.first_name,
+                    last_name = x.Creator.last_name,
+                    email = x.Creator.email,
+                }
+            }).SingleOrDefault();
 
             if (project == null)
             {
