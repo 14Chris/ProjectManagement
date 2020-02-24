@@ -4,7 +4,7 @@
     <div v-else>
       <div class="header-detail">
         <h2 class="title is-2">{{project.name}}</h2>
-        <b-button type="is-danger" v-on:click="isRemoveModalActive = true">Remove</b-button>
+        <!-- <b-button type="is-danger" v-on:click="isRemoveModalActive = true">Remove</b-button> -->
         <b-modal :active.sync="isRemoveModalActive">
           <div class="card">
             <div class="card-content">
@@ -12,12 +12,12 @@
             </div>
           </div>
         </b-modal>
-        <b-field label>
+        <!-- <b-field label>
           <label class="label">{{project.creation_date}}</label>
         </b-field>
         <b-field label>
           <label class="label">{{project.creator.first_name + " " + project.creator.last_name}}</label>
-        </b-field>
+        </b-field> -->
       </div>
       <div class="content-detail">
         <b-menu class="side-menu">
@@ -108,6 +108,8 @@ export default {
 .header-detail {
   display: flex;
   flex-direction: row;
+  margin:0 auto;
+  width: fit-content;
 }
 
 .side-menu {

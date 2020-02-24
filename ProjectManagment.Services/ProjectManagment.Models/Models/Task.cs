@@ -11,6 +11,9 @@ namespace ProjectManagment.Models.Models
 
         public int id_project { get; set; }
 
+        public TaskState state { get; set; }
+
         public Project Project { get; set; }
+
     }
 }
