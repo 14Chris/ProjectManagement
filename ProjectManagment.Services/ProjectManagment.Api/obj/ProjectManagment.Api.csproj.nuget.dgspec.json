@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\lenfa\\Projects\\ProjectManagmentApp\\ProjectManagment.Services\\ProjectManagment.Api\\ProjectManagment.Api.csproj": {}
+    "C:\\Users\\lenfa\\Projects\\ProjectManagment\\ProjectManagment.Services\\ProjectManagment.Api\\ProjectManagment.Api.csproj": {}
   },
   "projects": {
-    "C:\\Users\\lenfa\\Projects\\ProjectManagmentApp\\ProjectManagment.Services\\ProjectManagment.Api\\ProjectManagment.Api.csproj": {
+    "C:\\Users\\lenfa\\Projects\\ProjectManagment\\ProjectManagment.Services\\ProjectManagment.Api\\ProjectManagment.Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\lenfa\\Projects\\ProjectManagmentApp\\ProjectManagment.Services\\ProjectManagment.Api\\ProjectManagment.Api.csproj",
+        "projectUniqueName": "C:\\Users\\lenfa\\Projects\\ProjectManagment\\ProjectManagment.Services\\ProjectManagment.Api\\ProjectManagment.Api.csproj",
         "projectName": "ProjectManagment.Api",
-        "projectPath": "C:\\Users\\lenfa\\Projects\\ProjectManagmentApp\\ProjectManagment.Services\\ProjectManagment.Api\\ProjectManagment.Api.csproj",
+        "projectPath": "C:\\Users\\lenfa\\Projects\\ProjectManagment\\ProjectManagment.Services\\ProjectManagment.Api\\ProjectManagment.Api.csproj",
         "packagesPath": "C:\\Users\\lenfa\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\lenfa\\Projects\\ProjectManagmentApp\\ProjectManagment.Services\\ProjectManagment.Api\\obj\\",
+        "outputPath": "C:\\Users\\lenfa\\Projects\\ProjectManagment\\ProjectManagment.Services\\ProjectManagment.Api\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\",
@@ -32,8 +32,8 @@
         "frameworks": {
           "netcoreapp3.1": {
             "projectReferences": {
-              "C:\\Users\\lenfa\\Projects\\ProjectManagmentApp\\ProjectManagment.Services\\ProjectManagment.Models\\ProjectManagment.Models.csproj": {
-                "projectPath": "C:\\Users\\lenfa\\Projects\\ProjectManagmentApp\\ProjectManagment.Services\\ProjectManagment.Models\\ProjectManagment.Models.csproj"
+              "C:\\Users\\lenfa\\Projects\\ProjectManagment\\ProjectManagment.Services\\ProjectManagment.Models\\ProjectManagment.Models.csproj": {
+                "projectPath": "C:\\Users\\lenfa\\Projects\\ProjectManagment\\ProjectManagment.Services\\ProjectManagment.Models\\ProjectManagment.Models.csproj"
               }
             }
           }
@@ -64,6 +64,10 @@
               "version": "[6.1.0, )"
             },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[3.1.2, )"
+            },
+            "Microsoft.AspNetCore.Mvc.NewtonsoftJson": {
               "target": "Package",
               "version": "[3.1.2, )"
             },
@@ -128,14 +132,14 @@
         }
       }
     },
-    "C:\\Users\\lenfa\\Projects\\ProjectManagmentApp\\ProjectManagment.Services\\ProjectManagment.Models\\ProjectManagment.Models.csproj": {
+    "C:\\Users\\lenfa\\Projects\\ProjectManagment\\ProjectManagment.Services\\ProjectManagment.Models\\ProjectManagment.Models.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\lenfa\\Projects\\ProjectManagmentApp\\ProjectManagment.Services\\ProjectManagment.Models\\ProjectManagment.Models.csproj",
+        "projectUniqueName": "C:\\Users\\lenfa\\Projects\\ProjectManagment\\ProjectManagment.Services\\ProjectManagment.Models\\ProjectManagment.Models.csproj",
         "projectName": "ProjectManagment.Models",
-        "projectPath": "C:\\Users\\lenfa\\Projects\\ProjectManagmentApp\\ProjectManagment.Services\\ProjectManagment.Models\\ProjectManagment.Models.csproj",
+        "projectPath": "C:\\Users\\lenfa\\Projects\\ProjectManagment\\ProjectManagment.Services\\ProjectManagment.Models\\ProjectManagment.Models.csproj",
         "packagesPath": "C:\\Users\\lenfa\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\lenfa\\Projects\\ProjectManagmentApp\\ProjectManagment.Services\\ProjectManagment.Models\\obj\\",
+        "outputPath": "C:\\Users\\lenfa\\Projects\\ProjectManagment\\ProjectManagment.Services\\ProjectManagment.Models\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\",

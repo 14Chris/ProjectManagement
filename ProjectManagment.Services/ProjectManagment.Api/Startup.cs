@@ -34,8 +34,8 @@ namespace ProjectManagment.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers()
-                    //.AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
-                    ;
+                    // Add newtonsoft json serializer
+                    .AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
             services.AddCors(options =>
             {
@@ -48,7 +48,7 @@ namespace ProjectManagment.Api
                 });
             });
 
-            ///Gestion de l'authentification d'un utilisateur avec un jeton JWT
+            // Handle user authentication
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
@@ -63,9 +63,10 @@ namespace ProjectManagment.Api
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
                 };
             });
-
+            
             string? dbConnectString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
 
+            // To build the solution with no database connected
             string connectionString = (dbConnectString != null) ? dbConnectString : @"Server=.\SQLEXPRESS;Database=projectmanagment;Trusted_Connection=True;";
 
             services.AddDbContext<ProjectManagmentContext>(options =>
