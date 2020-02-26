@@ -1,23 +1,17 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Mail;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using ProjectManagment.Api.MailUtilities;
 using ProjectManagment.Models;
+using System;
+using System.Net;
+using System.Net.Mail;
+using System.Text;
 
 namespace ProjectManagment.Api
 {
@@ -33,20 +27,26 @@ namespace ProjectManagment.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers()
-                    //.AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
-                    ;
 
             services.AddCors(options =>
             {
-                options.AddDefaultPolicy(
+                options.AddPolicy("CorsPolicy",
                 builder =>
                 {
-                    builder.AllowAnyOrigin()
-                           .AllowAnyHeader()
-                           .AllowAnyMethod();
+                    builder
+                       .AllowAnyOrigin()
+                       .WithOrigins("http://localhost:8080")
+                       .AllowAnyHeader()
+                       .AllowAnyMethod()
+                       .SetPreflightMaxAge(TimeSpan.FromDays(5));
+
                 });
             });
+
+            services.AddControllers()
+                    .AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+
 
             ///Gestion de l'authentification d'un utilisateur avec un jeton JWT
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -69,7 +69,7 @@ namespace ProjectManagment.Api
             string connectionString = (dbConnectString != null) ? dbConnectString : @"Server=.\SQLEXPRESS;Database=projectmanagment;Trusted_Connection=True;";
 
             services.AddDbContext<ProjectManagmentContext>(options =>
-                    options.UseNpgsql(connectionString));
+                        options.UseNpgsql(connectionString));
 
             // Configure IFluentEmail
             services.AddFluentEmail("lenfant.chris@hotmail.fr")
@@ -99,11 +99,13 @@ namespace ProjectManagment.Api
                 dbContext.Database.Migrate();
             }
 
-            app.UseHttpsRedirection();
+            
 
             app.UseRouting();
 
-            app.UseCors();
+            app.UseCors("CorsPolicy");
+
+            //app.UseHttpsRedirection();
 
             app.UseAuthentication();
 

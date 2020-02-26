@@ -11,6 +11,8 @@ namespace ProjectManagment.Models.Models
 
         public string name { get; set; }
 
+        public string description { get; set; }
+
         public DateTime creation_date { get; set; }
 
         public byte[] image { get; set; }
