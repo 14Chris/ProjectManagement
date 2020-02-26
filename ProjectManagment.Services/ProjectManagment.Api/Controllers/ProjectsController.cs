@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,7 @@ namespace ProjectManagment.Api.Controllers
     [Route("[controller]")]
     [ApiController]
     [Authorize]
+    [EnableCors("CorsPolicy")]
     public class ProjectsController : ControllerBase
     {
         private readonly ProjectManagmentContext _context;
@@ -53,6 +55,7 @@ namespace ProjectManagment.Api.Controllers
                 id = x.id,
                 name = x.name,
                 creation_date = x.creation_date.ToString("dd/MM/yyyy"),
+                description = x.description,
                 creator = new UserModel()
                 {
                     id = x.Creator.id,
@@ -72,6 +75,7 @@ namespace ProjectManagment.Api.Controllers
                 id = x.id,
                 name = x.name,
                 creation_date = x.creation_date.ToString("dd/MM/yyyy"),
+                description = x.description,
                 creator = new UserModel()
                 {
                     id = x.Creator.id,
@@ -89,14 +93,26 @@ namespace ProjectManagment.Api.Controllers
             return project;
         }
 
-        // PUT: Projects/5
+        /// <summary>
+        /// Update informations of a project
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProject(int id, Project project)
+        public async Task<IActionResult> PutProject(int id, UpdateProjectModel model)
         {
-            if (id != project.id)
+            if (id != model.id)
             {
                 return BadRequest();
             }
+
+            Project project = _context.Project.Find(id);
+
+            project.name = model.name;
+            project.description = model.description;
+            if(model.image != null && model.image.Length > 0)
+                project.image = Convert.FromBase64String(model.image);
 
             _context.Entry(project).State = EntityState.Modified;
 

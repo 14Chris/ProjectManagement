@@ -193,13 +193,13 @@ C:\Users\lenfa\Projects\ProjectManagmentApp\ProjectManagment.Services\ProjectMan
 C:\Users\lenfa\Projects\ProjectManagmentApp\ProjectManagment.Services\ProjectManagment.Api\obj\Debug\netcoreapp3.1\ProjectManagment.Api.csprojAssemblyReference.cache
 C:\Users\lenfa\Projects\ProjectManagmentApp\ProjectManagment.Services\ProjectManagment.Api\obj\Debug\netcoreapp3.1\staticwebassets\ProjectManagment.Api.StaticWebAssets.Manifest.cache
 C:\Users\lenfa\Projects\ProjectManagmentApp\ProjectManagment.Services\ProjectManagment.Api\obj\Debug\netcoreapp3.1\staticwebassets\ProjectManagment.Api.StaticWebAssets.xml
-C:\Users\lenfa\Projects\ProjectManagmentApp\ProjectManagment.Services\ProjectManagment.Api\obj\Debug\netcoreapp3.1\ProjectManagment.Api.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\lenfa\Projects\ProjectManagmentApp\ProjectManagment.Services\ProjectManagment.Api\obj\Debug\netcoreapp3.1\ProjectManagment.Api.AssemblyInfoInputs.cache
 C:\Users\lenfa\Projects\ProjectManagmentApp\ProjectManagment.Services\ProjectManagment.Api\obj\Debug\netcoreapp3.1\ProjectManagment.Api.AssemblyInfo.cs
 C:\Users\lenfa\Projects\ProjectManagmentApp\ProjectManagment.Services\ProjectManagment.Api\obj\Debug\netcoreapp3.1\ProjectManagment.Api.RazorTargetAssemblyInfo.cache
 C:\Users\lenfa\Projects\ProjectManagmentApp\ProjectManagment.Services\ProjectManagment.Api\obj\Debug\netcoreapp3.1\ProjectManagment.Api.csproj.CopyComplete
 C:\Users\lenfa\Projects\ProjectManagmentApp\ProjectManagment.Services\ProjectManagment.Api\obj\Debug\netcoreapp3.1\ProjectManagment.Api.dll
 C:\Users\lenfa\Projects\ProjectManagmentApp\ProjectManagment.Services\ProjectManagment.Api\obj\Debug\netcoreapp3.1\ProjectManagment.Api.pdb
+<<<<<<< HEAD
 C:\Users\lenfa\Projects\ProjectManagment\ProjectManagment.Services\ProjectManagment.Api\bin\Debug\netcoreapp3.1\appsettings.Development.json
 C:\Users\lenfa\Projects\ProjectManagment\ProjectManagment.Services\ProjectManagment.Api\bin\Debug\netcoreapp3.1\appsettings.json
 C:\Users\lenfa\Projects\ProjectManagment\ProjectManagment.Services\ProjectManagment.Api\bin\Debug\netcoreapp3.1\Properties\launchSettings.json
@@ -365,3 +365,9 @@ C:\Users\lenfa\Projects\ProjectManagment\ProjectManagment.Services\ProjectManagm
 C:\Users\lenfa\Projects\ProjectManagment\ProjectManagment.Services\ProjectManagment.Api\obj\Debug\netcoreapp3.1\ProjectManagment.Api.csproj.CopyComplete
 C:\Users\lenfa\Projects\ProjectManagment\ProjectManagment.Services\ProjectManagment.Api\obj\Debug\netcoreapp3.1\ProjectManagment.Api.dll
 C:\Users\lenfa\Projects\ProjectManagment\ProjectManagment.Services\ProjectManagment.Api\obj\Debug\netcoreapp3.1\ProjectManagment.Api.pdb
+=======
+C:\Users\lenfa\Projects\ProjectManagmentApp\ProjectManagment.Services\ProjectManagment.Api\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.JsonPatch.dll
+C:\Users\lenfa\Projects\ProjectManagmentApp\ProjectManagment.Services\ProjectManagment.Api\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+C:\Users\lenfa\Projects\ProjectManagmentApp\ProjectManagment.Services\ProjectManagment.Api\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll
+C:\Users\lenfa\Projects\ProjectManagmentApp\ProjectManagment.Services\ProjectManagment.Api\obj\Debug\netcoreapp3.1\ProjectManagment.Api.MvcApplicationPartsAssemblyInfo.cache
+>>>>>>> 199915d03254121a6dc8787f1fd0e5d9ef974dc7

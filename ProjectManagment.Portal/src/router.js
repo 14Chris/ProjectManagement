@@ -7,11 +7,11 @@ import ForgotPassword from './components/User/ForgotPassword'
 import ResetPassword from './components/User/ResetPassword'
 import Projects from './components/Projects/Projects'
 import ProjectDetail from './components/Projects/ProjectDetail'
-import ProjectTasks from './components/Tasks/ProjectTasks'
-import ProjectCalendar from './components/Calendar/ProjectCalendar'
-import ProjectSettings from './components/Settings/ProjectSettings'
-import ProjectDocuments from './components/Documents/ProjectDocuments'
-import ProjectDashboard from './components/Dashboard/ProjectDashboard'
+import ProjectTasks from './components/Projects/Tasks/Tasks'
+import ProjectCalendar from './components/Projects/Calendar/Calendar'
+import ProjectSettings from './components/Projects/Settings/Settings'
+import ProjectDocuments from './components/Projects/Documents/Documents'
+import ProjectDashboard from './components/Projects/Dashboard/Dashboard'
 
 const router = new Router({
   routes: [

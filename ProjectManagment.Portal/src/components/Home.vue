@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="div-home">
     <b-navbar type="is-primary">
       <template slot="start">
         <b-navbar-item tag="router-link" to="/projects">Projects</b-navbar-item>
@@ -13,7 +13,7 @@
             size="is-medium"
             slot="trigger"
           ></b-icon>
-          <b-dropdown-item >
+          <b-dropdown-item>
             <router-link to="/profile">Profil</router-link>
           </b-dropdown-item>
           <b-dropdown-item value="settings">Settings</b-dropdown-item>
@@ -21,7 +21,9 @@
         </b-dropdown>
       </template>
     </b-navbar>
-    <router-view></router-view>
+    <div id="div-router">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
@@ -38,10 +40,7 @@ export default {
     };
   },
   mounted() {
-    api
-      .getData("Users/Session")
-      .then(resp => resp.json()) // Transform the data into json
-
+    api.getData("Users/Session").then(resp => resp.json()); // Transform the data into json
   },
   methods: {
     toggle() {
@@ -56,5 +55,18 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+#div-home {
+  height: 100%;
+  /* display: flex; */
+  flex-direction: column;
+}
+
+#div-router {
+  display: flex;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: blue;
+}
 </style>

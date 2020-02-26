@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-loading v-if="project == null" :is-full-page="false" :can-cancel="true"></b-loading>
-    <div v-else>
+    <div class="container-content" v-else>
       <div class="header-detail">
         <h2 class="title is-2">{{project.name}}</h2>
         <!-- <b-button type="is-danger" v-on:click="isRemoveModalActive = true">Remove</b-button> -->
@@ -17,7 +17,7 @@
         </b-field>
         <b-field label>
           <label class="label">{{project.creator.first_name + " " + project.creator.last_name}}</label>
-        </b-field> -->
+        </b-field>-->
       </div>
       <div class="content-detail">
         <b-menu class="side-menu">
@@ -50,7 +50,7 @@
           </b-menu-list>
         </b-menu>
         <div class="container">
-          <router-view></router-view>
+          <router-view @updateProject="UpdateProject"></router-view>
         </div>
       </div>
     </div>
@@ -98,16 +98,29 @@ export default {
     },
     SettingsClick() {
       this.$router.push("/projects/" + this.project.id + "/settings");
+    },
+    UpdateProject(project) {
+      console.log(project);
+      this.project = project;
     }
   }
 };
 </script>
 
 <style scoped>
+.container {
+  height: 100% !important;
+}
+.container-content {
+  height: 100% !important;
+  display: flex;
+  flex-direction: column;
+}
+
 .header-detail {
   display: flex;
   flex-direction: row;
-  margin:0 auto;
+  margin: 0 auto;
   width: fit-content;
 }
 
@@ -118,5 +131,6 @@ export default {
 .content-detail {
   display: flex;
   flex-direction: row;
+  flex:1;
 }
 </style>

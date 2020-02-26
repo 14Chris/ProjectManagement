@@ -18,6 +18,7 @@
         <template slot-scope="props">
           <b-table-column field="name" label="Name">{{ props.row.name }}</b-table-column>
 
+          <b-table-column field="description" label="Description">{{ props.row.description }}</b-table-column>
           <b-table-column field="creation_date" label="Creation date">{{ props.row.creation_date }}</b-table-column>
           <b-table-column
             field="creator"

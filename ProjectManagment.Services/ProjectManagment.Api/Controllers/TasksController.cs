@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using ProjectManagment.Api.Models;
 using ProjectManagment.Models;
 using ProjectManagment.Models.Models;
+using Task = ProjectManagment.Models.Models.Task;
 
 namespace ProjectManagment.Api.Controllers
 {
@@ -53,9 +54,12 @@ namespace ProjectManagment.Api.Controllers
             return task;
         }
 
-        // PUT: api/Tasks/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+        /// <summary>
+        /// Modify a task
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="task"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTask(int id, ProjectManagment.Models.Models.Task task)
         {
@@ -85,9 +89,45 @@ namespace ProjectManagment.Api.Controllers
             return NoContent();
         }
 
-        // POST: api/Tasks
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+        /// <summary>
+        /// Method to update task state
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="stateTask"></param>
+        /// <returns></returns>
+        [HttpPut("{id}/state")]
+        public async Task<IActionResult> ChangeStateTask(int id, [FromBody]int stateTask)
+        {
+            Task task = _context.Task.Find(id);
+
+            task.state = (TaskState)stateTask;
+
+            _context.Entry(task).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!TaskExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Create a new task
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult<ProjectManagment.Models.Models.Task>> PostTask(AddTaskModel model)
         {
@@ -102,7 +142,11 @@ namespace ProjectManagment.Api.Controllers
             return CreatedAtAction("GetTask", new { id = task.id }, task);
         }
 
-        // DELETE: api/Tasks/5
+        /// <summary>
+        /// Delete a task
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         public async Task<ActionResult<ProjectManagment.Models.Models.Task>> DeleteTask(int id)
         {

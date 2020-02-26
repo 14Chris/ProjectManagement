@@ -1,8 +1,10 @@
+const axios = require('axios').default;
+
 export default class ApiService {
     apiUrl = "http://localhost:8000"
     apiKey = "003026bbc133714df1834b8638bb496e-8f4b3d9a-e931-478d-a994-28a725159ab9"
 
-    getData (route) {
+    getData(route) {
 
         return fetch(this.createCompleteRoute(route, this.apiUrl), {
             method: 'GET',
@@ -18,11 +20,9 @@ export default class ApiService {
         });
     }
 
-    update (route, body) {
-        return fetch(this.createCompleteRoute(route, this.apiUrl), {
-            method: 'PUT',
-            headers: this.generateHeaders(),
-            body: body
+    update(route, body) {
+        return axios.put(this.createCompleteRoute(route, this.apiUrl), body, {
+            headers: this.generateHeaders()
         });
     }
 
@@ -39,24 +39,20 @@ export default class ApiService {
 
     generateHeaders() {
         var authToken = localStorage.getItem('userToken')
-         if (authToken && authToken.length > 0) {
-          return {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-           'Access-Control-Allow-Headers': "*",
-            'Authorization': `Bearer ${authToken}`,
-            'X-API-KEY': this.apiKey
-          }
+        if (authToken && authToken.length > 0) {
+            return {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`,
+                'X-API-KEY': this.apiKey
+            }
         }
         else {
-        return {
-            Accept: 'application/json',
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Headers': "*",
-            'Content-Type': 'application/json',
-            'X-API-KEY': this.apiKey
-        }
+            return {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'X-API-KEY': this.apiKey
+            }
         }
     }
 }
