@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     <form v-on:submit.prevent="AddTask">
+      <h1>Add task</h1>
       <b-field label="Name">
         <b-input v-model="model.name"></b-input>
       </b-field>
@@ -18,18 +19,18 @@ var api = new ApiService();
 export default {
   name: "AddTaskForm",
   components: {},
-    props:['TaskAdded'],
+  props: ["TaskAdded"],
   data() {
     return {
       submitStatus: "",
       model: {
         name: "",
-        idProject:Number
+        idProject: Number
       }
     };
   },
-  mounted(){
-      this.model.idProject = this.$route.params.id
+  mounted() {
+    this.model.idProject = this.$route.params.id;
   },
   methods: {
     AddTask() {

@@ -8,6 +8,7 @@ namespace ProjectManagment.Api.Models
     public class AddTaskModel
     {
         public string name { get; set; }
+
         public int idProject { get; set; }
     }
 }

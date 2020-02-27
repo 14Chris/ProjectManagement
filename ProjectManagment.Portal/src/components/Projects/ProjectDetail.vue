@@ -4,7 +4,6 @@
     <div class="container-content" v-else>
       <div class="header-detail">
         <h2 class="title is-2">{{project.name}}</h2>
-        <!-- <b-button type="is-danger" v-on:click="isRemoveModalActive = true">Remove</b-button> -->
         <b-modal :active.sync="isRemoveModalActive">
           <div class="card">
             <div class="card-content">
@@ -12,12 +11,6 @@
             </div>
           </div>
         </b-modal>
-        <!-- <b-field label>
-          <label class="label">{{project.creation_date}}</label>
-        </b-field>
-        <b-field label>
-          <label class="label">{{project.creator.first_name + " " + project.creator.last_name}}</label>
-        </b-field>-->
       </div>
       <div class="content-detail">
         <b-menu class="side-menu">
@@ -109,6 +102,10 @@ export default {
 </script>
 
 <style scoped>
+.div-container {
+  height: 100% !important;
+}
+
 .container {
   height: 100% !important;
 }
@@ -132,6 +129,6 @@ export default {
 .content-detail {
   display: flex;
   flex-direction: row;
-  flex:1;
+  flex: 1;
 }
 </style>

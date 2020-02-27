@@ -1,5 +1,6 @@
 <template>
   <div id="div-home">
+    <!-- Navbar -->
     <b-navbar type="is-primary">
       <template slot="start">
         <b-navbar-item tag="router-link" to="/projects">Projects</b-navbar-item>
@@ -21,6 +22,7 @@
         </b-dropdown>
       </template>
     </b-navbar>
+    <!-- div router -->
     <div id="div-router">
       <router-view></router-view>
     </div>
@@ -57,16 +59,14 @@ export default {
 
 <style scoped>
 #div-home {
+  display: flex;
+  flex-flow: column;
   height: 100%;
-  /* display: flex; */
-  flex-direction: column;
 }
 
 #div-router {
-  display: flex;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  background-color: blue;
+  height:calc(100% - 60px);
+  /* overflow-y: scroll; */
+  /* background-color: blue; */
 }
 </style>

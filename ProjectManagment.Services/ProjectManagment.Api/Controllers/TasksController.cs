@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagment.Api.Models;
 using ProjectManagment.Models;
 using ProjectManagment.Models.Models;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Task = ProjectManagment.Models.Models.Task;
 
 namespace ProjectManagment.Api.Controllers
@@ -39,14 +37,14 @@ namespace ProjectManagment.Api.Controllers
         /// <param name="idProject"></param>
         /// <returns></returns>
         [HttpGet("project/{idProject}")]
-        public async Task<ActionResult<IEnumerable<ProjectManagment.Models.Models.Task>>> GetTaskByProject(int idProject)
+        public async Task<ActionResult<IEnumerable<Task>>> GetTaskByProject(int idProject)
         {
             return await _context.Task.Where(x=>x.id_project == idProject).ToListAsync();
         }
 
         // GET: api/Tasks/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ProjectManagment.Models.Models.Task>> GetTask(int id)
+        public async Task<ActionResult<Task>> GetTask(int id)
         {
             var task = await _context.Task.FindAsync(id);
 
@@ -65,7 +63,7 @@ namespace ProjectManagment.Api.Controllers
         /// <param name="task"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTask(int id, ProjectManagment.Models.Models.Task task)
+        public async Task<IActionResult> PutTask(int id, Task task)
         {
             if (id != task.id)
             {
@@ -133,9 +131,9 @@ namespace ProjectManagment.Api.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<ProjectManagment.Models.Models.Task>> PostTask(AddTaskModel model)
+        public async Task<ActionResult<Task>> PostTask(AddTaskModel model)
         {
-            ProjectManagment.Models.Models.Task task = new ProjectManagment.Models.Models.Task();
+            Task task = new Task();
             task.name = model.name;
             task.id_project = model.idProject;
             task.state = TaskState.ToDo;
@@ -152,7 +150,7 @@ namespace ProjectManagment.Api.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("{id}")]
-        public async Task<ActionResult<ProjectManagment.Models.Models.Task>> DeleteTask(int id)
+        public async Task<ActionResult<Task>> DeleteTask(int id)
         {
             var task = await _context.Task.FindAsync(id);
             if (task == null)
