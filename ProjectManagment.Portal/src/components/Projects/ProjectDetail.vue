@@ -50,7 +50,7 @@
           </b-menu-list>
         </b-menu>
         <div class="container">
-          <router-view></router-view>
+          <router-view @updateProject="UpdateProject"></router-view>
         </div>
       </div>
     </div>
@@ -99,6 +99,10 @@ export default {
     },
     SettingsClick() {
       this.$router.push("/projects/" + this.project.id + "/settings");
+    },
+    UpdateProject(project){
+      console.log(project)
+      this.project = project
     }
   }
 };
