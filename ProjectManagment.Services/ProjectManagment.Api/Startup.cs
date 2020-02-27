@@ -27,9 +27,6 @@ namespace ProjectManagment.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers()
-                    // Add newtonsoft json serializer
-                    .AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
             services.AddCors(options =>
             {
@@ -46,7 +43,12 @@ namespace ProjectManagment.Api
                 });
             });
 
-            // Handle user authentication
+            services.AddControllers()
+                    .AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+
+
+            ///Gestion de l'authentification d'un utilisateur avec un jeton JWT
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
@@ -61,10 +63,9 @@ namespace ProjectManagment.Api
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
                 };
             });
-            
+
             string? dbConnectString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
 
-            // To build the solution with no database connected
             string connectionString = (dbConnectString != null) ? dbConnectString : @"Server=.\SQLEXPRESS;Database=projectmanagment;Trusted_Connection=True;";
 
             services.AddDbContext<ProjectManagmentContext>(options =>

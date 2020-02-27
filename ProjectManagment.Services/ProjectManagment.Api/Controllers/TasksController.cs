@@ -25,6 +25,14 @@ namespace ProjectManagment.Api.Controllers
             _context = context;
         }
 
+        // GET: api/Tasks
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ProjectManagment.Models.Models.Task>>> GetTask()
+        {
+            return await _context.Task.ToListAsync();
+        }
+
+
         /// <summary>
         /// Get all tasks of a project
         /// </summary>
@@ -36,11 +44,7 @@ namespace ProjectManagment.Api.Controllers
             return await _context.Task.Where(x=>x.id_project == idProject).ToListAsync();
         }
 
-        /// <summary>
-        /// Get task by id
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        // GET: api/Tasks/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ProjectManagment.Models.Models.Task>> GetTask(int id)
         {

@@ -25,27 +25,27 @@
             <b-menu-item
               label="Dashboard"
               :active='this.$route.path.split("/")[3] == "dashboard"'
-              v-on:click="DashboardClick"
+              @click="DashboardClick"
             ></b-menu-item>
             <b-menu-item
               label="Tasks"
               :active='this.$route.path.split("/")[3] == "tasks"'
-              v-on:click="TasksClick"
+              @click="TasksClick"
             ></b-menu-item>
             <b-menu-item
               label="Calendar"
               :active='this.$route.path.split("/")[3] == "calendar"'
-              v-on:click="CalendarClick"
+              @click="CalendarClick"
             ></b-menu-item>
             <b-menu-item
               label="Documents"
               :active='this.$route.path.split("/")[3] == "documents"'
-              v-on:click="DocumentsClick"
+              @click="DocumentsClick"
             ></b-menu-item>
             <b-menu-item
               label="Settings"
               :active='this.$route.path.split("/")[3] == "settings"'
-              v-on:click="SettingsClick"
+              @click="SettingsClick"
             ></b-menu-item>
           </b-menu-list>
         </b-menu>
@@ -78,6 +78,7 @@ export default {
     api.getData("Projects/" + this.$route.params.id).then(response => {
       if (response.status == 200) {
         response.json().then(data => {
+          console.log("data", data);
           this.project = data;
         });
       }
@@ -99,9 +100,9 @@ export default {
     SettingsClick() {
       this.$router.push("/projects/" + this.project.id + "/settings");
     },
-    UpdateProject(project){
-      console.log(project)
-      this.project = project
+    UpdateProject(project) {
+      console.log(project);
+      this.project = project;
     }
   }
 };

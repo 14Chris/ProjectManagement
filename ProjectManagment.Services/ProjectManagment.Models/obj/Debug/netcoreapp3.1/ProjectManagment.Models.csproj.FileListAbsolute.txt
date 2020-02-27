@@ -18,13 +18,3 @@ C:\Users\lenfa\Projects\ProjectManagmentApp\ProjectManagment.Services\ProjectMan
 C:\Users\lenfa\Projects\ProjectManagmentApp\ProjectManagment.Services\ProjectManagment.Models\obj\Debug\netcoreapp3.1\ProjectManagment.Models.AssemblyInfo.cs
 C:\Users\lenfa\Projects\ProjectManagmentApp\ProjectManagment.Services\ProjectManagment.Models\obj\Debug\netcoreapp3.1\ProjectManagment.Models.dll
 C:\Users\lenfa\Projects\ProjectManagmentApp\ProjectManagment.Services\ProjectManagment.Models\obj\Debug\netcoreapp3.1\ProjectManagment.Models.pdb
-C:\Users\lenfa\Projects\ProjectManagment\ProjectManagment.Services\ProjectManagment.Models\bin\Debug\netcoreapp3.1\ProjectManagment.Models.deps.json
-C:\Users\lenfa\Projects\ProjectManagment\ProjectManagment.Services\ProjectManagment.Models\bin\Debug\netcoreapp3.1\ProjectManagment.Models.runtimeconfig.json
-C:\Users\lenfa\Projects\ProjectManagment\ProjectManagment.Services\ProjectManagment.Models\bin\Debug\netcoreapp3.1\ProjectManagment.Models.runtimeconfig.dev.json
-C:\Users\lenfa\Projects\ProjectManagment\ProjectManagment.Services\ProjectManagment.Models\bin\Debug\netcoreapp3.1\ProjectManagment.Models.dll
-C:\Users\lenfa\Projects\ProjectManagment\ProjectManagment.Services\ProjectManagment.Models\bin\Debug\netcoreapp3.1\ProjectManagment.Models.pdb
-C:\Users\lenfa\Projects\ProjectManagment\ProjectManagment.Services\ProjectManagment.Models\obj\Debug\netcoreapp3.1\ProjectManagment.Models.csprojAssemblyReference.cache
-C:\Users\lenfa\Projects\ProjectManagment\ProjectManagment.Services\ProjectManagment.Models\obj\Debug\netcoreapp3.1\ProjectManagment.Models.AssemblyInfoInputs.cache
-C:\Users\lenfa\Projects\ProjectManagment\ProjectManagment.Services\ProjectManagment.Models\obj\Debug\netcoreapp3.1\ProjectManagment.Models.AssemblyInfo.cs
-C:\Users\lenfa\Projects\ProjectManagment\ProjectManagment.Services\ProjectManagment.Models\obj\Debug\netcoreapp3.1\ProjectManagment.Models.dll
-C:\Users\lenfa\Projects\ProjectManagment\ProjectManagment.Services\ProjectManagment.Models\obj\Debug\netcoreapp3.1\ProjectManagment.Models.pdb
