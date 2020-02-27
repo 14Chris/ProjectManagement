@@ -53,7 +53,10 @@ export default {
     this.GetTasks();
   },
   methods: {
-    TaskAdded() {},
+    TaskAdded() {
+      this.isAddTaskModalActive = false
+      this.GetTasks()
+    },
     GetTasks() {
       api.getData("Tasks/project/" + this.idProject).then(response => {
         response.json().then(data => {
