@@ -4,13 +4,6 @@
     <div class="container-content" v-else>
       <div class="header-detail">
         <h2 class="title is-2">{{project.name}}</h2>
-        <b-modal :active.sync="isRemoveModalActive">
-          <div class="card">
-            <div class="card-content">
-              <RemoveProjectForm :projectId="project.id" :projectName="project.name"></RemoveProjectForm>
-            </div>
-          </div>
-        </b-modal>
       </div>
       <div class="content-detail">
         <b-menu class="side-menu">
@@ -52,18 +45,15 @@
 ù
 <script>
 import ApiService from "../../services/api";
-import RemoveProjectForm from "./RemoveProjectForm";
 var api = new ApiService();
 
 export default {
   name: "ProjectDetail",
   components: {
-    RemoveProjectForm
   },
   data() {
     return {
       project: null,
-      isRemoveModalActive: false
     };
   },
   mounted() {

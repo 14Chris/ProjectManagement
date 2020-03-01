@@ -65,7 +65,7 @@ export default {
 }
 
 #div-router {
-  height:calc(100% - 60px);
+  flex:1;
   /* overflow-y: scroll; */
   /* background-color: blue; */
 }
