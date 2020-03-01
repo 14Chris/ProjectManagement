@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagment.Api.Models;
+using ProjectManagment.Api.Services;
 using ProjectManagment.Models;
 using ProjectManagment.Models.Models;
 
@@ -20,10 +21,12 @@ namespace ProjectManagment.Api.Controllers
     public class ProjectsController : ControllerBase
     {
         private readonly ProjectManagmentContext _context;
+        private readonly IProjectService _projectService;
 
-        public ProjectsController(ProjectManagmentContext context)
+        public ProjectsController(ProjectManagmentContext context, IProjectService projectService)
         {
             _context = context;
+            _projectService = projectService;
         }
 
         // GET: Projects

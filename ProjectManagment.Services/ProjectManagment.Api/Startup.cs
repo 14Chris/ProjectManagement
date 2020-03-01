@@ -7,6 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using ProjectManagment.Api.MailUtilities;
+using ProjectManagment.Api.Repositories;
+using ProjectManagment.Api.Services;
 using ProjectManagment.Models;
 using System;
 using System.Net;
@@ -71,6 +73,10 @@ namespace ProjectManagment.Api
             services.AddDbContext<ProjectManagmentContext>(options =>
                         options.UseNpgsql(connectionString));
 
+            //Configure services dependencies
+            services.AddScoped<IProjectRepository, ProjectRepository>();
+            services.AddScoped<IProjectService, ProjectService>();
+
             // Configure IFluentEmail
             services.AddFluentEmail("lenfant.chris@hotmail.fr")
             .AddRazorRenderer()
@@ -83,6 +89,8 @@ namespace ProjectManagment.Api
             // Add our service
             services.AddScoped<IEmailSender, EmailSender>();
             services.AddHttpContextAccessor();
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
