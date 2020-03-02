@@ -3010,6 +3010,20 @@
         "runtime": {
           "lib/netstandard1.3/System.Xml.XmlSerializer.dll": {}
         }
+      },
+      "ProjectManagement.Models/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v3.1",
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore": "3.1.1",
+          "Npgsql.EntityFrameworkCore.PostgreSQL": "3.1.1.2"
+        },
+        "compile": {
+          "bin/placeholder/ProjectManagement.Models.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ProjectManagement.Models.dll": {}
+        }
       }
     }
   },
@@ -9376,11 +9390,15 @@
         "system.xml.xmlserializer.4.3.0.nupkg.sha512",
         "system.xml.xmlserializer.nuspec"
       ]
+    },
+    "ProjectManagement.Models/1.0.0": {
+      "type": "project",
+      "path": "../ProjectManagement.Models/ProjectManagement.Models.csproj",
+      "msbuildProject": "../ProjectManagement.Models/ProjectManagement.Models.csproj"
     }
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
-      "C:\\Users\\lenfa\\Projects\\ProjectManagementApp\\ProjectManagement.Services\\ProjectManagement.Models\\ProjectManagement.Models.csproj",
       "FluentEmail.Core >= 2.7.0",
       "FluentEmail.Razor >= 2.7.0",
       "FluentEmail.Smtp >= 2.7.1",
@@ -9395,6 +9413,7 @@
       "Microsoft.VisualStudio.Azure.Containers.Tools.Targets >= 1.9.10",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 3.1.1",
       "Npgsql.EntityFrameworkCore.PostgreSQL >= 3.1.1.2",
+      "ProjectManagement.Models >= 1.0.0",
       "System.IdentityModel.Tokens.Jwt >= 5.6.0"
     ]
   },
@@ -9530,16 +9549,5 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
       }
     }
-  },
-  "logs": [
-    {
-      "code": "NU1104",
-      "level": "Error",
-      "message": "Projet 'C:\\Users\\lenfa\\Projects\\ProjectManagementApp\\ProjectManagement.Services\\ProjectManagement.Models\\ProjectManagement.Models.csproj' introuvable. Vérifiez que la référence de projet est valide et que le fichier projet existe.",
-      "libraryId": "C:\\Users\\lenfa\\Projects\\ProjectManagementApp\\ProjectManagement.Services\\ProjectManagement.Models\\ProjectManagement.Models.csproj",
-      "targetGraphs": [
-        ".NETCoreApp,Version=v3.1"
-      ]
-    }
-  ]
+  }
 }

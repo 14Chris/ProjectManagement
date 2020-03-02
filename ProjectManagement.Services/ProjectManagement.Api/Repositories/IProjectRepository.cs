@@ -8,6 +8,9 @@ namespace ProjectManagement.Api.Repositories
 {
     public interface IProjectRepository
     {
-        IEnumerable<Project> List();
+        IQueryable<Project> List();
+        Task<Project> CreateAsync(Project project);
+        Task<bool> UpdateAsync(Project project);
+        Task<bool> DeleteAsync(Project project);
     }
 }

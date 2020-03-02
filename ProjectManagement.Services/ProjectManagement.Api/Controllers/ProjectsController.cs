@@ -1,44 +1,46 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using ProjectManagement.Api.Models;
+using ProjectManagement.Api.Services;
+using ProjectManagement.Models.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ProjectManagement.Api.Models;
-using ProjectManagement.Api.Services;
-using ProjectManagement.Models;
-using ProjectManagement.Models.Models;
 
 namespace ProjectManagement.Api.Controllers
 {
     [Route("[controller]")]
     [ApiController]
     [Authorize]
-    [EnableCors("CorsPolicy")]
     public class ProjectsController : ControllerBase
     {
-        private readonly ProjectManagementContext _context;
         private readonly IProjectService _projectService;
+        private readonly IUserService _userService;
 
-        public ProjectsController(ProjectManagementContext context, IProjectService projectService)
+        public ProjectsController(IProjectService projectService, IUserService userService)
         {
-            _context = context;
             _projectService = projectService;
+            _userService = userService;
         }
 
-        // GET: Projects
+        /// <summary>
+        /// Get all projects
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Project>>> GetProject()
         {
-            return await _context.Project.ToListAsync();
+            return _projectService.List().ToList();
         }
 
-        // GET: Projects
+        /// <summary>
+        /// Get all project by a user
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("User")]
-        public async Task<ActionResult<IEnumerable<ProjectModel>>> GetProjectsByUser()
+        public ActionResult<IEnumerable<ProjectModel>> GetProjectsByUser()
         {
             int id = -1;
 
@@ -46,14 +48,14 @@ namespace ProjectManagement.Api.Controllers
             if (!ok)
                 return Unauthorized();
 
-            var compte = _context.User.Where(x => x.id == id).SingleOrDefault();
+            var compte = _userService.GetById(id);
 
             if (compte == null)
             {
                 return Unauthorized();
             }
 
-            return await _context.Project.Where(x => x.id_creator == id).Select(x => new ProjectModel()
+            return _projectService.ListByUser(id).Select(x => new ProjectModel()
             {
                 id = x.id,
                 name = x.name,
@@ -66,27 +68,34 @@ namespace ProjectManagement.Api.Controllers
                     last_name = x.Creator.last_name,
                     email = x.Creator.email,
                 }
-            }).ToListAsync();
+            }).ToList();
         }
 
-        // GET: Projects/5
+        /// <summary>
+        /// Get one project
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public ActionResult<ProjectModel> GetProject(int id)
         {
-            var project = _context.Project.Where(x => x.id == id).Select(x => new ProjectModel()
+            Project p = _projectService.GetById(id);
+
+
+            var project = new ProjectModel()
             {
-                id = x.id,
-                name = x.name,
-                creation_date = x.creation_date.ToString("dd/MM/yyyy"),
-                description = x.description,
+                id = p.id,
+                name = p.name,
+                creation_date = p.creation_date.ToString("dd/MM/yyyy"),
+                description = p.description,
                 creator = new UserModel()
                 {
-                    id = x.Creator.id,
-                    first_name = x.Creator.first_name,
-                    last_name = x.Creator.last_name,
-                    email = x.Creator.email,
+                    id = p.Creator.id,
+                    first_name = p.Creator.first_name,
+                    last_name = p.Creator.last_name,
+                    email = p.Creator.email,
                 }
-            }).SingleOrDefault();
+            };
 
             if (project == null)
             {
@@ -110,81 +119,47 @@ namespace ProjectManagement.Api.Controllers
                 return BadRequest();
             }
 
-            Project project = _context.Project.Find(id);
-
-            project.name = model.name;
-            project.description = model.description;
-            if(model.image != null && model.image.Length > 0)
-                project.image = Convert.FromBase64String(model.image);
-
-            _context.Entry(project).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ProjectExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await _projectService.UpdateAsync(model);
 
             return NoContent();
         }
 
-        // POST: Projects
+        /// <summary>
+        /// Create a new project
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult<Project>> PostProject(AddProjectModel model)
         {
             int id = -1;
 
             bool ok = Int32.TryParse(HttpContext.User.Identities.FirstOrDefault().Claims.FirstOrDefault().Value, out id);
+
             if (!ok)
                 return Unauthorized();
 
-            var compte = _context.User.Where(x => x.id == id).SingleOrDefault();
+            var compte = _userService.GetById(id);
 
             if (compte == null)
             {
                 return Unauthorized();
             }
 
-            Project project = new Project();
-            project.creation_date = DateTime.Now;
-            project.name = model.name;
-            project.id_creator = id;
-
-            _context.Project.Add(project);
-            await _context.SaveChangesAsync();
+            Project project = await _projectService.CreateAsync(model, id);
 
             return CreatedAtAction("GetProject", new { id = project.id }, project);
         }
 
-        // DELETE: Projects/5
+        /// <summary>
+        /// Delete a project
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Project>> DeleteProject(int id)
+        public async Task<ActionResult<bool>> DeleteProject(int id)
         {
-            var project = await _context.Project.FindAsync(id);
-            if (project == null)
-            {
-                return NotFound();
-            }
-
-            _context.Project.Remove(project);
-            await _context.SaveChangesAsync();
-
-            return project;
-        }
-
-        private bool ProjectExists(int id)
-        {
-            return _context.Project.Any(e => e.id == id);
+            return await _projectService.DeleteAsync(id);
         }
     }
 }
