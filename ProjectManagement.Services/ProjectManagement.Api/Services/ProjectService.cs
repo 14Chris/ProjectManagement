@@ -1,4 +1,5 @@
-﻿using ProjectManagement.Api.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using ProjectManagement.Api.Models;
 using ProjectManagement.Api.Repositories;
 using ProjectManagement.Models.Models;
 using System;
@@ -31,7 +32,7 @@ namespace ProjectManagement.Api.Services
         {
             Project project = GetById(id);
 
-            if(project == null)
+            if (project == null)
             {
                 return false;
             }
@@ -41,12 +42,12 @@ namespace ProjectManagement.Api.Services
 
         public Project GetById(int id)
         {
-            return _projectRepository.List().Where(x => x.id == id).SingleOrDefault();
+            return _projectRepository.List().Where(x => x.id == id).Include(x => x.Creator).SingleOrDefault();
         }
 
         public IEnumerable<Project> List()
         {
-           return _projectRepository.List().AsEnumerable();
+            return _projectRepository.List().AsEnumerable();
         }
 
         public IEnumerable<Project> ListByUser(int idUser)
@@ -56,9 +57,9 @@ namespace ProjectManagement.Api.Services
 
         public async Task<bool> UpdateAsync(UpdateProjectModel updateModel)
         {
-            Project project = GetById(updateModel.id); 
+            Project project = GetById(updateModel.id);
 
-            if(project == null)
+            if (project == null)
             {
                 return false;
             }

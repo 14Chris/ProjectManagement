@@ -81,7 +81,6 @@ namespace ProjectManagement.Api.Controllers
         {
             Project p = _projectService.GetById(id);
 
-
             var project = new ProjectModel()
             {
                 id = p.id,
