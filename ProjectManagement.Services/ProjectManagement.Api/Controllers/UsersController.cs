@@ -1,20 +1,13 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using ProjectManagement.Api.Models;
+using ProjectManagement.Api.Services;
+using ProjectManagement.Models.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using JWT;
-using JWT.Algorithms;
-using JWT.Builder;
-using JWT.Serializers;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ProjectManagement.Api.MailUtilities;
-using ProjectManagement.Api.Models;
-using ProjectManagement.Api.Services;
-using ProjectManagement.Models;
-using ProjectManagement.Models.Models;
 
 namespace ProjectManagement.Api.Controllers
 {
@@ -102,20 +95,7 @@ namespace ProjectManagement.Api.Controllers
         [HttpPost]
         [AllowAnonymous]
         public async Task<ActionResult<User>> PostUser(User user)
-        {
-
-            ////Verify if any user has the same email than the parameter
-            //if (_context.User.Where(x => x.email == user.email).Any())
-            //{
-            //    return BadRequest("EMAIL_ALREADY_REGISTRED");
-            //}
-
-            ////Verify that the password checked the requirements
-            //if (!PasswordUtilities.PasswordMatchRegex(user.password))
-            //{
-            //    return BadRequest("PASSWORD_TOO_WEAK");
-            //}
-
+        { 
             User resUser = await _userService.CreateAsync(user);
 
             return CreatedAtAction("GetUser", new { id = resUser.id }, resUser);
@@ -155,7 +135,7 @@ namespace ProjectManagement.Api.Controllers
         //Méthode permettant d'activer un compte utilisateur à l'aide d'un token fourni
         [HttpGet("account_activation/{token}")]
         [AllowAnonymous]
-        public async Task<ActionResult> ActivateAccount(string token)
+        public ActionResult ActivateAccount(string token)
         {
             bool b = _userService.ActivateAccount(token);
 
@@ -194,9 +174,5 @@ namespace ProjectManagement.Api.Controllers
             return Ok();
         }
 
-        //private bool UserExists(int id)
-        //{
-        //    return _context.User.Any(e => e.id == id);
-        //}
     }
 }
