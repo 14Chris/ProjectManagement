@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProjectManagement.Api.Models;
 using ProjectManagement.Api.Repositories;
+using ProjectManagement.Api.Responses;
 using ProjectManagement.Models.Models;
 using System;
 using System.Collections.Generic;
@@ -18,26 +19,30 @@ namespace ProjectManagement.Api.Services
             _projectRepository = projectRepository;
         }
 
-        public async Task<Project> CreateAsync(AddProjectModel addModel, int idCreator)
+        public async Task<Response> CreateAsync(AddProjectModel addModel, int idCreator)
         {
             Project project = new Project();
             project.creation_date = DateTime.Now;
             project.name = addModel.name;
             project.id_creator = idCreator;
 
-            return await _projectRepository.CreateAsync(project);
+            Project res = await _projectRepository.CreateAsync(project);
+
+            return new SuccessResponse(res);
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<Response> DeleteAsync(int id)
         {
             Project project = GetById(id);
 
             if (project == null)
             {
-                return false;
+                return new ErrorResponse("PROJECT_NOT_FOUND");
             }
 
-            return await _projectRepository.DeleteAsync(project);
+            bool res = await _projectRepository.DeleteAsync(project);
+
+            return new SuccessResponse(null);
         }
 
         public Project GetById(int id)
@@ -55,16 +60,18 @@ namespace ProjectManagement.Api.Services
             return _projectRepository.List().Where(x => x.id_creator == idUser).AsEnumerable();
         }
 
-        public async Task<bool> UpdateAsync(UpdateProjectModel updateModel)
+        public async Task<Response> UpdateAsync(UpdateProjectModel updateModel)
         {
             Project project = GetById(updateModel.id);
 
             if (project == null)
             {
-                return false;
+                return new ErrorResponse("PROJECT_NOT_FOUND");
             }
 
-            return await _projectRepository.UpdateAsync(project);
+            bool res = await _projectRepository.UpdateAsync(project);
+
+            return new SuccessResponse(null);
         }
     }
 }

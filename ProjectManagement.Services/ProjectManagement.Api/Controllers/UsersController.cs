@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProjectManagement.Api.Models;
+using ProjectManagement.Api.Responses;
 using ProjectManagement.Api.Services;
 using ProjectManagement.Models.Models;
 using System;
@@ -84,9 +85,22 @@ namespace ProjectManagement.Api.Controllers
                 return BadRequest();
             }
 
-            bool res = await _userService.UpdateAsync(model);
+            Response res = await _userService.UpdateAsync(model);
 
-            return NoContent();
+            if (res is ErrorResponse)
+            {
+                return StatusCode(500, ((ErrorResponse)res).error);
+            }
+            else if (res is SuccessResponse)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return StatusCode(500);
+            }
+
+
         }
 
         // POST: Users
@@ -95,10 +109,25 @@ namespace ProjectManagement.Api.Controllers
         [HttpPost]
         [AllowAnonymous]
         public async Task<ActionResult<User>> PostUser(User user)
-        { 
-            User resUser = await _userService.CreateAsync(user);
+        {
+            Response resUser = await _userService.CreateAsync(user);
 
-            return CreatedAtAction("GetUser", new { id = resUser.id }, resUser);
+            if (resUser is ErrorResponse)
+            {
+                return StatusCode(500, ((ErrorResponse)resUser).error);
+            }
+            else if (resUser is SuccessResponse)
+            {
+                User u = (User)((SuccessResponse)resUser).data;
+
+                return CreatedAtAction("GetUser", new { id = u.id }, u);
+            }
+            else
+            {
+                return StatusCode(500);
+            }
+
+
         }
 
         // POST: Users/password
@@ -112,9 +141,22 @@ namespace ProjectManagement.Api.Controllers
             if (!ok)
                 return Unauthorized();
 
-            bool b = await _userService.UpdatePasswordAsync(model);
+            Response res = await _userService.UpdatePasswordAsync(model);
 
-            return Ok();
+            if (res is ErrorResponse)
+            {
+                return StatusCode(500, ((ErrorResponse)res).error);
+            }
+            else if (res is SuccessResponse)
+            {
+                return Ok();
+            }
+            else
+            {
+                return StatusCode(500);
+            }
+
+         
         }
 
         // GET: check if email already exists
@@ -132,7 +174,7 @@ namespace ProjectManagement.Api.Controllers
             }
         }
 
-        //Méthode permettant d'activer un compte utilisateur à l'aide d'un token fourni
+        // GET to activate account
         [HttpGet("account_activation/{token}")]
         [AllowAnonymous]
         public ActionResult ActivateAccount(string token)
@@ -142,8 +184,7 @@ namespace ProjectManagement.Api.Controllers
             return Ok();
         }
 
-        //Méthode permettant de générer un token de changement de mot de passe à la suite d'un oubli et d'envoyer un email
-        //contenant un lien permettant de le changer
+        //Post to register token for forgot password
         [HttpPost("forgot_password")]
         [AllowAnonymous]
         public async Task<ActionResult> ForgotPassword([FromBody]string email)
@@ -153,25 +194,47 @@ namespace ProjectManagement.Api.Controllers
             return Ok();
         }
 
-        //Méthode permettant de valider le token fourni pour changer de mot de passe
+        // GET to validate reset password token
         [HttpGet("reset_password/{token}")]
         [AllowAnonymous]
         public async Task<ActionResult> ValidateTokenResetPasswordAsync(string token)
         {
-            bool b = await _userService.ValidateToken(token);
+            Responses.Response res = await _userService.ValidateToken(token);
 
-            //Si Ok
-            return Ok();
+            if (res is ErrorResponse)
+            {
+                return StatusCode(500, ((ErrorResponse)res).error);
+            }
+            else if (res is SuccessResponse)
+            {
+                return Ok();
+            }
+            else
+            {
+                return StatusCode(500);
+            }
+      
         }
 
-        //Méthode permettant de modifier le mot de passe d'un utilisateur à la suite d'un oublie
+        // POST to reset password
         [HttpPost("reset_password/{token}")]
         [AllowAnonymous]
         public async Task<ActionResult> ResetPassword(string token, [FromBody]string password)
         {
-            bool b = await _userService.ModifyPasswordAsync(token, password);
+            Responses.Response res = await _userService.ModifyPasswordAsync(token, password);
 
-            return Ok();
+            if (res is ErrorResponse)
+            {
+                return StatusCode(500, ((ErrorResponse)res).error);
+            }
+            else if (res is SuccessResponse)
+            {
+                return Ok();
+            }
+            else
+            {
+                return StatusCode(500);
+            }
         }
 
     }

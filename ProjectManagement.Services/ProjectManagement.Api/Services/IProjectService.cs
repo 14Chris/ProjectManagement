@@ -1,4 +1,5 @@
 ﻿using ProjectManagement.Api.Models;
+using ProjectManagement.Api.Responses;
 using ProjectManagement.Models.Models;
 using System;
 using System.Collections.Generic;
@@ -15,10 +16,10 @@ namespace ProjectManagement.Api.Services
 
         Project GetById(int id);
 
-        Task<Project> CreateAsync(AddProjectModel addModel, int idCreator);
+        Task<Response> CreateAsync(AddProjectModel addModel, int idCreator);
 
-        Task<bool> UpdateAsync(UpdateProjectModel updateModel);
+        Task<Response> UpdateAsync(UpdateProjectModel updateModel);
 
-        Task<bool> DeleteAsync(int id);
+        Task<Response> DeleteAsync(int id);
     }
 }

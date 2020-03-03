@@ -26,20 +26,27 @@ namespace ProjectManagement.Api.Services
             _emailSender = emailSender;
         }
 
-        public async Task<User> CreateAsync(User user)
+        /// <summary>
+        /// Method to create an user
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public async Task<Responses.Response> CreateAsync(User user)
         {
+            Responses.Response response;
+
             //Verify if any user has the same email than the parameter
             if (_userRepository.EmailExists(user.email))
             {
-                //return BadRequest("EMAIL_ALREADY_REGISTRED");
-                return null;
+                return new Responses.ErrorResponse("EMAIL_ALREADY_REGISTRED");
+
             }
 
             //Verify that the password checked the requirements
             if (!PasswordUtilities.PasswordMatchRegex(user.password))
             {
                 //return BadRequest("PASSWORD_TOO_WEAK");
-                return null;
+                return new Responses.ErrorResponse("PASSWORD_TOO_WEAK");
             }
 
             //Hash the password of the user
@@ -70,20 +77,34 @@ namespace ProjectManagement.Api.Services
                 await ((EmailSender)_emailSender).SendAccountActivationMailAsync(resUser, resToken.token);
             }
 
-            return user;
+            return new Responses.SuccessResponse(resUser);
         }
 
+        /// <summary>
+        /// Method to get one user by his id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public User GetById(int id)
         {
             return _userRepository.List().Where(x => x.id == id).SingleOrDefault();
         }
 
+        /// <summary>
+        /// Method to list all the users
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<User> List()
         {
             return _userRepository.List().ToList();
         }
 
-        public Task<bool> UpdateAsync(UserProfileModel model)
+        /// <summary>
+        /// Method to update data of an user
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<Responses.Response> UpdateAsync(UserProfileModel model)
         {
             User user = GetById(model.id);
 
@@ -92,35 +113,66 @@ namespace ProjectManagement.Api.Services
             if (model.profile_picture != null && model.profile_picture.Length > 0)
                 user.profile_picture = Convert.FromBase64String(model.profile_picture);
 
-            return _userRepository.UpdateAsync(user);
+            bool res = await _userRepository.UpdateAsync(user);
+
+            if (res)
+            {
+                return new Responses.SuccessResponse(null);
+            }
+            else
+            {
+                return new Responses.ErrorResponse("Error");
+            }
         }
 
-        public async Task<bool> UpdatePasswordAsync(ModifyPasswordModel model)
+        /// <summary>
+        /// Method to update the password
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<Responses.Response> UpdatePasswordAsync(ModifyPasswordModel model)
         {
             User user = GetById(model.id);
 
             if (user.password != PasswordUtilities.HashPassword(model.oldPassword))
             {
-                //return BadRequest("INVALID_OLD_PASSWORD");
-                return false;
+                return new Responses.ErrorResponse("INVALID_OLD_PASSWORD");
             }
 
             if (!PasswordUtilities.PasswordMatchRegex(model.newPassword))
             {
-                //return BadRequest("NEW_PASSWORD_TOO_WEAK");
-                return false;
+                return new Responses.ErrorResponse("NEW_PASSWORD_TOO_WEAK");
             }
 
             user.password = PasswordUtilities.HashPassword(model.newPassword);
 
-            return await _userRepository.UpdateAsync(user);
+            bool res = await _userRepository.UpdateAsync(user);
+
+            if (res)
+            {
+                return new Responses.SuccessResponse(null);
+            }
+            else
+            {
+                return new Responses.ErrorResponse("Error");
+            }
         }
 
+        /// <summary>
+        /// Method to verify if an email is already taken
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
         public bool EmailExists(string email)
         {
             return _userRepository.EmailExists(email);
         }
 
+        /// <summary>
+        /// Method to activate an account with the token send
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
         public bool ActivateAccount(string token)
         {
             //Récupération du dernier token (par l'id)
@@ -165,7 +217,13 @@ namespace ProjectManagement.Api.Services
             return true;
         }
 
-        public async Task<bool> ModifyPasswordAsync(string token, string password)
+        /// <summary>
+        /// Method to modify password with token
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public async Task<Responses.Response> ModifyPasswordAsync(string token, string password)
         {
             //Si le token est bien valide pour changer le mot de passe
             Token tokenReset = _tokenRepository.List()
@@ -173,8 +231,7 @@ namespace ProjectManagement.Api.Services
 
             if (tokenReset == null)
             {
-                //return BadRequest("BAD_TOKEN");
-                return false;
+                return new Responses.ErrorResponse("BAD_TOKEN");
             }
 
             string secret = "tokenReset33-password&!";
@@ -193,34 +250,46 @@ namespace ProjectManagement.Api.Services
             catch (TokenExpiredException)
             {
                 await _tokenRepository.DeleteAsync(tokenReset);
-                return false;
+                return new Responses.ErrorResponse("Error");
             }
             catch (SignatureVerificationException)
             {
-                return false;
+                return new Responses.ErrorResponse("Error");
             }
 
             User user = GetById(tokenReset.id_user);
 
             if (user == null)
             {
-                //return BadRequest("NO_USER");
-                return false;
+                return new Responses.ErrorResponse("NO_USER");
             }
 
             //test si le nouveau mot de passe respect les conditions (regex)
             if (!PasswordUtilities.PasswordMatchRegex(password))
             {
-                //return BadRequest("PASSWORD_TOO_WEAK");
-                return false;
+                return new Responses.ErrorResponse("PASSWORD_TOO_WEAK");
             }
 
             user.password = PasswordUtilities.HashPassword(password);
 
-            return await _userRepository.UpdateAsync(user);
+            bool res = await _userRepository.UpdateAsync(user);
+
+            if (res)
+            {
+                return new Responses.SuccessResponse(null);
+            }
+            else
+            {
+                return new Responses.ErrorResponse("Error");
+            }
         }
 
-        public async Task<bool> ValidateToken(string token)
+        /// <summary>
+        /// Method to validate the token send to reset passsword
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public async Task<Responses.Response> ValidateToken(string token)
         {
             //Si le token est bien valide pour changer le mot de passe
             Token tokenReset = _tokenRepository.List()
@@ -228,8 +297,7 @@ namespace ProjectManagement.Api.Services
 
             if (tokenReset == null)
             {
-                //return BadRequest("BAD_TOKEN");
-                return false;
+                return new Responses.ErrorResponse("BAD_TOKEN");
             }
 
             string secret = "tokenReset33-password&!";
@@ -248,19 +316,25 @@ namespace ProjectManagement.Api.Services
             catch (TokenExpiredException)
             {
                 _tokenRepository.DeleteAsync(tokenReset);
-                //return BadRequest("TOKEN_EXPIRED");
-                return false;
+
+                return new Responses.ErrorResponse("TOKEN_EXPIRED");
             }
             catch (SignatureVerificationException)
             {
-                //return BadRequest("BAD_SIGNATURE");
-                return false;
+                return new Responses.ErrorResponse("BAD_SIGNATURE");
             }
 
             //Si Ok
-            return true;
+            return new Responses.SuccessResponse(null);
+          
         }
 
+
+        /// <summary>
+        /// Method to create and save token for password reset
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
         public async Task<bool> ForgotPassword(string email)
         {
             //Récupération de l'utilisateur par email

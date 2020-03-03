@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProjectManagement.Api.Models;
+using ProjectManagement.Api.Responses;
 using ProjectManagement.Api.Services;
 using ProjectManagement.Models.Models;
 using System;
@@ -118,9 +119,21 @@ namespace ProjectManagement.Api.Controllers
                 return BadRequest();
             }
 
-            await _projectService.UpdateAsync(model);
+            Response resUser = await _projectService.UpdateAsync(model);
 
-            return NoContent();
+            if (resUser is ErrorResponse)
+            {
+                return StatusCode(500, ((ErrorResponse)resUser).error);
+            }
+            else if (resUser is SuccessResponse)
+            {
+
+                return NoContent();
+            }
+            else
+            {
+                return StatusCode(500);
+            }
         }
 
         /// <summary>
@@ -145,9 +158,23 @@ namespace ProjectManagement.Api.Controllers
                 return Unauthorized();
             }
 
-            Project project = await _projectService.CreateAsync(model, id);
+            Response res = await _projectService.CreateAsync(model, id);
 
-            return CreatedAtAction("GetProject", new { id = project.id }, project);
+            if (res is ErrorResponse)
+            {
+                return StatusCode(500, ((ErrorResponse)res).error);
+            }
+            else if (res is SuccessResponse)
+            {
+                Project project = (Project)((SuccessResponse)res).data;
+                return CreatedAtAction("GetProject", new { id = project.id }, project);
+            }
+            else
+            {
+                return StatusCode(500);
+            }
+
+      
         }
 
         /// <summary>
@@ -158,7 +185,20 @@ namespace ProjectManagement.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<bool>> DeleteProject(int id)
         {
-            return await _projectService.DeleteAsync(id);
+            Response res = await _projectService.DeleteAsync(id);
+
+            if (res is ErrorResponse)
+            {
+                return StatusCode(500, ((ErrorResponse)res).error);
+            }
+            else if (res is SuccessResponse)
+            {
+                return Ok();
+            }
+            else
+            {
+                return StatusCode(500);
+            }
         }
     }
 }
