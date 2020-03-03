@@ -1,0 +1,6 @@
+C:\Users\lenfa\Projects\ProjectManagementApp\ProjectManagement.Services\ProjectManagement.Api\obj\Debug\netcoreapp3.1\ProjectManagement.Api.csprojAssemblyReference.cache
+C:\Users\lenfa\Projects\ProjectManagementApp\ProjectManagement.Services\ProjectManagement.Api\obj\Debug\netcoreapp3.1\staticwebassets\ProjectManagement.Api.StaticWebAssets.Manifest.cache
+C:\Users\lenfa\Projects\ProjectManagementApp\ProjectManagement.Services\ProjectManagement.Api\obj\Debug\netcoreapp3.1\staticwebassets\ProjectManagement.Api.StaticWebAssets.xml
+C:\Users\lenfa\Projects\ProjectManagementApp\ProjectManagement.Services\ProjectManagement.Api\obj\Debug\netcoreapp3.1\ProjectManagement.Api.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\lenfa\Projects\ProjectManagementApp\ProjectManagement.Services\ProjectManagement.Api\obj\Debug\netcoreapp3.1\ProjectManagement.Api.AssemblyInfoInputs.cache
+C:\Users\lenfa\Projects\ProjectManagementApp\ProjectManagement.Services\ProjectManagement.Api\obj\Debug\netcoreapp3.1\ProjectManagement.Api.AssemblyInfo.cs
