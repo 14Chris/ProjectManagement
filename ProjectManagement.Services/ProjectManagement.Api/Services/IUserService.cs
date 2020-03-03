@@ -1,23 +1,22 @@
 ﻿using ProjectManagement.Api.Models;
+using ProjectManagement.Api.Responses;
 using ProjectManagement.Models.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ProjectManagement.Api.Services
 {
     public interface IUserService
     {
-        public User GetById(int id);
-        public IEnumerable<User> List();
-        public Task<Responses.Response> CreateAsync(User user);
-        public Task<Responses.Response> UpdateAsync(UserProfileModel model);
-        public Task<Responses.Response> UpdatePasswordAsync(ModifyPasswordModel model);
-        public bool EmailExists(string email);
-        public bool ActivateAccount(string token);
-        public Task<Responses.Response> ModifyPasswordAsync(string token, string password);
-        public Task<Responses.Response> ValidateToken(string token);
-        public Task<bool> ForgotPassword(string email);
+        User GetById(int id);
+        IEnumerable<User> List();
+        Task<Response> CreateAsync(User user);
+        Task<Response> UpdateAsync(UserProfileModel model);
+        Task<Response> UpdatePasswordAsync(ModifyPasswordModel model);
+        bool EmailExists(string email);
+        bool ActivateAccount(string token);
+        Task<Response> ModifyPasswordAsync(string token, string password);
+        Task<Response> ValidateToken(string token);
+        Task<bool> ForgotPassword(string email);
     }
 }

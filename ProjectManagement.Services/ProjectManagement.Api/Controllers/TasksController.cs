@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagement.Api.Models;
+using ProjectManagement.Api.Responses;
+using ProjectManagement.Api.Services;
 using ProjectManagement.Models;
 using ProjectManagement.Models.Models;
 using System.Collections.Generic;
@@ -16,20 +18,14 @@ namespace ProjectManagement.Api.Controllers
     [Authorize]
     public class TasksController : ControllerBase
     {
-        private readonly ProjectManagementContext _context;
+        //private readonly ProjectManagementContext _context;
+        private readonly ITaskService _taskService;
 
-        public TasksController(ProjectManagementContext context)
+        public TasksController(ITaskService taskService)
         {
-            _context = context;
+            //_context = context;
+            _taskService = taskService;
         }
-
-        // GET: api/Tasks
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProjectManagement.Models.Models.Task>>> GetTask()
-        {
-            return await _context.Task.ToListAsync();
-        }
-
 
         /// <summary>
         /// Get all tasks of a project
@@ -37,31 +33,19 @@ namespace ProjectManagement.Api.Controllers
         /// <param name="idProject"></param>
         /// <returns></returns>
         [HttpGet("project/{idProject}")]
-        public async Task<ActionResult<IEnumerable<Task>>> GetTaskByProject(int idProject)
+        public ActionResult<IEnumerable<Task>> GetTaskByProject(int idProject)
         {
-            return await _context.Task.Where(x=>x.id_project == idProject).ToListAsync();
+            return _taskService.ListByProject(idProject).ToList();
         }
 
         // GET: api/Tasks/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Task>> GetTask(int id)
         {
-            var task = await _context.Task.FindAsync(id);
-
-            if (task == null)
-            {
-                return NotFound();
-            }
-
-            return task;
+            return _taskService.GetById(id);
         }
 
-        /// <summary>
-        /// Modify a task
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="task"></param>
-        /// <returns></returns>
+        // PUT: task
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTask(int id, Task task)
         {
@@ -70,56 +54,41 @@ namespace ProjectManagement.Api.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(task).State = EntityState.Modified;
+            Response res = await _taskService.UpdateAsync(task);
 
-            try
+            if(res is SuccessResponse)
             {
-                await _context.SaveChangesAsync();
+                return NoContent();
             }
-            catch (DbUpdateConcurrencyException)
+            else if(res is ErrorResponse)
             {
-                if (!TaskExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return StatusCode(500, ((ErrorResponse)res).error);
+            }
+            else
+            {
+                return StatusCode(500);
             }
 
-            return NoContent();
+            
         }
 
-        /// <summary>
-        /// Method to update task state
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="stateTask"></param>
-        /// <returns></returns>
+        // PUT: Update state of a task
         [HttpPut("{id}/state")]
         public async Task<IActionResult> ChangeStateTask(int id, [FromBody]int stateTask)
         {
-            Task task = _context.Task.Find(id);
+            Response res = await _taskService.UpdateStateAsync(id, (TaskState)stateTask);
 
-            task.state = (TaskState)stateTask;
-
-            _context.Entry(task).State = EntityState.Modified;
-
-            try
+            if (res is SuccessResponse)
             {
-                await _context.SaveChangesAsync();
+                return NoContent();
             }
-            catch (DbUpdateConcurrencyException)
+            else if (res is ErrorResponse)
             {
-                if (!TaskExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return StatusCode(500, ((ErrorResponse)res).error);
+            }
+            else
+            {
+                return StatusCode(500);
             }
 
             return NoContent();
@@ -133,15 +102,23 @@ namespace ProjectManagement.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<Task>> PostTask(AddTaskModel model)
         {
-            Task task = new Task();
-            task.name = model.name;
-            task.id_project = model.idProject;
-            task.state = TaskState.ToDo;
+            Response res = await _taskService.CreateAsync(model);
 
-            _context.Task.Add(task);
-            await _context.SaveChangesAsync();
+            if (res is SuccessResponse)
+            {
+                Task task = ((SuccessResponse)res).data;
+                return CreatedAtAction("GetTask", new { id = task.id }, task);
+            }
+            else if (res is ErrorResponse)
+            {
+                return StatusCode(500, ((ErrorResponse)res).error);
+            }
+            else
+            {
+                return StatusCode(500);
+            }
 
-            return CreatedAtAction("GetTask", new { id = task.id }, task);
+
         }
 
         /// <summary>
@@ -152,21 +129,21 @@ namespace ProjectManagement.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Task>> DeleteTask(int id)
         {
-            var task = await _context.Task.FindAsync(id);
-            if (task == null)
+            Response res = await _taskService.DeleteAsync(id);
+
+            if (res is SuccessResponse)
             {
-                return NotFound();
+                return Ok();
             }
-
-            _context.Task.Remove(task);
-            await _context.SaveChangesAsync();
-
-            return task;
+            else if (res is ErrorResponse)
+            {
+                return StatusCode(500, ((ErrorResponse)res).error);
+            }
+            else
+            {
+                return StatusCode(500);
+            }
         }
 
-        private bool TaskExists(int id)
-        {
-            return _context.Task.Any(e => e.id == id);
-        }
     }
 }
