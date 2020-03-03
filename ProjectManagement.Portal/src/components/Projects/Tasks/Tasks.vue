@@ -15,6 +15,7 @@
         <b-table-column field="state" label="State">
           <!-- {{ GetStateLibelle(props.row.state)}} -->
           <b-select
+            disabled
             @input="UpdateStateTask(props.row)"
             v-model="props.row.state"
             placeholder="Select a name"
@@ -26,19 +27,21 @@
             >{{ option.libelle }}</option>
           </b-select>
         </b-table-column>
+        <b-table-column field="delete" label="Delete">
+          <button class="button is-danger" @click="DeleteTask(props.row.id, $event)">
+            <b-icon icon="delete" size="is-small"></b-icon>
+          </button>
+        </b-table-column>
       </template>
     </b-table>
-    <vs-sidebar
-      position-right
-      parent="body"
-      default-index="1"
-      color="primary"
-      class="sidebarx"
-      spacer
-      v-model="active"
-    >
-     <EditTaskForm></EditTaskForm>
-    </vs-sidebar>
+    <!-- <EditTaskSideBar></EditTaskSideBar> -->
+    <b-modal :active.sync="isEditTaskModalActive">
+      <div class="card">
+        <div class="card-content">
+          <EditTaskForm :taskId="currentTaskId" v-bind:TaskUpdated="TaskUpdated"></EditTaskForm>
+        </div>
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -56,14 +59,15 @@ export default {
   },
   data() {
     return {
-      active: false,
       idProject: Number,
       tasks: [],
       taskStates: [
         { id: 1, libelle: "To do" },
         { id: 2, libelle: "Done" }
       ],
-      isAddTaskModalActive: false
+      isAddTaskModalActive: false,
+      isEditTaskModalActive: false,
+      currentTaskId: null
     };
   },
   mounted() {
@@ -75,8 +79,9 @@ export default {
       this.isAddTaskModalActive = false;
       this.GetTasks();
     },
-    TaskClicked() {
-      this.active = true;
+    TaskClicked(row) {
+      this.isEditTaskModalActive = true;
+      this.currentTaskId = row.id;
     },
     GetTasks() {
       api.getData("Tasks/project/" + this.idProject).then(response => {
@@ -92,10 +97,28 @@ export default {
         .then(response => {
           console.log(response);
         });
+    },
+    TaskUpdated() {
+      this.isEditTaskModalActive = false;
+      this.GetTasks();
+    },
+    DeleteTask(id, event) {
+      event.stopPropagation();
+
+      api.delete("Tasks/" + id).then(response => {
+        if (response.status == 200) {
+          this.GetTasks();
+        }
+      });
     }
   }
 };
 </script>
 
-<style>
+<style scoped>
+#side-menu {
+  height: 100%;
+  position: absolute;
+  width: 300px;
+}
 </style>

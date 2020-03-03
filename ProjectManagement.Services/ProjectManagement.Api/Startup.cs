@@ -77,8 +77,10 @@ namespace ProjectManagement.Api
             services.AddScoped<IProjectRepository, ProjectRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ITokenRepository, TokenRepository>();
+            services.AddScoped<ITaskRepository, TaskRepository>();
             services.AddScoped<IProjectService, ProjectService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ITaskService, TaskService>();
 
             // Configure IFluentEmail
             services.AddFluentEmail("lenfant.chris@hotmail.fr")

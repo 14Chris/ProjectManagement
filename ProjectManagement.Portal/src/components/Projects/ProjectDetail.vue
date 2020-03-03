@@ -57,11 +57,10 @@ export default {
     };
   },
   mounted() {
-    console.log(this.$route.path.split("/"));
     api.getData("Projects/" + this.$route.params.id).then(response => {
       if (response.status == 200) {
         response.json().then(data => {
-          console.log("data", data);
+         
           this.project = data;
         });
       }
@@ -84,7 +83,6 @@ export default {
       this.$router.push("/projects/" + this.project.id + "/settings");
     },
     UpdateProject(project) {
-      console.log(project);
       this.project = project;
     }
   }

@@ -34,11 +34,12 @@ namespace ProjectManagement.Api.Services
 
             if (resTask != null)
             {
-                return new ErrorResponse("Error");
+                return new SuccessResponse(resTask);
+
             }
             else
             {
-                return new SuccessResponse(resTask);
+                return new ErrorResponse("Error");
             }
         }
 
