@@ -1,7 +1,14 @@
 steps:
 - task: DockerCompose@0
-  displayName: Container registry login
   inputs:
-    action: Build services
-    containerregistrytype: Container Registry
-    dockerRegistryEndpoint: Docker hub
+    containerregistrytype: 'Container Registry'
+    dockerRegistryEndpoint: 'Docker hub'
+    dockerComposeFile: '**/docker-compose.yml'
+    action: 'Build services'
+
+- task: DockerCompose@0
+  inputs:
+    containerregistrytype: 'Container Registry'
+    dockerRegistryEndpoint: 'Docker hub'
+    dockerComposeFile: '**/docker-compose.yml'
+    action: 'Push services'
