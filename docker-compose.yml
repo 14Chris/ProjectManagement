@@ -10,7 +10,7 @@ services:
         depends_on: 
             - "postgres-image"
         build: 
-            context: .\ProjectManagement.Services
+            context: ProjectManagement.Services
             dockerfile: Dockerfile
         ports:
             - "8000:80"
@@ -24,7 +24,7 @@ services:
         depends_on: 
             - "projectmanagementapi"
         build: 
-            context: .\ProjectManagement.Portal
+            context: ProjectManagement.Portal
             dockerfile: Dockerfile
         ports:
            - "8085:8080"
