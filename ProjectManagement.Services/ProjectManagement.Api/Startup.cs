@@ -38,6 +38,7 @@ namespace ProjectManagement.Api
                     builder
                        .AllowAnyOrigin()
                        .WithOrigins("http://localhost:8080")
+                       .WithOrigins("http://localhost:8085")
                        .AllowAnyHeader()
                        .AllowAnyMethod()
                        .SetPreflightMaxAge(TimeSpan.FromDays(5));
