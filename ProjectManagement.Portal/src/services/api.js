@@ -1,7 +1,7 @@
 const axios = require('axios').default;
 
 export default class ApiService {
-    apiUrl = "http://localhost:8000"
+    apiUrl = "http://localhost:8000";
     apiKey = "003026bbc133714df1834b8638bb496e-8f4b3d9a-e931-478d-a994-28a725159ab9"
 
     getData(route) {
@@ -38,6 +38,7 @@ export default class ApiService {
     }
 
     generateHeaders() {
+        console.log("env:" ,process.env)
         var authToken = localStorage.getItem('userToken')
         if (authToken && authToken.length > 0) {
             return {
