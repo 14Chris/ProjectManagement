@@ -1,0 +1,7 @@
+steps:
+- task: DockerCompose@0
+  displayName: Container registry login
+  inputs:
+    action: Build services
+    containerregistrytype: Container Registry
+    dockerRegistryEndpoint: Docker hub
