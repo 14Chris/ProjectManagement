@@ -1,14 +1,7 @@
 steps:
-- task: DockerCompose@0
+- task: Docker@2
   inputs:
-    containerregistrytype: 'Container Registry'
-    dockerRegistryEndpoint: 'Docker hub'
-    dockerComposeFile: '**/docker-compose.yml'
-    action: 'Build services'
-
-- task: DockerCompose@0
-  inputs:
-    containerregistrytype: 'Container Registry'
-    dockerRegistryEndpoint: 'Docker hub'
-    dockerComposeFile: '**/docker-compose.yml'
-    action: 'Push services'
+    containerRegistry: 'Docker hub'
+    repository: '14chris/projectmanagement'
+    command: 'buildAndPush'
+    Dockerfile: '**/Dockerfile'
