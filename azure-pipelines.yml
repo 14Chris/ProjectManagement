@@ -13,6 +13,5 @@ steps:
     containerregistrytype: 'Container Registry'
     dockerRegistryEndpoint: 'Docker hub'
     dockerComposeFile: '**/docker-compose.yml'
-    projectName: '14chris/projectmanagement-api'
     action: 'Push services'
     includeLatestTag: true
