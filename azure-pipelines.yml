@@ -6,10 +6,13 @@ steps:
     dockerComposeFile: '**/docker-compose.yml'
     action: 'Build services'
     includeLatestTag: true
+
+
 - task: DockerCompose@0
   inputs:
     containerregistrytype: 'Container Registry'
     dockerRegistryEndpoint: 'Docker hub'
     dockerComposeFile: '**/docker-compose.yml'
+    projectName: '14chris/projectmanagement-api'
     action: 'Push services'
     includeLatestTag: true
