@@ -7,13 +7,10 @@ steps:
     action: 'Build services'
     includeLatestTag: true
 
-
 - task: DockerCompose@0
   inputs:
     containerregistrytype: 'Container Registry'
     dockerRegistryEndpoint: 'Docker hub'
     dockerComposeFile: '**/docker-compose.yml'
-    projectName: '14chris/projectmanagement-api'
-    qualifyImageNames: false
     action: 'Push services'
     includeLatestTag: true
