@@ -10,7 +10,7 @@ services:
         depends_on: 
             - "postgres-image"
         build: 
-            context: ProjectManagement.Services
+            context: .\ProjectManagement.Services
             dockerfile: Dockerfile
         ports:
             - "443:443"
@@ -18,7 +18,21 @@ services:
             DB_CONNECTION_STRING: "host=postgres-image;port=5432;database=projectmanagement;username=postgres;password=dockerPassword"
         networks: 
             - dockerapi-dev
-
+            
+    projectmanagementportal:
+        image: portal:latest
+        depends_on: 
+            - "projectmanagementapi"
+        build: 
+            context: .\ProjectManagement.Portal
+            dockerfile: Dockerfile
+        ports:
+           - "80:8080"
+        environment: 
+            VUE_APP_API_URL: "projectmanagementapi:8000"
+        networks: 
+            - dockerapi-dev
+            
     postgres-image:
         image: postgres:latest
         ports:
