@@ -26,12 +26,10 @@ services:
         build: 
             context: .\ProjectManagement.Portal
             dockerfile: Dockerfile
-            ports:
-                - "8085:8080"
-            environment: 
-                VUE_APP_API_URL: "projectmanagementapi:8000"
-            networks: 
-                - dockerapi-dev
+        ports:
+            - "8085:8080"
+        networks: 
+            - dockerapi-dev
 
     postgres-image:
         image: postgres:latest
