@@ -10,7 +10,7 @@ services:
         depends_on: 
             - "postgres-image"
         build: 
-            context: .\ProjectManagement.Services
+            context: ProjectManagement.Services
             dockerfile: Dockerfile
         ports:
             - "443:443"
