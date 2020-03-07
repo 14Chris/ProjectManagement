@@ -2,6 +2,6 @@ steps:
 - task: Docker@2
   inputs:
     containerRegistry: 'Docker hub'
-    repository: '14chris/projectmanagement'
+    repository: '14chris/projectmanagement-api'
     command: 'buildAndPush'
     Dockerfile: '**/Dockerfile'
