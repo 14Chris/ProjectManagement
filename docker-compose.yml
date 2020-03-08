@@ -20,7 +20,7 @@ services:
             - dockerapi-dev
 
     projectmanagementportal:
-        image: 14chris:/projectmanagement-portal:latest
+        image: 14chris/projectmanagement-portal:latest
         depends_on: 
             - "projectmanagementapi"
         build: 
