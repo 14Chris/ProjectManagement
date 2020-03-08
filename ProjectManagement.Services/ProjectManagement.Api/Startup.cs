@@ -39,6 +39,7 @@ namespace ProjectManagement.Api
                        .AllowAnyOrigin()
                        .WithOrigins("http://localhost:8080")
                        .WithOrigins("http://localhost:8085")
+                       .WithOrigins("https://projectmanagement-portal.azurewebsites.net/")
                        .AllowAnyHeader()
                        .AllowAnyMethod()
                        .SetPreflightMaxAge(TimeSpan.FromDays(5));
