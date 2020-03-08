@@ -9425,11 +9425,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\lenfa\\Projects\\ProjectManagementApp\\ProjectManagement.Services\\ProjectManagement.Api\\ProjectManagement.Api.csproj",
+      "projectUniqueName": "C:\\Users\\lenfa\\Projects\\ProjectManagement\\ProjectManagement.Services\\ProjectManagement.Api\\ProjectManagement.Api.csproj",
       "projectName": "ProjectManagement.Api",
-      "projectPath": "C:\\Users\\lenfa\\Projects\\ProjectManagementApp\\ProjectManagement.Services\\ProjectManagement.Api\\ProjectManagement.Api.csproj",
+      "projectPath": "C:\\Users\\lenfa\\Projects\\ProjectManagement\\ProjectManagement.Services\\ProjectManagement.Api\\ProjectManagement.Api.csproj",
       "packagesPath": "C:\\Users\\lenfa\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\lenfa\\Projects\\ProjectManagementApp\\ProjectManagement.Services\\ProjectManagement.Api\\obj\\",
+      "outputPath": "C:\\Users\\lenfa\\Projects\\ProjectManagement\\ProjectManagement.Services\\ProjectManagement.Api\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Microsoft\\Xamarin\\NuGet\\",
@@ -9450,8 +9450,8 @@
       "frameworks": {
         "netcoreapp3.1": {
           "projectReferences": {
-            "C:\\Users\\lenfa\\Projects\\ProjectManagementApp\\ProjectManagement.Services\\ProjectManagement.Models\\ProjectManagement.Models.csproj": {
-              "projectPath": "C:\\Users\\lenfa\\Projects\\ProjectManagementApp\\ProjectManagement.Services\\ProjectManagement.Models\\ProjectManagement.Models.csproj"
+            "C:\\Users\\lenfa\\Projects\\ProjectManagement\\ProjectManagement.Services\\ProjectManagement.Models\\ProjectManagement.Models.csproj": {
+              "projectPath": "C:\\Users\\lenfa\\Projects\\ProjectManagement\\ProjectManagement.Services\\ProjectManagement.Models\\ProjectManagement.Models.csproj"
             }
           }
         }

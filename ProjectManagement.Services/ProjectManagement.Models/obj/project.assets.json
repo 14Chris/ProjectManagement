@@ -912,11 +912,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\lenfa\\Projects\\ProjectManagementApp\\ProjectManagement.Services\\ProjectManagement.Models\\ProjectManagement.Models.csproj",
+      "projectUniqueName": "C:\\Users\\lenfa\\Projects\\ProjectManagement\\ProjectManagement.Services\\ProjectManagement.Models\\ProjectManagement.Models.csproj",
       "projectName": "ProjectManagement.Models",
-      "projectPath": "C:\\Users\\lenfa\\Projects\\ProjectManagementApp\\ProjectManagement.Services\\ProjectManagement.Models\\ProjectManagement.Models.csproj",
+      "projectPath": "C:\\Users\\lenfa\\Projects\\ProjectManagement\\ProjectManagement.Services\\ProjectManagement.Models\\ProjectManagement.Models.csproj",
       "packagesPath": "C:\\Users\\lenfa\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\lenfa\\Projects\\ProjectManagementApp\\ProjectManagement.Services\\ProjectManagement.Models\\obj\\",
+      "outputPath": "C:\\Users\\lenfa\\Projects\\ProjectManagement\\ProjectManagement.Services\\ProjectManagement.Models\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Microsoft\\Xamarin\\NuGet\\",
