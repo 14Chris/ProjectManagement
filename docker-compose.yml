@@ -13,7 +13,7 @@ services:
             context: ProjectManagement.Services
             dockerfile: Dockerfile
         ports:
-            - "4433:443"
+            # - "4433:443"
             - "8081:80"
         environment: 
             # ASPNETCORE_Kestrel__Certificates__Default__Path: /root/.dotnet/https/certificate.pfx
