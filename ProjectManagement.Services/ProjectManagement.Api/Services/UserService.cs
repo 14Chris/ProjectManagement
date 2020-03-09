@@ -2,13 +2,19 @@
 using JWT.Algorithms;
 using JWT.Builder;
 using JWT.Serializers;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using ProjectManagement.Api.MailUtilities;
 using ProjectManagement.Api.Models;
 using ProjectManagement.Api.Repositories;
+using ProjectManagement.Api.Responses;
 using ProjectManagement.Models.Models;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace ProjectManagement.Api.Services
@@ -18,12 +24,14 @@ namespace ProjectManagement.Api.Services
         private readonly IUserRepository _userRepository;
         private readonly IEmailSender _emailSender;
         private readonly ITokenRepository _tokenRepository;
+        private IConfiguration _config;
 
-        public UserService(IUserRepository userRepository, ITokenRepository tokenRepository, IEmailSender emailSender)
+        public UserService(IConfiguration config, IUserRepository userRepository, ITokenRepository tokenRepository, IEmailSender emailSender)
         {
             _userRepository = userRepository;
             _tokenRepository = tokenRepository;
             _emailSender = emailSender;
+            _config = config;
         }
 
         /// <summary>
@@ -367,6 +375,60 @@ namespace ProjectManagement.Api.Services
             }
 
             return true;
+        }
+
+        public Response LoginUser(string email, string password)
+        {
+           User user = AuthenticateUser(email, password);
+
+            if (user != null)
+            {
+                if (user.active)
+                {
+                    var tokenString = GenerateJSONWebToken(user);
+                    return new SuccessResponse(new { token = tokenString, user = user });
+                }
+                else
+                {
+                    return new ErrorResponse("NOT_ACTIVATED");
+                }
+            }
+            else
+            {
+                return new ErrorResponse("BAD_CREDENTIALS");
+            }
+        }
+
+        private string GenerateJSONWebToken(User userInfo)
+        {
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+            var claims = new[] {
+                 new Claim(JwtRegisteredClaimNames.Sub, userInfo.id.ToString())
+             };
+
+            var token = new JwtSecurityToken(_config["Jwt:Issuer"],
+            _config["Jwt:Issuer"],
+            claims,
+            expires: DateTime.Now.AddMinutes(60),
+            signingCredentials: credentials);
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        private User AuthenticateUser(string email, string password)
+        {
+            string hashPassword = PasswordUtilities.HashPassword(password);
+
+            User user = _userRepository.List().Where(x => x.email == email && x.password == hashPassword).SingleOrDefault();
+
+            if (user != null)
+            {
+                return user;
+            }
+
+            return null;
         }
     }
 }

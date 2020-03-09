@@ -5,6 +5,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using ProjectManagement.Api;
 using ProjectManagement.Api.Models;
+using ProjectManagement.Api.Responses;
+using ProjectManagement.Api.Services;
 using ProjectManagement.Models;
 using ProjectManagement.Models.Models;
 using System;
@@ -17,75 +19,39 @@ namespace ProjectManagement.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    //[Authorize(Policy = "ApiKeyPolicy")]
     public class LoginController : ControllerBase
     {
         private IConfiguration _config;
-        private readonly ProjectManagementContext _context;
+        private readonly IUserService _userService;
 
-        public LoginController(IConfiguration config, ProjectManagementContext context)
+        public LoginController(IConfiguration config, IUserService userService)
         {
             _config = config;
-            _context = context;
+            _userService = userService;
         }
 
         [HttpPost]
         public IActionResult Login([FromBody]LoginModel login)
         {
             IActionResult response = Unauthorized();
-            var user = AuthenticateUser(login);
+ 
+            Response res =  _userService.LoginUser(login.email, login.password);
 
-            if (user != null)
+            if (res is ErrorResponse)
             {
-                if (user.active)
-                {
-                    var tokenString = GenerateJSONWebToken(user);
-                    response = Ok(new { token = tokenString, user = user });
-                }
-                else
-                {
-                    response = Unauthorized("NOT_ACTIVATED");
-                }
+                return Unauthorized(((ErrorResponse)res).error);
+            }
+            else if (res is SuccessResponse)
+            {
+                return Ok(((SuccessResponse)res).data);
             }
             else
             {
-                response = Unauthorized("BAD_CREDENTIALS");
+                return StatusCode(500);
             }
-
-            return response;
         }
 
-        private string GenerateJSONWebToken(User userInfo)
-        {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-            var claims = new[] {
-                 new Claim(JwtRegisteredClaimNames.Sub, userInfo.id.ToString())
-             };
-
-            var token = new JwtSecurityToken(_config["Jwt:Issuer"],
-            _config["Jwt:Issuer"],
-            claims,
-            expires: DateTime.Now.AddMinutes(60),
-            signingCredentials: credentials);
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
-
-        private User AuthenticateUser(LoginModel login)
-        {
-            string password = PasswordUtilities.HashPassword(login.password);
-
-            User user = _context.User.Where(x => x.email == login.email && x.password == password).SingleOrDefault();
-
-            if (user != null)
-            {
-                return user;
-            }
-
-            return null;
-        }
+        
     }
 }
 
