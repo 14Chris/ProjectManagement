@@ -72,8 +72,18 @@ namespace ProjectManagement.Api
 
             string connectionString = (dbConnectString != null) ? dbConnectString : @"Server=.\SQLEXPRESS;Database=ProjectManagement;Trusted_Connection=True;";
 
-            services.AddDbContext<ProjectManagementContext>(options =>
-                        options.UseNpgsql(connectionString));
+
+            if(dbConnectString != null)
+            {
+                services.AddDbContext<ProjectManagementContext>(options =>
+                   options.UseNpgsql(connectionString));
+            }
+            else
+            {
+                services.AddDbContext<ProjectManagementContext>(options =>
+                  options.UseSqlServer(connectionString));
+            }
+       
 
             //Configure services dependencies
             services.AddScoped<IProjectRepository, ProjectRepository>();
@@ -120,7 +130,7 @@ namespace ProjectManagement.Api
 
             app.UseCors("CorsPolicy");
 
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
 
             app.UseAuthentication();
 

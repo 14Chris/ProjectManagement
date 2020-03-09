@@ -13,8 +13,11 @@ services:
             context: ProjectManagement.Services
             dockerfile: Dockerfile
         ports:
-            - "443:443"
+            - "4433:443"
+            - "8081:80"
         environment: 
+            # ASPNETCORE_Kestrel__Certificates__Default__Path: /root/.dotnet/https/certificate.pfx
+            # ASPNETCORE_URLS: https://*:443
             DB_CONNECTION_STRING: "host=postgres-image;port=5432;database=projectmanagement;username=postgres;password=dockerPassword"
         networks: 
             - dockerapi-dev
