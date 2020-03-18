@@ -38,7 +38,6 @@ export default class ApiService {
     }
 
     generateHeaders() {
-        console.log("env:" ,process.env)
         var authToken = localStorage.getItem('userToken')
         if (authToken && authToken.length > 0) {
             return {

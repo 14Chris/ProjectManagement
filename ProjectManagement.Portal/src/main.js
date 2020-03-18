@@ -5,7 +5,7 @@ import Vuelidate from 'vuelidate'
 import VueRouter from 'vue-router'
 import Buefy from 'buefy'
 
-import 'buefy/dist/buefy.css'
+// import 'buefy/dist/buefy.css'
 
 Vue.config.productionTip = false
 

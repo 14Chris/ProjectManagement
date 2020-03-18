@@ -8,3 +8,5 @@ C:\Users\lenfa\Projects\ProjectManagement\ProjectManagement.Services\ProjectMana
 C:\Users\lenfa\Projects\ProjectManagement\ProjectManagement.Services\ProjectManagement.Models\obj\Release\netcoreapp3.1\ProjectManagement.Models.AssemblyInfo.cs
 C:\Users\lenfa\Projects\ProjectManagement\ProjectManagement.Services\ProjectManagement.Models\obj\Release\netcoreapp3.1\ProjectManagement.Models.dll
 C:\Users\lenfa\Projects\ProjectManagement\ProjectManagement.Services\ProjectManagement.Models\obj\Release\netcoreapp3.1\ProjectManagement.Models.pdb
+C:\Users\lenfa\Projects\ProjectManagement\ProjectManagement.Services\ProjectManagement.Models\obj\Release\netcoreapp3.1\ProjectManagement.Models.csproj.CoreCompileInputs.cache
+C:\Users\lenfa\Projects\ProjectManagement\ProjectManagement.Services\ProjectManagement.Models\obj\Release\netcoreapp3.1\ProjectManagement.Models.genruntimeconfig.cache

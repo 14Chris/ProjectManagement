@@ -22,9 +22,10 @@
             v-if="!$v.login.password.required && submitStatus=='ERROR'"
           >Password is required</div>
 
-          <b-button type="is-success" native-type="submit">Login</b-button>
-          <b-button tag="router-link" to="/register" type="is-link">Register</b-button>
+          <b-button type="is-primary" expanded native-type="submit">Login</b-button>
+         
           <b-button type="is-text" tag="router-link" to="/forgot_password">Forgot password ?</b-button>
+          <div><span>Don't have an account ?</span><b-button tag="router-link" to="/register" type="is-text">Register</b-button></div>
         </form>
       </div>
     </div>

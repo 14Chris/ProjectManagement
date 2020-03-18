@@ -13,8 +13,7 @@ export default {
       apiData: ""
     };
   },
-  mounted() {
-  }
+  mounted() {}
 };
 </script>
 
@@ -27,4 +26,8 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+</style>
+
+<style lang="scss">
+  @import './buefy-config.scss';
 </style>
