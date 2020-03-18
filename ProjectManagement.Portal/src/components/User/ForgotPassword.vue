@@ -7,8 +7,7 @@
           <b-field label="Email">
             <b-input type="text" v-model="model.email"></b-input>
           </b-field>
-
-          <b-button type="is-success" native-type="submit">Submit</b-button>
+          <b-button type="is-primary" expanded native-type="submit">Submit</b-button>
         </form>
       </div>
     </div>

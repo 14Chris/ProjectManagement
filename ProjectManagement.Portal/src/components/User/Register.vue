@@ -1,6 +1,18 @@
 <template>
   <div class="container">
-    <div class="card">
+    <b-modal :active.sync="isCardModalActive" :width="800">
+      <div class="card">
+        <div class="card-content">
+          <div>
+            <h1 class="title">Account created</h1>
+            <div class="message">An email has just been sent to you</div>
+            <div class="message">Please click on the link in it to activate your account</div>
+            <b-button @click="RegistrationSuccess">Ok</b-button>
+          </div>
+        </div>
+      </div>
+    </b-modal>
+    <div class="card card-form">
       <div class="card-content">
         <p class="title">Register</p>
         <form v-on:submit.prevent="registerUser" class="ui form">
@@ -76,12 +88,13 @@
           <b-field v-else label="Confirm password">
             <b-input password-reveal type="password" v-model="model.repeatPassword"></b-input>
           </b-field>
-          <b-button type="is-primary" expanded native-type="submit">Register</b-button> 
+          <b-button type="is-primary" expanded native-type="submit">Register</b-button>
           <div>
             <span>You already have an account ?</span>
             <b-button tag="router-link" to="/login" type="is-text">Login</b-button>
           </div>
         </form>
+        
       </div>
     </div>
   </div>
@@ -100,7 +113,8 @@ export default {
   data() {
     return {
       submitStatus: "",
-      model: new RegisterUserModel()
+      model: new RegisterUserModel(),
+      isCardModalActive: false
     };
   },
   methods: {
@@ -116,17 +130,18 @@ export default {
           .create("Users", JSON.stringify(this.model))
           .then(response => {
             this.submitStatus = "OK";
-            if(response.status == 204){
-              this.success("User created")  
+            if (response.status == 201) {
+              this.isCardModalActive = true;
+              this.model = new RegisterUserModel();
+            } else {
+              response.json().then(data => {
+                this.submitStatus = "ERROR";
+                this.danger(data);
+              });
             }
-            else{
-              this.danger("Erreur")
-            }
-            console.log("response", response);
-            this.model = new RegisterUserModel();
           })
           .catch(error => {
-            console.log(error)
+            console.log(error);
           });
       }
     },
@@ -175,7 +190,7 @@ export default {
 
       return errors;
     },
-     danger(message) {
+    danger(message) {
       this.$buefy.toast.open({
         duration: 5000,
         message: message,
@@ -183,13 +198,17 @@ export default {
         type: "is-danger"
       });
     },
-     success(message) {
+    success(message) {
       this.$buefy.toast.open({
         duration: 5000,
         message: message,
         position: "is-bottom",
         type: "is-success"
       });
+    },
+    RegistrationSuccess(){
+      this.isCardModalActive= false;
+      this.$router.push("/login");
     }
   },
   validations: {
@@ -229,12 +248,16 @@ export default {
 </script>
 
 <style scoped>
+.message{
+  margin-bottom: 10px;
+}
+
 .container {
   align-content: center;
   height: 100%;
 }
 
-.card {
+.card-form {
   position: absolute;
   left: 50%;
   top: 50%;

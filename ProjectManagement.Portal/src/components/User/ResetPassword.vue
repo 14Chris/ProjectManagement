@@ -25,7 +25,7 @@
         class="error"
         v-if="!$v.model.repeatPassword.required && submitStatus=='ERROR'"
       >Confirmation password is required</div>
-      <b-button native-type="submit">Submit</b-button>
+      <b-button type="is-primary" expanded native-type="submit">Submit</b-button>
     </form>
   </div>
 </template>
