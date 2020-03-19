@@ -25,7 +25,7 @@
           <b-button type="is-primary" expanded native-type="submit">Login</b-button>
          
           <b-button type="is-text" tag="router-link" to="/forgot_password">Forgot password ?</b-button>
-          <div><span>Don't have an account ?</span><b-button tag="router-link" to="/register" type="is-text">Register</b-button></div>
+          <div class="div-register">Don't have an account ? <b-button id="btn-register" tag="router-link" to="/register" type="is-text">Register</b-button></div>
         </form>
       </div>
     </div>
@@ -91,13 +91,21 @@ export default {
       }
     },
     danger(message) {
-      this.$buefy.toast.open({
+      this.$buefy.notification.open({
         duration: 5000,
         message: message,
-        position: "is-bottom",
-        type: "is-danger"
+        type: "is-danger",
+        // hasIcon: true
       });
-    }
+    },
+    success(message) {
+      this.$buefy.notification.open({
+        duration: 5000,
+        message: message,
+        type: "is-success",
+        // hasIcon: true
+      });
+    },
   },
   validations: {
     login: {
@@ -112,16 +120,9 @@ export default {
 };
 </script>
 
-<style>
-.container {
-  align-content: center;
-  height: 100%;
-}
+<style scoped>
 
-.card {
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 50%;
+#btn-register{
+  vertical-align: middle;
 }
 </style>

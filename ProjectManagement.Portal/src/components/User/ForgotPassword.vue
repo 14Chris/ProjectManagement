@@ -4,8 +4,17 @@
       <div class="card-content">
         <p class="title">Forgot password</p>
         <form v-on:submit.prevent="SubmitPasswordChange">
-          <b-field label="Email">
-            <b-input type="text" v-model="model.email"></b-input>
+          <b-field
+            v-if="$v.model.email.$error && submitStatus=='ERROR'"
+            type="is-danger"
+            label="Email"
+            :message="GetEmailErrors()"
+          >
+            <b-input v-model="model.email"></b-input>
+          </b-field>
+
+          <b-field v-else label="Email">
+            <b-input type="email" v-model="model.email"></b-input>
           </b-field>
           <b-button type="is-primary" expanded native-type="submit">Submit</b-button>
         </form>
@@ -15,6 +24,7 @@
 </template>
 
 <script>
+import { required, email } from "vuelidate/lib/validators";
 import ApiService from "../../services/api";
 var api = new ApiService();
 
@@ -32,31 +42,60 @@ export default {
   methods: {
     SubmitPasswordChange: function() {
       var router = this.$router;
-      api
-        .create("Users/forgot_password", JSON.stringify(this.model.email))
-        .then(resp => {
-          if (resp.status == 400) {
-            this.danger("No account with this login");
-            return;
-          } else {
-            resp.json().then(function(data) {
-              console.log(data);
-              router.push("/");
-            });
-          }
-        }) // Transform the data into json
-
-        .catch(error => {
-          console.log("error", error);
-        });
+      this.submitStatus = "SUBMITTED";
+      console.log(this.$v.model);
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        this.submitStatus = "ERROR";
+      } else {
+        this.submitStatus = "PENDING";
+        api
+          .create("Users/forgot_password", JSON.stringify(this.model.email))
+          .then(resp => {
+            this.submitStatus = "OK";
+            if (resp.status == 400) {
+              this.submitStatus = "ERROR";
+              this.danger("No account with this login");
+              return;
+            } else {
+              resp.json().then(function() {
+                router.push("/");
+              });
+            }
+          }) // Transform the data into json
+          .catch(error => {
+            this.submitStatus = "ERROR";
+            console.log("error", error);
+          });
+      }
     },
     danger(message) {
-      this.$buefy.toast.open({
+      this.$buefy.notification.open({
         duration: 5000,
         message: message,
-        position: "is-bottom",
-        type: "is-danger"
+        type: "is-danger",
+        hasIcon: true
       });
+    },
+    GetEmailErrors() {
+      var errors = "";
+      if (!this.$v.model.email.email) {
+        errors += "Please enter valid email address ";
+      }
+
+      if (!this.$v.model.email.required) {
+        errors += "Email is required ";
+      }
+
+      return errors;
+    }
+  },
+  validations: {
+    model: {
+      email: {
+        required,
+        email
+      }
     }
   }
 };

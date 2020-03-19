@@ -26,8 +26,20 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+
+.container {
+  align-content: center;
+  height: 100%;
+}
+
+.card {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 50%;
+}
 </style>
 
 <style lang="scss">
-  @import './buefy-config.scss';
+@import "./buefy-config.scss";
 </style>

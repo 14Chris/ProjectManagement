@@ -91,7 +91,7 @@
           <b-button type="is-primary" expanded native-type="submit">Register</b-button>
           <div>
             <span>You already have an account ?</span>
-            <b-button tag="router-link" to="/login" type="is-text">Login</b-button>
+            <b-button id="btn-login" tag="router-link" to="/login" type="is-text">Login</b-button>
           </div>
         </form>
         
@@ -191,19 +191,19 @@ export default {
       return errors;
     },
     danger(message) {
-      this.$buefy.toast.open({
+      this.$buefy.notification.open({
         duration: 5000,
         message: message,
-        position: "is-bottom",
-        type: "is-danger"
+        type: "is-danger",
+        hasIcon: true
       });
     },
     success(message) {
-      this.$buefy.toast.open({
+      this.$buefy.notification.open({
         duration: 5000,
         message: message,
-        position: "is-bottom",
-        type: "is-success"
+        type: "is-success",
+        hasIcon: true
       });
     },
     RegistrationSuccess(){
@@ -252,17 +252,10 @@ export default {
   margin-bottom: 10px;
 }
 
-.container {
-  align-content: center;
-  height: 100%;
-}
 
-.card-form {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 50%;
+
+#btn-login{
+  vertical-align: middle;
 }
 </style>
 

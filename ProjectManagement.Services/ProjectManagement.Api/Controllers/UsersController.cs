@@ -190,8 +190,11 @@ namespace ProjectManagement.Api.Controllers
         public async Task<ActionResult> ForgotPassword([FromBody]string email)
         {
             bool b = await _userService.ForgotPassword(email);
-
-            return Ok();
+            
+            if(b)
+                return Ok();
+            else
+                return StatusCode(400);
         }
 
         // GET to validate reset password token
