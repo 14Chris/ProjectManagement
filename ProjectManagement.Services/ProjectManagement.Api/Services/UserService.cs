@@ -184,7 +184,7 @@ namespace ProjectManagement.Api.Services
         public bool ActivateAccount(string token)
         {
             //Récupération du dernier token (par l'id)
-            Token tokenActivation =_tokenRepository.List()
+            Token tokenActivation = _tokenRepository.List()
                 .Where(x => x.token == token && x.type == TypeToken.AccountActivation).OrderByDescending(x => x.id).FirstOrDefault();
 
             if (tokenActivation == null)
@@ -334,7 +334,7 @@ namespace ProjectManagement.Api.Services
 
             //Si Ok
             return new Responses.SuccessResponse(null);
-          
+
         }
 
 
@@ -365,7 +365,7 @@ namespace ProjectManagement.Api.Services
             tokenActivation.id_user = user.id;
             tokenActivation.type = TypeToken.ForgotPassword;
             tokenActivation.token = token;
-            
+
             Token resToken = await _tokenRepository.CreateAsync(tokenActivation);
 
             if (tokenActivation.id > 0)
@@ -379,7 +379,7 @@ namespace ProjectManagement.Api.Services
 
         public Response LoginUser(string email, string password)
         {
-           User user = AuthenticateUser(email, password);
+            User user = AuthenticateUser(email, password);
 
             if (user != null)
             {

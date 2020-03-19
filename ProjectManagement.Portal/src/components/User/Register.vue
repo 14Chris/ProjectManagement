@@ -18,7 +18,7 @@
         <form v-on:submit.prevent="registerUser" class="ui form">
           <!-- First name -->
           <b-field
-            v-if="$v.model.first_name.$error && submitStatus=='ERROR'"
+            v-if="$v.model.first_name.$invalid && submitStatus=='ERROR'"
             type="is-danger"
             label="First name"
             :message="!$v.model.first_name.required ? 'First name is required' : ''"
@@ -32,7 +32,7 @@
 
           <!-- Last name -->
           <b-field
-            v-if="$v.model.last_name.$error && submitStatus=='ERROR'"
+            v-if="$v.model.last_name.$invalid && submitStatus=='ERROR'"
             type="is-danger"
             label="Last Name"
             :message="!$v.model.last_name.required ? 'Last name is required' : ''"
@@ -46,7 +46,7 @@
 
           <!-- Email -->
           <b-field
-            v-if="$v.model.email.$error && submitStatus=='ERROR'"
+            v-if="$v.model.email.$invalid && submitStatus=='ERROR'"
             type="is-danger"
             label="Email"
             :message="GetEmailErrors()"
@@ -60,7 +60,7 @@
 
           <!-- Password -->
           <b-field
-            v-if="$v.model.password.$error && submitStatus=='ERROR'"
+            v-if="$v.model.password.$invalid && submitStatus=='ERROR'"
             type="is-danger"
             label="Password"
             password-reveal
@@ -76,7 +76,7 @@
           <!-- Confirm password -->
 
           <b-field
-            v-if="$v.model.repeatPassword.$error && submitStatus=='ERROR'"
+            v-if="$v.model.repeatPassword.$invalid && submitStatus=='ERROR'"
             type="is-danger"
             label="Confirm password"
             password-reveal
@@ -94,7 +94,6 @@
             <b-button id="btn-login" tag="router-link" to="/login" type="is-text">Login</b-button>
           </div>
         </form>
-        
       </div>
     </div>
   </div>
@@ -114,7 +113,8 @@ export default {
     return {
       submitStatus: "",
       model: new RegisterUserModel(),
-      isCardModalActive: false
+      isCardModalActive: false,
+      chkUsernameAvailabilityTimer: null
     };
   },
   methods: {
@@ -146,46 +146,56 @@ export default {
       }
     },
     GetEmailErrors() {
-      var errors = "";
-      if (!this.$v.model.email.email) {
-        errors += "Please enter valid email address ";
-      }
-
-      if (!this.$v.model.email.isUnique) {
-        errors += "Email is already taken ";
-      }
+      var errors = [];
 
       if (!this.$v.model.email.required) {
-        errors += "Email is required ";
+        errors.push("Email is required");
+      } else {
+        if (!this.$v.model.email.email) {
+          errors.push("Please enter valid email address");
+        }
+
+        if (!this.$v.model.email.isUnique) {
+          errors.push("Email is already taken");
+        }
       }
 
       return errors;
     },
     GetPasswordErrors() {
-      var errors = "";
+      var errors = [];
 
       if (!this.$v.model.password.required) {
-        errors += "Password is required ";
-      }
+        errors.push("Password is required");
+      } else {
+        if (!this.$v.model.password.minLength) {
+          errors.push(
+            "Password must have at least " +
+              this.$v.model.password.$params.minLength.min +
+              " letters."
+          );
+        }
 
-      if (!this.$v.model.password.minLength) {
-        errors +=
-          "Password must have at least " +
-          this.$v.model.password.$params.minLength.min +
-          " letters.";
+        if (!this.$v.model.password.oneNumber) {
+          errors.push("Password must have at least one number");
+        }
+        if (!this.$v.model.password.oneUpperCase) {
+          errors.push("Password must have at least one upper case character");
+        }
+        if (!this.$v.model.password.oneLowerCase) {
+          errors.push("Password must have at least one lower case character");
+        }
       }
 
       return errors;
     },
     GetConfirmPasswordErrors() {
-      var errors = "";
+      var errors = [];
 
       if (!this.$v.model.repeatPassword.required) {
-        errors += "Confirmation password is required ";
-      }
-
-      if (!this.$v.model.repeatPassword.sameAsPassword) {
-        errors += "Confirmation password has to be the same as password ";
+        errors.push("Confirmation password is required");
+      } else if (!this.$v.model.repeatPassword.sameAsPassword) {
+        errors.push("Confirmation password has to be the same as password");
       }
 
       return errors;
@@ -194,20 +204,20 @@ export default {
       this.$buefy.notification.open({
         duration: 5000,
         message: message,
-        type: "is-danger",
-        hasIcon: true
+        type: "is-danger"
+        // hasIcon: true
       });
     },
     success(message) {
       this.$buefy.notification.open({
         duration: 5000,
         message: message,
-        type: "is-success",
-        hasIcon: true
+        type: "is-success"
+        // hasIcon: true
       });
     },
-    RegistrationSuccess(){
-      this.isCardModalActive= false;
+    RegistrationSuccess() {
+      this.isCardModalActive = false;
       this.$router.push("/login");
     }
   },
@@ -226,17 +236,33 @@ export default {
         async isUnique(value) {
           if (value == null || value == "") return true;
 
-          const response = await api.getData("Users/email_exists/" + value);
-          if (response.status == 200) {
-            return true;
-          } else {
-            return false;
+          if (this.chkUsernameAvailabilityTimer) {
+            clearTimeout(this.chkUsernameAvailabilityTimer);
+            this.chkUsernameAvailabilityTimer = null;
           }
+          this.chkUsernameAvailabilityTimer = setTimeout(() => {
+            api.getData("Users/email_exists/" + value).then(response => {
+              if (response.status == 200) {
+                return true;
+              } else {
+                return false;
+              }
+            });
+          }, 500);
         }
       },
       password: {
         required,
-        minLength: minLength(8)
+        minLength: minLength(8),
+        oneNumber(password) {
+          return /(?=.*\d)/.test(password);
+        },
+        oneUpperCase(password) {
+          return /(?=.*[A-Z])/.test(password);
+        },
+        oneLowerCase(password) {
+          return /(?=.*[a-z])/.test(password);
+        }
       },
       repeatPassword: {
         required,
@@ -248,13 +274,11 @@ export default {
 </script>
 
 <style scoped>
-.message{
+.message {
   margin-bottom: 10px;
 }
 
-
-
-#btn-login{
+#btn-login {
   vertical-align: middle;
 }
 </style>
