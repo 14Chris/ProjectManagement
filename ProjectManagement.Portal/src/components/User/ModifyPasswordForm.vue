@@ -2,19 +2,25 @@
   <div>
     <h1>Modify password</h1>
     <form v-on:submit.prevent="ModifyPassword">
-      <b-field label="Old password">
+   <b-field
+        v-if="$v.model.oldPassword.$error && submitStatus=='ERROR'"
+        type="is-danger"
+        label="Old password"
+        password-reveal
+       :message="!$v.model.oldPassword.required ? 'Old password is required' : ''"
+      >
+        <b-input v-model="model.oldPassword"></b-input>
+      </b-field>
+      
+      <b-field v-else label="Old password">
         <b-input type="password" v-model="model.oldPassword"></b-input>
       </b-field>
-      <div
-        class="error"
-        v-if="!$v.model.oldPassword.required && submitStatus=='ERROR'"
-      >Password is required</div>
 
       <!-- Password -->
       <b-field
         v-if="$v.model.newPassword.$error && submitStatus=='ERROR'"
         type="is-danger"
-        label="¨New password"
+        label="New password"
         password-reveal
         :message="GetPasswordErrors()"
       >
@@ -26,7 +32,6 @@
       </b-field>
 
       <!-- Confirm password -->
-
       <b-field
         v-if="$v.model.repeatNewPassword.$error && submitStatus=='ERROR'"
         type="is-danger"
@@ -40,7 +45,7 @@
       <b-field v-else label="Confirm new password">
         <b-input password-reveal type="password" v-model="model.repeatNewPassword"></b-input>
       </b-field>
-      <b-button type="is-success" native-type="submit">Submit</b-button>
+     <b-button type="is-primary" expanded native-type="submit">Submit</b-button>
     </form>
   </div>
 </template>
