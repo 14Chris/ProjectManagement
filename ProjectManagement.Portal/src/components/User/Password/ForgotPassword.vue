@@ -25,7 +25,7 @@
 
 <script>
 import { required, email } from "vuelidate/lib/validators";
-import ApiService from "../../services/api";
+import ApiService from "../../../services/api";
 var api = new ApiService();
 
 export default {

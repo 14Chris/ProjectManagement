@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import ApiService from "../../services/api";
+import ApiService from "../../../services/api";
 import { required, sameAs, minLength } from "vuelidate/lib/validators";
 var api = new ApiService();
 

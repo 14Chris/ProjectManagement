@@ -63,9 +63,22 @@ namespace ProjectManagement.Api.Controllers
         }
 
         // GET: Users
+
         [HttpGet("{id}/profile_picture")]
         [AllowAnonymous]
         public IActionResult GetUserProfilePicture(int id)
+        {
+            var compte = _userService.GetById(id);
+
+            if (compte.profile_picture == null)
+                return NotFound();
+
+            return File(compte.profile_picture, "image/jpeg");
+        }
+
+        [HttpHead("{id}/profile_picture")]
+        [AllowAnonymous]
+        public IActionResult HeadUserProfilePicture(int id)
         {
             var compte = _userService.GetById(id);
 
@@ -156,7 +169,7 @@ namespace ProjectManagement.Api.Controllers
                 return StatusCode(500);
             }
 
-         
+
         }
 
         // GET: check if email already exists
@@ -190,8 +203,8 @@ namespace ProjectManagement.Api.Controllers
         public async Task<ActionResult> ForgotPassword([FromBody]string email)
         {
             bool b = await _userService.ForgotPassword(email);
-            
-            if(b)
+
+            if (b)
                 return Ok();
             else
                 return StatusCode(400);
@@ -216,7 +229,7 @@ namespace ProjectManagement.Api.Controllers
             {
                 return StatusCode(500);
             }
-      
+
         }
 
         // POST to reset password
@@ -240,5 +253,31 @@ namespace ProjectManagement.Api.Controllers
             }
         }
 
+        // POST: Users/password
+        [HttpDelete("picture")]
+        [Authorize]
+        public async Task<IActionResult> DeletePictureUser()
+        {
+            int id = -1;
+
+            bool ok = Int32.TryParse(HttpContext.User.Identities.FirstOrDefault().Claims.FirstOrDefault().Value, out id);
+            if (!ok)
+                return Unauthorized();
+
+            Response res = await _userService.DeleteProfilePictureAsync(id);
+
+            if (res is ErrorResponse)
+            {
+                return StatusCode(500, ((ErrorResponse)res).error);
+            }
+            else if (res is SuccessResponse)
+            {
+                return Ok();
+            }
+            else
+            {
+                return StatusCode(500);
+            }
+        }
     }
 }

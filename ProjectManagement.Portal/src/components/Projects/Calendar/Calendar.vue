@@ -1,18 +1,18 @@
 <template>
   <div>
-    <FullCalendar aspectRatio="0.5" defaultView="timeGridWeek" :plugins="calendarPlugins" />
+    <!-- <FullCalendar aspectRatio="0.5" defaultView="timeGridWeek" :plugins="calendarPlugins" /> -->
   </div>
 </template>
 
 <script>
-import FullCalendar from "@fullcalendar/vue";
+// import FullCalendar from "@fullcalendar/vue";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 
 export default {
   name: "ProjectCalendar",
   components: {
-    FullCalendar // make the <FullCalendar> tag available
+    // FullCalendar // make the <FullCalendar> tag available
   },
   data() {
     return {

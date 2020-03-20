@@ -19,5 +19,6 @@ namespace ProjectManagement.Api.Services
         Task<Response> ValidateToken(string token);
         Task<bool> ForgotPassword(string email);
         Response LoginUser(string email, string password);
+        Task<Response> DeleteProfilePictureAsync(int id);
     }
 }

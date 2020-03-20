@@ -2,10 +2,10 @@
   <div>
     <div v-if="edit" class="avatar-selector">
       <div class="avatar-container">
-        <avatar class="avatar-picture" :size="200" v-if="value" :src="avatarFileUrl"></avatar>
-        <avatar class="avatar-picture" :size="200" v-else-if="urlCheck" :src="url"></avatar>
-        <avatar class="avatar-picture" :size="200" v-else username="Chris"></avatar>
-        <input class="change-picture-btn" type="button" @click="uploadAvatar" value="Upload avatar" />
+        <AvatarContainer :size="200" initial="Chris" :url="url" :value="value"></AvatarContainer>
+        <b-button type="is-text" @click="uploadAvatar">Change picture</b-button>
+        <b-button type="is-text" @click="DeleteAvatar">Delete</b-button>
+        <!-- <input class="change-picture-btn" type="button" @click="uploadAvatar" value="Upload avatar" /> -->
         <input
           type="file"
           @change="handleAvatarChange"
@@ -17,20 +17,23 @@
     </div>
     <div v-else class="avatar-selector">
       <div class="avatar-container">
-        <avatar class="avatar-picture" :size="200" v-if="value" :src="avatarFileUrl"></avatar>
-        <avatar class="avatar-picture" :size="200" v-else-if="urlCheck" :src="url"></avatar>
-        <avatar class="avatar-picture" :size="200" v-else username="Chris"></avatar>
+       <AvatarContainer :size="200" initial="Chris" :url="url" :value="value"></AvatarContainer>
       </div>
     </div>
-  </div>
+  </div> 
 </template>
 
 <script>
-import Avatar from "vue-avatar";
+
+import AvatarContainer from "./Avatar"
+import ApiService from "../../../services/api";
+
+var api = new ApiService();
+
 export default {
   name: "AvatarSelector",
   components: {
-    Avatar
+    AvatarContainer
   },
   data() {
     return {
@@ -92,6 +95,13 @@ export default {
     CancelUploadAvatar() {
       this.value = null;
       console.log(this.value);
+    },
+    DeleteAvatar(){
+      api.delete("Users/picture").then(response=>{
+        if(response.status == 200){
+          window.location.reload()
+        }
+      })
     }
   },
   watch: {
@@ -128,11 +138,5 @@ export default {
   position: absolute;
   // top: 0;
   // left: 0;
-}
-.change-picture-btn {
-  position: absolute;
-  background-color: transparent;
-
-  z-index: 10;
 }
 </style>

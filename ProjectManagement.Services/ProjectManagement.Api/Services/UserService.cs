@@ -399,6 +399,24 @@ namespace ProjectManagement.Api.Services
             }
         }
 
+        public async Task<Response> DeleteProfilePictureAsync(int id)
+        {
+            User user = GetById(id);
+
+            user.profile_picture = null;
+
+            bool b = await _userRepository.UpdateAsync(user);
+
+            if (b)
+            {
+                return new SuccessResponse(null);
+            }
+            else
+            {
+                return new ErrorResponse("");
+            }
+        }
+
         private string GenerateJSONWebToken(User userInfo)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
@@ -430,5 +448,7 @@ namespace ProjectManagement.Api.Services
 
             return null;
         }
+
+
     }
 }
