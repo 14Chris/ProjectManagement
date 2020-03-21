@@ -41,11 +41,10 @@
       >
         <b-input v-model="model.repeatNewPassword"></b-input>
       </b-field>
-
       <b-field v-else label="Confirm new password">
         <b-input password-reveal type="password" v-model="model.repeatNewPassword"></b-input>
       </b-field>
-     <b-button type="is-primary" expanded native-type="submit">Submit</b-button>
+     <b-button type="is-primary" expanded native-type="submit">Modify</b-button>
     </form>
   </div>
 </template>
