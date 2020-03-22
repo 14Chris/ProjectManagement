@@ -1,3 +1,5 @@
+trigger:
+- master
 steps:
 - task: DockerCompose@0
   inputs:
