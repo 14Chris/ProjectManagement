@@ -30,6 +30,7 @@ namespace ProjectManagement.Api.Services
             task.name = t.name;
             task.id_project = t.idProject;
             task.state = TaskState.ToDo;
+            task.priority = TaskPriority.Normal;
             task.description = t.desc;
             task.creation_date = DateTime.Now;
 
@@ -83,7 +84,7 @@ namespace ProjectManagement.Api.Services
         /// </summary>
         /// <param name="idProject"></param>
         /// <returns></returns>
-        public IEnumerable<TaskModel> ListByProject(int idProject)
+        public IEnumerable<Task> ListByProject(int idProject)
         {
             return _taskRepository.List().Where(x => x.id_project == idProject).ToList();
         }

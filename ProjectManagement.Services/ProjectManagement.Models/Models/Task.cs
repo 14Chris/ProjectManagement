@@ -25,6 +25,8 @@ namespace ProjectManagement.Models.Models
 
         public TaskState state { get; set; }
 
+        public TaskPriority priority { get; set; }
+
         public Project Project { get; set; }
 
         public Task MainTask { get; set; }

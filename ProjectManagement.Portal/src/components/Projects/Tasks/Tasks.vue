@@ -11,28 +11,12 @@
     <b-table @click="TaskClicked" :data="tasks" @contextmenu="TaskContextMenu">
       <template slot-scope="props">
         <b-table-column field="name" label="Name">{{ props.row.name }}</b-table-column>
+        <b-table-column field="description" label="Description">{{ props.row.description }}</b-table-column>
         <b-table-column field="state" label="State">
-          <b-select
-            disabled
-            @input="UpdateStateTask(props.row)"
-            v-model="props.row.state"
-            placeholder="Select a name"
-          >
-            <option
-              v-for="option in taskStates"
-              :value="option.id"
-              :key="option.id"
-            >{{ option.libelle }}</option>
-          </b-select>
+          {{ props.row.state }}
         </b-table-column>
-        <!-- <b-table-column field="assignedto" label="Assigned to"></b-table-column> -->
-        <!-- <b-table-column field="delete" label="Delete">
-          <b-button
-            type="is-danger"
-            icon-right="delete"
-            @click="DeleteTask(props.row.id, $event)"
-          ></b-button>
-        </b-table-column>-->
+        <b-table-column field="assignedto" label="Assigned to"></b-table-column>
+        <b-table-column field="priority" label="Priority">{{ props.row.priority }}</b-table-column>
       </template>
     </b-table>
     <!-- Context menu for tasks table -->
@@ -74,10 +58,6 @@ export default {
     return {
       idProject: Number,
       tasks: [],
-      taskStates: [
-        { id: 1, libelle: "To do" },
-        { id: 2, libelle: "Done" }
-      ],
       isAddTaskModalActive: false,
       isEditTaskModalActive: false,
       currentTaskId: null
