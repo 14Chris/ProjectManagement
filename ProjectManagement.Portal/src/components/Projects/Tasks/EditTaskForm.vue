@@ -19,9 +19,7 @@
       <b-field label="Description">
         <b-input maxlength="150" type="textarea"></b-input>
       </b-field>
-
-      <!-- <b-loading v-if='submitStatus == "SUBMITTED"' :is-full-page="isFullPage" :can-cancel="true"></b-loading> -->
-
+      
       <b-button type="is-primary" native-type="submit" expanded>Edit</b-button>
     </form>
   </div>

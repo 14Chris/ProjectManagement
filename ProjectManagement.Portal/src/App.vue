@@ -28,9 +28,9 @@ export default {
 }
 
 .container {
-  /* align-content: center; */
-  /* height: 100%;
-  margin-top:25px; */
+  align-content: center;
+  height: 100%;
+  margin-top:25px;
 }
 
 .card {

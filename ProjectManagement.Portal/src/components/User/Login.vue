@@ -151,4 +151,6 @@ export default {
 #btn-register {
   vertical-align: middle;
 }
+
+
 </style>
