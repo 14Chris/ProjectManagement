@@ -13,7 +13,7 @@
         <b-field label="Description">
           <b-input type="textarea" v-model="project.description"></b-input>
         </b-field>
-        <b-button type="is-success" native-type="submit">Update</b-button>
+        <b-button type="is-primary" native-type="submit">Save</b-button>
       </form>
       <b-button type="is-danger" v-on:click="isRemoveModalActive = true">Remove</b-button>
       <b-modal :active.sync="isRemoveModalActive">

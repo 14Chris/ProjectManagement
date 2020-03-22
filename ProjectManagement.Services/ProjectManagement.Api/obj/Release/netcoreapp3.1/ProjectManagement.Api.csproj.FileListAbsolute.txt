@@ -163,3 +163,5 @@ C:\Users\lenfa\Projects\ProjectManagement\ProjectManagement.Services\ProjectMana
 C:\Users\lenfa\Projects\ProjectManagement\ProjectManagement.Services\ProjectManagement.Api\obj\Release\netcoreapp3.1\ProjectManagement.Api.csproj.CopyComplete
 C:\Users\lenfa\Projects\ProjectManagement\ProjectManagement.Services\ProjectManagement.Api\obj\Release\netcoreapp3.1\ProjectManagement.Api.dll
 C:\Users\lenfa\Projects\ProjectManagement\ProjectManagement.Services\ProjectManagement.Api\obj\Release\netcoreapp3.1\ProjectManagement.Api.pdb
+C:\Users\lenfa\Projects\ProjectManagement\ProjectManagement.Services\ProjectManagement.Api\obj\Release\netcoreapp3.1\ProjectManagement.Api.csproj.CoreCompileInputs.cache
+C:\Users\lenfa\Projects\ProjectManagement\ProjectManagement.Services\ProjectManagement.Api\obj\Release\netcoreapp3.1\ProjectManagement.Api.genruntimeconfig.cache

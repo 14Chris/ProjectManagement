@@ -1,7 +1,6 @@
 <template>
   <div>
-    <h1>Tasks</h1>
-    <b-button type="is-primary" @click="isAddTaskModalActive = true">Add</b-button>
+    <b-button icon-left="plus" type="is-light" @click="isAddTaskModalActive = true">Add New Task</b-button>
     <b-modal :active.sync="isAddTaskModalActive">
       <div class="card">
         <div class="card-content">
@@ -9,11 +8,10 @@
         </div>
       </div>
     </b-modal>
-    <b-table :data="tasks" @click="TaskClicked">
+    <b-table @click="TaskClicked" :data="tasks" @contextmenu="TaskContextMenu">
       <template slot-scope="props">
         <b-table-column field="name" label="Name">{{ props.row.name }}</b-table-column>
         <b-table-column field="state" label="State">
-          <!-- {{ GetStateLibelle(props.row.state)}} -->
           <b-select
             disabled
             @input="UpdateStateTask(props.row)"
@@ -27,14 +25,24 @@
             >{{ option.libelle }}</option>
           </b-select>
         </b-table-column>
-        <b-table-column field="delete" label="Delete">
-          <button class="button is-danger" @click="DeleteTask(props.row.id, $event)">
-            <b-icon icon="delete" size="is-small"></b-icon>
-          </button>
-        </b-table-column>
+        <!-- <b-table-column field="assignedto" label="Assigned to"></b-table-column> -->
+        <!-- <b-table-column field="delete" label="Delete">
+          <b-button
+            type="is-danger"
+            icon-right="delete"
+            @click="DeleteTask(props.row.id, $event)"
+          ></b-button>
+        </b-table-column>-->
       </template>
     </b-table>
-    <!-- <EditTaskSideBar></EditTaskSideBar> -->
+    <!-- Context menu for tasks table -->
+    <vue-context ref="menu">
+      <template slot-scope="child">
+        <li>
+          <b-button @click="DeleteTask(child.data.taskId)" icon-left="delete" type="is-light">Delete</b-button>
+        </li>
+      </template>
+    </vue-context>
     <b-modal :active.sync="isEditTaskModalActive">
       <div class="card">
         <div class="card-content">
@@ -46,6 +54,10 @@
 </template>
 
 <script>
+//Context menu
+import VueContext from "vue-context";
+import "vue-context/src/sass/vue-context.scss";
+
 import ApiService from "../../../services/api";
 import AddTaskForm from "./AddTaskForm";
 import EditTaskForm from "./EditTaskForm";
@@ -55,7 +67,8 @@ export default {
   name: "ProjectTasks",
   components: {
     AddTaskForm,
-    EditTaskForm
+    EditTaskForm,
+    VueContext
   },
   data() {
     return {
@@ -79,6 +92,10 @@ export default {
       this.isAddTaskModalActive = false;
       this.GetTasks();
     },
+    TaskContextMenu(row, contextMenuNativeEvent) {
+      contextMenuNativeEvent.preventDefault();
+      this.$refs.menu.open(contextMenuNativeEvent, { taskId: row.id });
+    },
     TaskClicked(row) {
       this.isEditTaskModalActive = true;
       this.currentTaskId = row.id;
@@ -91,7 +108,6 @@ export default {
       });
     },
     UpdateStateTask(task) {
-      console.log(task);
       api
         .update("Tasks/" + task.id + "/state", JSON.stringify(task.state))
         .then(response => {
@@ -102,9 +118,7 @@ export default {
       this.isEditTaskModalActive = false;
       this.GetTasks();
     },
-    DeleteTask(id, event) {
-      event.stopPropagation();
-
+    DeleteTask(id) {
       api.delete("Tasks/" + id).then(response => {
         if (response.status == 200) {
           this.GetTasks();

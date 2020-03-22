@@ -1,7 +1,7 @@
 <template>
   <div>
     <form v-on:submit.prevent="UpdateTask">
-      <h1>Edit task</h1>
+      <h3 class="title is-3">Edit task</h3>
       <b-field label="Name">
         <b-input v-model="task.name"></b-input>
       </b-field>
@@ -16,9 +16,13 @@
         </b-select>
       </b-field>
 
+      <b-field label="Description">
+        <b-input maxlength="150" type="textarea"></b-input>
+      </b-field>
+
       <!-- <b-loading v-if='submitStatus == "SUBMITTED"' :is-full-page="isFullPage" :can-cancel="true"></b-loading> -->
 
-      <b-button type="is-success" native-type="submit">Edit</b-button>
+      <b-button type="is-primary" native-type="submit" expanded>Edit</b-button>
     </form>
   </div>
 </template>

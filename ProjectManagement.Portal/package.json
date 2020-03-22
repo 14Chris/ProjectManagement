@@ -19,6 +19,7 @@
     "vue": "^2.6.11",
     "vue-avatar": "^2.2.0",
     "vue-axios": "^2.1.5",
+    "vue-context": "^5.1.0",
     "vue-router": "^3.1.5",
     "vuelidate": "^0.7.5"
   },

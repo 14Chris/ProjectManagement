@@ -6,25 +6,39 @@
         <p class="title">Login</p>
 
         <form v-on:submit.prevent="Login">
-          <b-field label="Email">
+          <b-field
+            v-if="$v.login.email.$invalid && submitStatus=='ERROR'"
+            type="is-danger"
+            label="Email"
+            :message="!$v.login.email.required ? 'Email is required' : ''"
+          >
             <b-input v-model="login.email"></b-input>
           </b-field>
-          <div
-            class="error"
-            v-if="!$v.login.email.required && submitStatus=='ERROR'"
-          >Email is required</div>
 
-          <b-field label="Password">
+          <b-field v-else label="Email">
+            <b-input v-model="login.email"></b-input>
+          </b-field>
+
+          <b-field
+            v-if="$v.login.password.$invalid && submitStatus=='ERROR'"
+            type="is-danger"
+            label="Password"
+            :message="!$v.login.password.required ? 'Password is required' : ''"
+          >
+                <b-input type="password" v-model="login.password"></b-input>
+          </b-field>
+
+          <b-field v-else label="Password">
             <b-input type="password" v-model="login.password"></b-input>
           </b-field>
-          <div
-            class="error"
-            v-if="!$v.login.password.required && submitStatus=='ERROR'"
-          >Password is required</div>
 
-          <b-button type="is-success" native-type="submit">Login</b-button>
-          <b-button tag="router-link" to="/register" type="is-link">Register</b-button>
+          <b-button type="is-primary" expanded native-type="submit">Login</b-button>
+
           <b-button type="is-text" tag="router-link" to="/forgot_password">Forgot password ?</b-button>
+          <div class="div-register">
+            Don't have an account ?
+            <b-button id="btn-register" tag="router-link" to="/register" type="is-text">Register</b-button>
+          </div>
         </form>
       </div>
     </div>
@@ -55,6 +69,7 @@ export default {
     Login: function() {
       var router = this.$router;
       var _this = this;
+      console.log(this.$v)
       if (this.$v.$invalid) {
         _this.submitStatus = "ERROR";
       } else {
@@ -66,9 +81,21 @@ export default {
             if (resp.status == 401) {
               _this.isLoading = false;
               resp.json().then(data => {
-                this.danger("Authentication failed : " + data);
-              });
+                let errorMessage = "";
+                switch (data) {
+                  case "NOT_ACTIVATED":
+                    errorMessage =
+                      "Your account is not active yet. Click on the link in the email we sent you";
+                    break;
+                  case "BAD_CREDENTIALS":
+                    errorMessage = "Invalid email or password";
+                    break;
+                  default:
+                    errorMessage = "Error connecting to the application";
+                }
 
+                this.danger(errorMessage);
+              });
               return;
             } else {
               _this.submitStatus = "OK";
@@ -83,18 +110,27 @@ export default {
               });
             }
           })
-          .catch(error => {
+          .catch(() => {
             _this.isLoading = false;
-            console.log("error", error);
+            let errorMessage = "Error connecting to the application";
+            this.danger(errorMessage);
           });
       }
     },
     danger(message) {
-      this.$buefy.toast.open({
+      this.$buefy.notification.open({
         duration: 5000,
         message: message,
-        position: "is-bottom",
         type: "is-danger"
+        // hasIcon: true
+      });
+    },
+    success(message) {
+      this.$buefy.notification.open({
+        duration: 5000,
+        message: message,
+        type: "is-success"
+        // hasIcon: true
       });
     }
   },
@@ -111,16 +147,8 @@ export default {
 };
 </script>
 
-<style>
-.container {
-  align-content: center;
-  height: 100%;
-}
-
-.card {
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 50%;
+<style scoped>
+#btn-register {
+  vertical-align: middle;
 }
 </style>

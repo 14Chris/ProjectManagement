@@ -1,12 +1,17 @@
 <template>
   <div class="container">
     <form v-on:submit.prevent="AddTask">
-      <h1>Add task</h1>
+      <h3 class="title is-3">Add task</h3>
       <b-field label="Name">
         <b-input v-model="model.name"></b-input>
       </b-field>
       <div class="error" v-if="!$v.model.name.required && submitStatus=='ERROR'">Name is required</div>
-      <b-button type="is-success" native-type="submit">Add</b-button>
+
+      <b-field label="Description">
+        <b-input maxlength="150" type="textarea"></b-input>
+      </b-field>
+   
+      <b-button type="is-primary" native-type="submit" expanded>Add</b-button>
     </form>
   </div>
 </template>

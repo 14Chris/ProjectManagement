@@ -6,7 +6,7 @@
         <b-input type="text" v-model="model.name"></b-input>
       </b-field>
       <div class="error" v-if="!$v.model.name.required && submitStatus=='ERROR'">Name is required</div>
-      <b-button type="is-success" native-type="submit">Add</b-button>
+      <b-button type="is-primary" native-type="submit" expanded>Add</b-button>
     </form>
   </div>
 </template>

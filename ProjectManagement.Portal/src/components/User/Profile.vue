@@ -1,48 +1,53 @@
 <template>
   <div class="container">
-    <div class="div-profile" v-if="user != null">
-      <div v-if="edit">
-        <form v-on:submit.prevent="updateUser">
-          <AvatarSelector
-            class="avatar-profile"
-            v-model="file"
-            :formats="formats"
-            :size="sizeKB"
-            :url="profilePictureUrl"
-            :edit="edit"
-            ref="avatarComponent"
-          />
+    <div class="columns">
+      <div class="column is-two-thirds">
+        <div class="div-profile box" v-if="user != null">
+          <h3 class="title is-3">Informations</h3>
+          <div v-if="edit">
+            <form v-on:submit.prevent="updateUser">
+              <b-field label="First name">
+                <b-input type="text" v-model="user.first_name"></b-input>
+              </b-field>
+              <div
+                class="error"
+                v-if="!$v.user.first_name.required && submitStatus=='ERROR'"
+              >First name is required</div>
 
-          <b-field label="First name">
-            <b-input type="text" v-model="user.first_name"></b-input>
-          </b-field>
-          <div
-            class="error"
-            v-if="!$v.user.first_name.required && submitStatus=='ERROR'"
-          >First name is required</div>
+              <b-field label="Last name">
+                <b-input type="text" v-model="user.last_name"></b-input>
+              </b-field>
+              <b-field label="Email">
+                <h3>{{user.email}}</h3>
+              </b-field>
 
-          <b-field label="Last name">
-            <b-input type="text" v-model="user.last_name"></b-input>
-          </b-field>
-          <b-field label="Email">
-            <h3>{{user.email}}</h3>
-          </b-field>
-          <b-field label="Password">
-            <b-button type="is-primary" @click="ShowModifyPasswordModal">Modify password</b-button>
-          </b-field>
-          <b-modal :active.sync="isCardModalActive" :width="640">
-            <div class="card">
-              <div class="card-content">
-                <ModifyPasswordForm :idUser="user.id" />
-              </div>
-            </div>
-          </b-modal>
+              <b-button class="submit-button" type="is-primary" native-type="submit">Submit</b-button>
+              <b-button type="is-primary" @click="edit=false" outlined>Cancel</b-button>
+            </form>
+          </div>
+          <div v-else>
+            <b-field label="First name">
+              <h3>{{user.first_name}}</h3>
+            </b-field>
+            <b-field label="Last name">
+              <h3>{{user.last_name}}</h3>
+            </b-field>
+            <b-field label="Email">
+              <h3>{{user.email}}</h3>
+            </b-field>
+            <b-button type="is-primary" @click="edit=true">Modify</b-button>
+          </div>
+        </div>
+        <div v-else>
+          <b-loading :is-full-page="isFullPage" :active.sync="isLoading" :can-cancel="true"></b-loading>
+        </div>
 
-          <b-button type="is-success" native-type="submit">Submit</b-button>
-          <b-button type="is-danger" @click="edit=false">Cancel</b-button>
-        </form>
+        <div class="box">
+          <h3 class="title is-3">Security</h3>
+          <ModifyPasswordForm :idUser="user.id"></ModifyPasswordForm>
+        </div>
       </div>
-      <div v-else>
+      <div class="column">
         <AvatarSelector
           class="avatar-profile"
           v-model="file"
@@ -52,20 +57,7 @@
           :edit="edit"
           ref="avatarComponent"
         />
-        <b-field label="First name">
-          <h3>{{user.first_name}}</h3>
-        </b-field>
-        <b-field label="Last name">
-          <h3>{{user.last_name}}</h3>
-        </b-field>
-        <b-field label="Email">
-          <h3>{{user.email}}</h3>
-        </b-field>
-        <b-button type="is-primary" @click="edit=true">Modify</b-button>
       </div>
-    </div>
-    <div v-else>
-      <b-loading :is-full-page="isFullPage" :active.sync="isLoading" :can-cancel="true"></b-loading>
     </div>
   </div>
 </template>
@@ -74,7 +66,7 @@
 import ApiService from "../../services/api";
 import AvatarSelector from "./Avatar/AvatarSelector";
 import { required } from "vuelidate/lib/validators";
-import ModifyPasswordForm from "./ModifyPasswordForm";
+import ModifyPasswordForm from "./Password/ModifyPasswordForm";
 
 var api = new ApiService();
 
@@ -112,7 +104,6 @@ export default {
   methods: {
     updateUser() {
       var _this = this;
-
       this.submitStatus = "SUBMITTED";
       if (this.$v.$invalid) {
         this.submitStatus = "ERROR";
@@ -123,7 +114,6 @@ export default {
           reader.readAsDataURL(this.file);
           reader.onload = function() {
             _this.user.profile_picture = reader.result.split(",")[1];
-
             api
               .update("Users/" + _this.user.id, JSON.stringify(_this.user))
               .then(resp => {
@@ -131,6 +121,8 @@ export default {
                   _this.submitStatus = "OK";
                   _this.success("Change made");
                   _this.edit = false;
+                  window.location.reload();
+                  // this.$emit('profilepicturechanged')
                 } else {
                   _this.submitStatus = "ERROR";
                   _this.danger("Error during modification");
@@ -189,14 +181,25 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.container {
+  margin-top: 25px;
+}
+
 .div-profile {
-  width: 50%;
   margin: 0 auto;
-  margin-top: 25px !important;
+  /* margin-top: 25px !important; */
 }
 
 .avatar-profile {
   margin: 0 auto;
+}
+
+.submit-button{
+  margin-right: 20px;
+}
+
+.box{
+  margin-bottom: 50px;
 }
 </style>

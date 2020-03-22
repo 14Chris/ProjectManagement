@@ -99,7 +99,7 @@ namespace ProjectManagement.Api
             .AddRazorRenderer()
             .AddSmtpSender(new SmtpClient("smtp-mail.outlook.com", 587)
             {
-                Credentials = new NetworkCredential("lenfant.chris@hotmail.fr", "Mmajjbmt15!14"),
+                Credentials = new NetworkCredential("lenfant.chris@hotmail.fr", "9PZpr>Zf=lbmD6V"),
                 EnableSsl = true
             });
 

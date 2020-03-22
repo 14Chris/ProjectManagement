@@ -1,64 +1,98 @@
 <template>
   <div class="container">
-    <div class="card">
+    <b-modal :active.sync="isCardModalActive" :width="800">
+      <div class="card">
+        <div class="card-content">
+          <div>
+            <h1 class="title">Account created</h1>
+            <div class="message">An email has just been sent to you</div>
+            <div class="message">Please click on the link in it to activate your account</div>
+            <b-button @click="RegistrationSuccess">Ok</b-button>
+          </div>
+        </div>
+      </div>
+    </b-modal>
+    <div class="card card-form">
       <div class="card-content">
         <p class="title">Register</p>
         <form v-on:submit.prevent="registerUser" class="ui form">
-          <b-field label="First name">
+          <!-- First name -->
+          <b-field
+            v-if="$v.model.first_name.$invalid && submitStatus=='ERROR'"
+            type="is-danger"
+            label="First name"
+            :message="!$v.model.first_name.required ? 'First name is required' : ''"
+          >
             <b-input v-model="model.first_name"></b-input>
           </b-field>
-          <div
-            class="error"
-            v-if="!$v.model.first_name.required && submitStatus=='ERROR'"
-          >First name is required</div>
 
-          <b-field label="Last Name">
+          <b-field v-else label="First name">
+            <b-input v-model="model.first_name"></b-input>
+          </b-field>
+
+          <!-- Last name -->
+          <b-field
+            v-if="$v.model.last_name.$invalid && submitStatus=='ERROR'"
+            type="is-danger"
+            label="Last Name"
+            :message="!$v.model.last_name.required ? 'Last name is required' : ''"
+          >
             <b-input v-model="model.last_name"></b-input>
           </b-field>
-          <div
-            class="error"
-            v-if="!$v.model.last_name.required && submitStatus=='ERROR'"
-          >Last name is required</div>
 
-          <b-field label="Email">
+          <b-field v-else label="Last Name">
+            <b-input v-model="model.last_name"></b-input>
+          </b-field>
+
+          <!-- Email -->
+          <b-field
+            v-if="$v.model.email.$invalid && submitStatus=='ERROR'"
+            type="is-danger"
+            label="Email"
+            :message="GetEmailErrors()"
+          >
             <b-input v-model="model.email"></b-input>
           </b-field>
-          <div
-            class="error"
-            v-if="!$v.model.email.required && submitStatus=='ERROR'"
-          >Email is required</div>
-          <div
-            class="error"
-            v-if="!$v.model.email.email && submitStatus=='ERROR'"
-          >Please enter valid email address</div>
-          <div
-            class="error"
-            v-if="!$v.model.email.isUnique && submitStatus=='ERROR'"
-          >Email is already taken</div>
-          <b-field label="Password">
-            <b-input type="password" v-model="model.password"></b-input>
+
+          <b-field v-else label="Email">
+            <b-input type="email" v-model="model.email"></b-input>
           </b-field>
-          <div
-            class="error"
-            v-if="!$v.model.password.required && submitStatus=='ERROR'"
-          >Password is required</div>
-          <div
-            class="error"
-            v-if="!$v.model.password.minLength && submitStatus=='ERROR'"
-          >Password must have at least {{$v.model.password.$params.minLength.min}} letters.</div>
-          <b-field label="Confirm password">
-            <b-input type="password" v-model="model.repeatPassword"></b-input>
+
+          <!-- Password -->
+          <b-field
+            v-if="$v.model.password.$invalid && submitStatus=='ERROR'"
+            type="is-danger"
+            label="Password"
+            password-reveal
+            :message="GetPasswordErrors()"
+          >
+            <b-input v-model="model.password"></b-input>
           </b-field>
-          <div
-            class="error"
-            v-if="!$v.model.repeatPassword.sameAsPassword && submitStatus=='ERROR'"
-          >Confirmation password has to be the same as password</div>
-          <div
-            class="error"
-            v-if="!$v.model.repeatPassword.required && submitStatus=='ERROR'"
-          >Confirmation password is required</div>
-          <b-button type="is-success" native-type="submit">Register</b-button>
-          <b-button tag="router-link" to="/login" type="is-link">Login</b-button>
+
+          <b-field v-else label="Password">
+            <b-input password-reveal type="password" v-model="model.password"></b-input>
+          </b-field>
+
+          <!-- Confirm password -->
+
+          <b-field
+            v-if="$v.model.repeatPassword.$invalid && submitStatus=='ERROR'"
+            type="is-danger"
+            label="Confirm password"
+            password-reveal
+            :message="GetConfirmPasswordErrors()"
+          >
+            <b-input v-model="model.repeatPassword"></b-input>
+          </b-field>
+
+          <b-field v-else label="Confirm password">
+            <b-input password-reveal type="password" v-model="model.repeatPassword"></b-input>
+          </b-field>
+          <b-button type="is-primary" expanded native-type="submit">Register</b-button>
+          <div>
+            <span>You already have an account ?</span>
+            <b-button id="btn-login" tag="router-link" to="/login" type="is-text">Login</b-button>
+          </div>
         </form>
       </div>
     </div>
@@ -78,12 +112,15 @@ export default {
   data() {
     return {
       submitStatus: "",
-      model: new RegisterUserModel()
+      model: new RegisterUserModel(),
+      isCardModalActive: false,
+      chkUsernameAvailabilityTimer: null
     };
   },
   methods: {
     registerUser: function() {
       this.submitStatus = "SUBMITTED";
+      console.log(this.$v.model);
       this.$v.$touch();
       if (this.$v.$invalid) {
         this.submitStatus = "ERROR";
@@ -93,13 +130,95 @@ export default {
           .create("Users", JSON.stringify(this.model))
           .then(response => {
             this.submitStatus = "OK";
-            console.log("response", response);
-            this.model = new RegisterUserModel();
+            if (response.status == 201) {
+              this.isCardModalActive = true;
+              this.model = new RegisterUserModel();
+            } else {
+              response.json().then(data => {
+                this.submitStatus = "ERROR";
+                this.danger(data);
+              });
+            }
           })
           .catch(error => {
-            console.log("error", error);
+            console.log(error);
           });
       }
+    },
+    GetEmailErrors() {
+      var errors = [];
+
+      if (!this.$v.model.email.required) {
+        errors.push("Email is required");
+      } else {
+        if (!this.$v.model.email.email) {
+          errors.push("Please enter valid email address");
+        }
+
+        if (!this.$v.model.email.isUnique) {
+          errors.push("Email is already taken");
+        }
+      }
+
+      return errors;
+    },
+    GetPasswordErrors() {
+      var errors = [];
+
+      if (!this.$v.model.password.required) {
+        errors.push("Password is required");
+      } else {
+        if (!this.$v.model.password.minLength) {
+          errors.push(
+            "Password must have at least " +
+              this.$v.model.password.$params.minLength.min +
+              " letters."
+          );
+        }
+
+        if (!this.$v.model.password.oneNumber) {
+          errors.push("Password must have at least one number");
+        }
+        if (!this.$v.model.password.oneUpperCase) {
+          errors.push("Password must have at least one upper case character");
+        }
+        if (!this.$v.model.password.oneLowerCase) {
+          errors.push("Password must have at least one lower case character");
+        }
+      }
+
+      return errors;
+    },
+    GetConfirmPasswordErrors() {
+      var errors = [];
+
+      if (!this.$v.model.repeatPassword.required) {
+        errors.push("Confirmation password is required");
+      } else if (!this.$v.model.repeatPassword.sameAsPassword) {
+        errors.push("Confirmation password has to be the same as password");
+      }
+
+      return errors;
+    },
+    danger(message) {
+      this.$buefy.notification.open({
+        duration: 5000,
+        message: message,
+        type: "is-danger"
+        // hasIcon: true
+      });
+    },
+    success(message) {
+      this.$buefy.notification.open({
+        duration: 5000,
+        message: message,
+        type: "is-success"
+        // hasIcon: true
+      });
+    },
+    RegistrationSuccess() {
+      this.isCardModalActive = false;
+      this.$router.push("/login");
     }
   },
   validations: {
@@ -115,17 +234,35 @@ export default {
         email,
         // simulate async call, fail for all logins with even length
         async isUnique(value) {
-          const response = await api.getData("Users/email_exists/" + value);
-          if (response.status == 200) {
-            return true;
-          } else {
-            return false;
+          if (value == null || value == "") return true;
+
+          if (this.chkUsernameAvailabilityTimer) {
+            clearTimeout(this.chkUsernameAvailabilityTimer);
+            this.chkUsernameAvailabilityTimer = null;
           }
+          this.chkUsernameAvailabilityTimer = setTimeout(() => {
+            api.getData("Users/email_exists/" + value).then(response => {
+              if (response.status == 200) {
+                return true;
+              } else {
+                return false;
+              }
+            });
+          }, 500);
         }
       },
       password: {
         required,
-        minLength: minLength(8)
+        minLength: minLength(8),
+        oneNumber(password) {
+          return /(?=.*\d)/.test(password);
+        },
+        oneUpperCase(password) {
+          return /(?=.*[A-Z])/.test(password);
+        },
+        oneLowerCase(password) {
+          return /(?=.*[a-z])/.test(password);
+        }
       },
       repeatPassword: {
         required,
@@ -137,17 +274,12 @@ export default {
 </script>
 
 <style scoped>
-.container {
-  align-content: center;
-  height: 100%;
+.message {
+  margin-bottom: 10px;
 }
 
-.card {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 50%;
+#btn-login {
+  vertical-align: middle;
 }
 </style>
 
