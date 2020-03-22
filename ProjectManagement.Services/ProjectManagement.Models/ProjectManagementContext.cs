@@ -36,6 +36,11 @@ namespace ProjectManagement.Models
                .WithMany(x => x.Tasks)
                .HasForeignKey(x => x.id_project);
 
+            modelBuilder.Entity<Task>()
+               .HasOne(x => x.MainTask)
+               .WithMany(x => x.SubTasks)
+               .HasForeignKey(x => x.id_main_task);
+
             modelBuilder.Entity<Token>()
              .HasOne(x => x.User)
              .WithMany(x => x.Tokens)

@@ -17,7 +17,7 @@
       </b-field>
 
       <b-field label="Description">
-        <b-input maxlength="150" type="textarea"></b-input>
+        <b-input v-model="task.description" maxlength="150" type="textarea"></b-input>
       </b-field>
       
       <b-button type="is-primary" native-type="submit" expanded>Edit</b-button>

@@ -2,6 +2,7 @@
 using ProjectManagement.Api.Repositories;
 using ProjectManagement.Api.Responses;
 using ProjectManagement.Models.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -29,6 +30,8 @@ namespace ProjectManagement.Api.Services
             task.name = t.name;
             task.id_project = t.idProject;
             task.state = TaskState.ToDo;
+            task.description = t.desc;
+            task.creation_date = DateTime.Now;
 
             Task resTask = await _taskRepository.CreateAsync(task);
 
@@ -80,7 +83,7 @@ namespace ProjectManagement.Api.Services
         /// </summary>
         /// <param name="idProject"></param>
         /// <returns></returns>
-        public IEnumerable<Task> ListByProject(int idProject)
+        public IEnumerable<TaskModel> ListByProject(int idProject)
         {
             return _taskRepository.List().Where(x => x.id_project == idProject).ToList();
         }

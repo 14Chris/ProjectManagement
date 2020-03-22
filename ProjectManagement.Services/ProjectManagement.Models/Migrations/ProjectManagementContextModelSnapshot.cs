@@ -84,16 +84,33 @@ namespace ProjectManagement.Models.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    b.Property<DateTime>("creation_date")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("description")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("due_date")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int?>("id_main_task")
+                        .HasColumnType("integer");
+
                     b.Property<int>("id_project")
                         .HasColumnType("integer");
 
                     b.Property<string>("name")
                         .HasColumnType("text");
 
+                    b.Property<DateTime?>("start_date")
+                        .HasColumnType("timestamp without time zone");
+
                     b.Property<int>("state")
                         .HasColumnType("integer");
 
                     b.HasKey("id");
+
+                    b.HasIndex("id_main_task");
 
                     b.HasIndex("id_project");
 
@@ -173,6 +190,10 @@ namespace ProjectManagement.Models.Migrations
 
             modelBuilder.Entity("ProjectManagement.Models.Models.Task", b =>
                 {
+                    b.HasOne("ProjectManagement.Models.Models.Task", "MainTask")
+                        .WithMany("SubTasks")
+                        .HasForeignKey("id_main_task");
+
                     b.HasOne("ProjectManagement.Models.Models.Project", "Project")
                         .WithMany("Tasks")
                         .HasForeignKey("id_project")

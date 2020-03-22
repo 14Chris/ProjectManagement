@@ -73,16 +73,16 @@ namespace ProjectManagement.Api
             string connectionString = (dbConnectString != null) ? dbConnectString : @"Server=.\SQLEXPRESS;Database=ProjectManagement;Trusted_Connection=True;";
 
 
-            if(dbConnectString != null)
-            {
+            //if(dbConnectString != null)
+            //{
                 services.AddDbContext<ProjectManagementContext>(options =>
                    options.UseNpgsql(connectionString));
-            }
-            else
-            {
-                services.AddDbContext<ProjectManagementContext>(options =>
-                  options.UseSqlServer(connectionString));
-            }
+            //}
+            //else
+            //{
+            //    services.AddDbContext<ProjectManagementContext>(options =>
+            //      options.UseSqlServer(connectionString));
+            //}
        
 
             //Configure services dependencies
@@ -123,8 +123,6 @@ namespace ProjectManagement.Api
                 var dbContext = scope.ServiceProvider.GetService<ProjectManagementContext>();
                 dbContext.Database.Migrate();
             }
-
-            
 
             app.UseRouting();
 
