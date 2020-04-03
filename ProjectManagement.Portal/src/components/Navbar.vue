@@ -3,6 +3,7 @@
   <b-navbar type="is-primary">
     <template slot="start">
       <b-navbar-item tag="router-link" to="/">ProjectManagement</b-navbar-item>
+      <b-navbar-item tag="router-link" to="/">Home</b-navbar-item>
       <b-navbar-item tag="router-link" to="/projects">Projects</b-navbar-item>
     </template>
     <template slot="end">
