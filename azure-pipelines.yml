@@ -1,8 +1,8 @@
-pool:
-  vmImage: 'ubuntu-16.04'
-
 trigger:
 - master
+
+pool:
+  vmImage: 'ubuntu-16.04'
 
 steps:
 - task: DockerCompose@0
