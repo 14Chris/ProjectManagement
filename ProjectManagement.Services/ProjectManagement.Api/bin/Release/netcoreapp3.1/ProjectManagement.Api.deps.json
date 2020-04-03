@@ -2598,6 +2598,7 @@
       "ProjectManagement.Models/1.0.0": {
         "dependencies": {
           "Microsoft.EntityFrameworkCore": "3.1.1",
+          "Microsoft.EntityFrameworkCore.SqlServer": "3.1.1",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "3.1.1.2"
         },
         "runtime": {

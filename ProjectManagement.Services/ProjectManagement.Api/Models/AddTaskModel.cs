@@ -9,6 +9,8 @@ namespace ProjectManagement.Api.Models
     {
         public string name { get; set; }
 
+        public string desc { get; set; }
+
         public int idProject { get; set; }
     }
 }

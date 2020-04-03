@@ -33,9 +33,17 @@ namespace ProjectManagement.Api.Controllers
         /// <param name="idProject"></param>
         /// <returns></returns>
         [HttpGet("project/{idProject}")]
-        public ActionResult<IEnumerable<Task>> GetTaskByProject(int idProject)
+        public ActionResult<IEnumerable<TaskModel>> GetTaskByProject(int idProject)
         {
-            return _taskService.ListByProject(idProject).ToList();
+            return _taskService.ListByProject(idProject).Select(x=>new TaskModel
+            {
+                id = x.id,
+                name = x.name,
+                creationDate= x.creation_date.ToShortDateString(),
+                description = x.description,
+                state = x.state.ToString(),
+                priority = x.priority.ToString()
+            }).ToList();
         }
 
         // GET: api/Tasks/5
@@ -117,8 +125,6 @@ namespace ProjectManagement.Api.Controllers
             {
                 return StatusCode(500);
             }
-
-
         }
 
         /// <summary>
