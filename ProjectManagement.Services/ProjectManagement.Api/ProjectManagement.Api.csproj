@@ -31,7 +31,7 @@
     <PackageReference Include="FluentEmail.Razor" Version="2.7.0" />
     <PackageReference Include="FluentEmail.Smtp" Version="2.7.1" />
     <PackageReference Include="JWT" Version="6.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.18" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.1" />
